@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="小程序," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="web前端开发日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="微信小程序开发资源汇总 在github上看了justjavac的一篇关于小程序资源的汇总，觉得挺不错的就并转发至 个人博客  目录 官方文档 工具 插件 讨论 教程 视频教程 文章 代码 轮子  置顶 WePY：组件化的小程序开发框架 💯 WePY 开发资源汇总 💯 ZanUI-WeApp: 高颜值、好用、易扩展的微信小程序 UI 库，Powered by 有赞 💯  官方文档 小程序开发文">
+<meta name="keywords" content="小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序学习资源汇总">
+<meta property="og:url" content="http://zhaorubo.top/2018/03/24/微信小程序学习资源汇总/index.html">
+<meta property="og:site_name" content="web前端开发日志">
+<meta property="og:description" content="微信小程序开发资源汇总 在github上看了justjavac的一篇关于小程序资源的汇总，觉得挺不错的就并转发至 个人博客  目录 官方文档 工具 插件 讨论 教程 视频教程 文章 代码 轮子  置顶 WePY：组件化的小程序开发框架 💯 WePY 开发资源汇总 💯 ZanUI-WeApp: 高颜值、好用、易扩展的微信小程序 UI 库，Powered by 有赞 💯  官方文档 小程序开发文">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-24T15:47:59.323Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信小程序学习资源汇总">
+<meta name="twitter:description" content="微信小程序开发资源汇总 在github上看了justjavac的一篇关于小程序资源的汇总，觉得挺不错的就并转发至 个人博客  目录 官方文档 工具 插件 讨论 教程 视频教程 文章 代码 轮子  置顶 WePY：组件化的小程序开发框架 💯 WePY 开发资源汇总 💯 ZanUI-WeApp: 高颜值、好用、易扩展的微信小程序 UI 库，Powered by 有赞 💯  官方文档 小程序开发文">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":0,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhaorubo.top/2018/03/24/微信小程序学习资源汇总/"/>
+
+
+
+
+
+  <title>微信小程序学习资源汇总 | web前端开发日志</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?040cfddb709ae0dc8e06f498ee1b8a64";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+    <!-- 添加github for me-->
+      <a href="https://github.com/ZrbJava/zrbjava.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">web前端开发日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">专注web前端开发</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-collector">
+          <a href="http://collect.w3ctrain.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            前端收藏夹
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resume">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            个人简历
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhaorubo.top/2018/03/24/微信小程序学习资源汇总/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jackie_bobo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="web前端开发日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">微信小程序学习资源汇总</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-24T23:31:18+08:00">
+                2018-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">小程序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/24/微信小程序学习资源汇总/" class="leancloud_visitors" data-flag-title="微信小程序学习资源汇总">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                <span title="字数统计">
+                  文章字数:2,091
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                <span title="阅读时长">
+                  阅读时间:8分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="微信小程序开发资源汇总"><a href="#微信小程序开发资源汇总" class="headerlink" title="微信小程序开发资源汇总"></a>微信小程序开发资源汇总</h1><blockquote>
+<p>在github上看了<a href="https://github.com/justjavac/awesome-wechat-weapp" target="_blank" rel="noopener">justjavac</a>的一篇关于小程序资源的汇总，觉得挺不错的就并转发至</p>
+<p><a href="http://zhaorubo.top">个人博客</a></p>
+</blockquote>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3" target="_blank" rel="noopener">官方文档</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E5%B7%A5%E5%85%B7" target="_blank" rel="noopener">工具</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E6%8F%92%E4%BB%B6" target="_blank" rel="noopener">插件</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E8%AE%A8%E8%AE%BA" target="_blank" rel="noopener">讨论</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">教程</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">视频教程</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E6%96%87%E7%AB%A0" target="_blank" rel="noopener">文章</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E4%BB%A3%E7%A0%81" target="_blank" rel="noopener">代码</a></li>
+<li><a href="https://github.com/ZrbJava/awesome-wechat-weapp#%E8%BD%AE%E5%AD%90" target="_blank" rel="noopener">轮子</a></li>
+</ul>
+<h2 id="置顶"><a href="#置顶" class="headerlink" title="置顶"></a>置顶</h2><ul>
+<li><a href="https://github.com/Tencent/wepy" target="_blank" rel="noopener">WePY：组件化的小程序开发框架</a> 💯</li>
+<li><a href="https://github.com/aben1188/awesome-wepy" target="_blank" rel="noopener">WePY 开发资源汇总</a> 💯</li>
+<li><a href="https://github.com/youzan/zanui-weapp" target="_blank" rel="noopener">ZanUI-WeApp: 高颜值、好用、易扩展的微信小程序 UI 库，Powered by 有赞</a> 💯</li>
+</ul>
+<h2 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h2><ul>
+<li><a href="https://mp.weixin.qq.com/debug/wxadoc/dev/index.html" target="_blank" rel="noopener">小程序开发文档</a></li>
+<li><a href="https://mp.weixin.qq.com/debug/wxadoc/design/index.html" target="_blank" rel="noopener">小程序设计指南</a></li>
+<li><a href="https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/download.html" target="_blank" rel="noopener">小程序开发者工具</a></li>
+</ul>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><ul>
+<li><a href="https://github.com/Tencent/wepy" target="_blank" rel="noopener">WePY 一个支持组件化的小程序开发框架</a></li>
+<li><a href="https://weapptool.com/" target="_blank" rel="noopener">微信小程序配置及目录在线生成工具</a></li>
+<li><a href="http://developer.egret.com/cn/github/egret-docs/Wing/update/update320/index.html" target="_blank" rel="noopener">Egret Wing 3.2.x 支持微信小程序实时预览的 IDE)</a></li>
+<li><a href="https://github.com/maichong/labrador" target="_blank" rel="noopener">Labrador 支持 ES6/7 的微信小程序组件化开发框架</a></li>
+<li><a href="https://github.com/chemzqm/wept" target="_blank" rel="noopener">WEPT 一个微信小程序实时运行环境</a></li>
+<li><a href="https://github.com/seanlong/wxml-parser" target="_blank" rel="noopener">wxml-parser JavaScript WXML parser</a> 以及<a href="https://seanlong.github.io/wxapp-page-editor" target="_blank" rel="noopener">在线页面demo</a></li>
+<li><a href="http://allanguys.github.io/px2rpx" target="_blank" rel="noopener">Px 转 Rpx 在线工具</a></li>
+<li><a href="https://github.com/xpmjs/xpmjs" target="_blank" rel="noopener">微信小程序云端增强 SDK XpmJS</a></li>
+<li><a href="https://github.com/chenzhuo1992/wech" target="_blank" rel="noopener">4kb 模块化开发工具 将模块化的属性和方法映射成小程序页面</a></li>
+<li><a href="https://github.com/mdsb100/gulp-wxa-copy-npm" target="_blank" rel="noopener">gulp-wxa-copy-npm 插件 能够使用 ES6/7 和 NPM 库</a></li>
+<li><a href="https://github.com/cytle/wechat_web_devtools" target="_blank" rel="noopener">wechat_web_devtools Linux 下微信开发者工具</a></li>
+<li><a href="https://github.com/Jeff2Ma/WeApp-Workflow" target="_blank" rel="noopener">WeApp-Workflow 基于 Gulp 的微信小程序前端开发工作流</a></li>
+<li><a href="https://openclub.alipay.com/read.php?tid=2888&amp;fid=51" target="_blank" rel="noopener">小程序助手 轻松实现小程序互转</a></li>
+<li><a href="https://github.com/haojy/weact" target="_blank" rel="noopener">weact 用 JSX 快速开发小程序</a></li>
+<li><a href="https://github.com/tinajs/tina" target="_blank" rel="noopener">Tina.js - 一款轻巧的渐进式微信小程序框架</a></li>
+<li><a href="https://github.com/Meituan-Dianping/mpvue" target="_blank" rel="noopener">Mpvue - 基于 Vue.js 的小程序开发框架，从底层支持 Vue.js 语法和构建工具体系</a></li>
+</ul>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><ul>
+<li><a href="https://github.com/chemzqm/wxapp.vim" target="_blank" rel="noopener">vim 插件(chemzqm/wxapp.vim)</a></li>
+<li><a href="https://github.com/Abbotton/weapp-snippet-for-sublime-text-2-3" target="_blank" rel="noopener">sublime text 2&amp;3 snippet(Abbotton/weapp-snippet-for-sublime-text-2-3)</a></li>
+<li><a href="https://github.com/lypeer/Matchmaker" target="_blank" rel="noopener">IntelliJ IDEA 插件，注入方法</a></li>
+<li><a href="https://github.com/qbright/wechatCode-complete" target="_blank" rel="noopener">webstorm 插件（代码提示）</a></li>
+<li><a href="https://github.com/FloydaGithub/wxapp" target="_blank" rel="noopener">sublime plugin - wxapp</a></li>
+<li><a href="https://segmentfault.com/a/1190000007132719" target="_blank" rel="noopener">vscode 插件(代码提示)</a></li>
+</ul>
+<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><ul>
+<li><a href="https://www.qcloud.com/act/event/yingyonghao.html" target="_blank" rel="noopener">从搭建一个微信小程序开始(腾讯云)</a></li>
+</ul>
+<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><ul>
+<li><a href="https://www.zhihu.com/question/50874500" target="_blank" rel="noopener">如何评价 9 月 21 日开始内测的「微信小程序」？(知乎)</a></li>
+<li><a href="https://www.zhihu.com/question/39374074" target="_blank" rel="noopener">如何看待微信将推应用号？(知乎)</a></li>
+<li><a href="https://www.zhihu.com/question/50875544" target="_blank" rel="noopener">微信小程序（应用号）价值是什么？(知乎)</a></li>
+<li><a href="https://www.zhihu.com/question/50878415" target="_blank" rel="noopener">微信应用号是否真能颠覆APP？(知乎)</a></li>
+<li><a href="https://www.zhihu.com/question/50900987" target="_blank" rel="noopener">微信小程序的出现会给前端开发带来什么？(知乎)</a></li>
+</ul>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li>全球首个微信应用号开发教程！通宵吐血赶稿，每日更新！<ul>
+<li><a href="http://www.diycode.cc/topics/311" target="_blank" rel="noopener">第一弹</a></li>
+<li><a href="http://www.diycode.cc/topics/312" target="_blank" rel="noopener">第二弹</a></li>
+<li><a href="http://www.diycode.cc/topics/316" target="_blank" rel="noopener">第三弹</a></li>
+<li><a href="http://www.diycode.cc/topics/325" target="_blank" rel="noopener">第四弹</a></li>
+<li><a href="http://www.diycode.cc/topics/328" target="_blank" rel="noopener">第五弹</a></li>
+</ul>
+</li>
+<li>微信小程序剖析(微信公众号)<ul>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5Mjg4NDMwMA==&amp;mid=2652974082&amp;idx=1&amp;sn=47c7f672caf629cd846e315b8df2b1c5&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">「官方示例代码」浅析</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5Mjg4NDMwMA==&amp;mid=2652974093&amp;idx=1&amp;sn=0570a243304ea8bb7d1b636624886fb1&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">（一）：运行机制</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5Mjg4NDMwMA==&amp;mid=2652974111&amp;idx=1&amp;sn=93a868cdb59b5dd77c65c7a5303e6e31#rd" target="_blank" rel="noopener">（二）：框架原理</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5Mjg4NDMwMA==&amp;mid=2652974133&amp;idx=1&amp;sn=3b67419e8ac0bb8262ca4c1e3cdabb35#rd" target="_blank" rel="noopener">（三）：让小程序运行在Chrome浏览器上</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5Mjg4NDMwMA==&amp;mid=2652974146&amp;idx=1&amp;sn=52041fdca4245e8f4b670ed20efa77de#rd" target="_blank" rel="noopener">（四）：原生的实时DOM转Virtual DOM</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5Mjg4NDMwMA==&amp;mid=2652974149&amp;idx=1&amp;sn=3efe5e6ee479ad6cbddc0a607cd40411#rd" target="_blank" rel="noopener">（五）：创建一个兼容「微信小程序」的Web框架</a></li>
+</ul>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/22754296" target="_blank" rel="noopener">微信小程序架构分析(上)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/22765476" target="_blank" rel="noopener">微信小程序架构分析(中)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/22932309" target="_blank" rel="noopener">微信小程序架构分析(下)</a></li>
+<li><a href="http://gold.xitu.io/entry/57e34d6bd2030900691e9ad7" target="_blank" rel="noopener">首个微信小程序开发教程(掘金)</a></li>
+<li><a href="http://xituqu.com/508.html" target="_blank" rel="noopener">微信小程序开发教程！(稀土区)</a></li>
+<li><a href="https://github.com/dingyiming/weapp-example" target="_blank" rel="noopener">hello-weapp 微信小程序最简示例教程(dingyiming/weapp-example)</a></li>
+<li><a href="https://github.com/champion32/WeAppIdeIssue" target="_blank" rel="noopener">微信小应用 IDE 的安装以及安装过程的常见问题(champion32/WeAppIdeIssue)</a></li>
+<li><a href="https://cnodejs.org/topic/57ea257b3670ca3f44c5beb6" target="_blank" rel="noopener">分享我用 cnode 社区 api 做微信小应用的入门过程(CNode)</a></li>
+<li><a href="http://www.jianshu.com/p/aaef5ceb3936" target="_blank" rel="noopener">微信小程序开发教程-从零开始(简书)</a></li>
+<li><a href="https://seahub.github.io/2016/10/09/%E6%88%91%E6%89%80%E7%90%86%E8%A7%A3%E7%9A%84%E5%B0%8F%E7%A8%8B%E5%BA%8F/" target="_blank" rel="noopener">我所理解的小程序 - 小程序真机调试(seahub)</a></li>
+<li><a href="https://www.v2ex.com/t/352472" target="_blank" rel="noopener">微信小程序集成 mobx</a></li>
+<li><a href="https://segmentfault.com/a/1190000007107646" target="_blank" rel="noopener">微信小程序集成 Redux(Segmentfault)</a></li>
+<li><a href="https://aotu.io/notes/2017/01/06/wxapp-img-loader/" target="_blank" rel="noopener">在微信小程序里实现图片预加载组件(凹凸实验室)</a></li>
+</ul>
+<h2 id="视频教程"><a href="#视频教程" class="headerlink" title="视频教程"></a>视频教程</h2><ul>
+<li><a href="https://www.youtube.com/playlist?list=PLXbU-2B80FvA5bNILAS8-zY3_KkE-PVn0" target="_blank" rel="noopener">微信小程序开发视频教程</a> (youtube)</li>
+</ul>
+<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
+<li><a href="https://cnodejs.org/topic/57e330d07d8293463a01e7e0" target="_blank" rel="noopener">未来是 h5 的：写在微信应用号发布之际(CNode)</a></li>
+<li><a href="http://www.jianshu.com/p/60c8fd8d6862" target="_blank" rel="noopener">微信“小程序”让我脑洞大开(简书)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/22565340" target="_blank" rel="noopener">关于微信小程序（应用号）的底层逻辑分析和拥抱建议(知乎专栏)</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwODY4OTk2Mg==&amp;mid=2652039482&amp;idx=2&amp;sn=778e1313ebbd832b590b81a8088b63db#rd" target="_blank" rel="noopener">微信小程序和谷歌 PWA 有什么关系？(微信公众号)</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzI0ODU0MDg0Mw==&amp;mid=2247483754&amp;idx=1&amp;sn=9578311da11d1fd3889e0829505c3993&amp;scene=2&amp;srcid=0924io6H1CmEPGYJxmEQVtlA" target="_blank" rel="noopener">在微信小程序里，我们要怎样做数据分析（上）(微信公众号)</a></li>
+<li><a href="http://zhenhua-lee.github.io/manmage/wx.html" target="_blank" rel="noopener">一张图看微信小程序(前端之路 - DRY)</a></li>
+<li><a href="http://blog.csdn.net/yanzhenjie1003/article/details/52698184" target="_blank" rel="noopener">微信小程序要这样解读(CSDN)</a></li>
+<li><a href="http://blog.csdn.net/luoyanglizi/article/details/52681245" target="_blank" rel="noopener">一名 Android 开发者的微信小程序填坑之路(1)</a></li>
+<li><a href="http://blog.csdn.net/luoyanglizi/article/details/52711634" target="_blank" rel="noopener">小程序开发利器：Matchmaker(CSDN)</a></li>
+<li><a href="https://segmentfault.com/a/1190000007017985" target="_blank" rel="noopener">微信小程序开发三宗罪和解决方案(SegmentFault)</a></li>
+<li><a href="https://segmentfault.com/a/1190000007109050" target="_blank" rel="noopener">使用 Labrador 0.3 构建 ES6/ES7 标准模块化微信小程序(SegmentFault)</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5NTQ4NjkyMQ==&amp;mid=2650723004&amp;idx=1&amp;sn=a6bcbf354beca3e745c47e542e119e5c&amp;chksm=88b4e41abfc36d0c547698b6f4f3669b1aa351a879332c2848ffd6618dbf23cb41316dca570a&amp;scene=0#rd" target="_blank" rel="noopener">微信小程序真机测试多个 DEMO)(微信公众号)</a></li>
+<li><a href="https://github.com/bestony/WeApp-Demo" target="_blank" rel="noopener">微信小程序真机测试视频源文件</a></li>
+<li><a href="https://devework.com/wordpress-rest-api-weixin-weapp.html" target="_blank" rel="noopener">WordPress 网站基于 REST API 开发“微信小程序”实战</a></li>
+<li><a href="https://devework.com/wordpress-weapp-2.html" target="_blank" rel="noopener">WordPress 网站开发“微信小程序“实战(二)</a></li>
+<li><a href="https://devework.com/wordpress-weapp-3.html" target="_blank" rel="noopener">WordPress 网站开发“微信小程序“实战(三)</a></li>
+<li><a href="https://segmentfault.com/a/1190000013448739" target="_blank" rel="noopener">解决微信小程序组件所在页面无返回按钮的问题</a></li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><ul>
+<li><a href="https://github.com/Hao-Wu/WeApp-Demo" target="_blank" rel="noopener">微信小程序官方 Demo(Hao-Wu/WeApp-Demo)</a></li>
+<li><a href="https://github.com/phodal/weapp-quick" target="_blank" rel="noopener">微信小应用示例代码(phodal/weapp-quick)</a></li>
+<li><a href="https://github.com/giscafer/wechat-weapp-mapdemo" target="_blank" rel="noopener">微信小应用地图定位 demo(giscafer/wechat-weapp-mapdemo)</a></li>
+<li><a href="https://github.com/hilongjw/weapp-gold" target="_blank" rel="noopener">微信小应用- 掘金主页信息流(hilongjw/weapp-gold)</a></li>
+<li><a href="https://github.com/zce/weapp-demo" target="_blank" rel="noopener">微信小程序（应用号）示例：微信小程序豆瓣电影(zce/weapp-demo)</a></li>
+<li><a href="https://github.com/hingsir/weapp-douban-film" target="_blank" rel="noopener">微信小程序 - 豆瓣电影(hingsir/weapp-douban-film)</a></li>
+<li><a href="https://github.com/kunkun12/weapp" target="_blank" rel="noopener">小程序 hello world 尝鲜(kunkun12/weapp)</a></li>
+<li><a href="https://github.com/natee/wxapp-2048" target="_blank" rel="noopener">微信小程序版 2048 小游戏(natee/wxapp-2048)</a></li>
+<li><a href="https://github.com/wangmingjob/weapp-weipiao" target="_blank" rel="noopener">微信小程序 - 微票(wangmingjob/weapp-weipiao)</a></li>
+<li><a href="https://github.com/SeptemberMaples/wechat-weapp-demo" target="_blank" rel="noopener">微信小程序购物车 DEMO(SeptemberMaples/wechat-weapp-demo)</a></li>
+<li><a href="https://github.com/jectychen/wechat-v2ex" target="_blank" rel="noopener">微信小程序 V2EX(jectychen/wechat-v2ex)</a></li>
+<li><a href="https://github.com/myronliu347/wechat-app-zhihudaily" target="_blank" rel="noopener">微信小程序 - 知乎日报(myronliu347/wechat-app-zhihudaily)</a></li>
+<li><a href="https://github.com/hijiangtao/weapp-newsapp" target="_blank" rel="noopener">微信小程序 - 公众号热门文章信息流(hijiangtao/weapp-newsapp)</a></li>
+<li><a href="https://github.com/lypeer/wechat-weapp-gank" target="_blank" rel="noopener">微信小程序版 Gank 客户端(lypeer/wechat-weapp-gank)</a></li>
+<li><a href="https://github.com/charleyw/wechat-weapp-redux-todos" target="_blank" rel="noopener">微信小程序集成 Redux 实现的Todo list(charleyw/wechat-weapp-redux-todos)</a></li>
+<li><a href="https://github.com/leancloud/leantodo-weapp" target="_blank" rel="noopener">微信小程序集成 LeanCloud 实现的 Todo list(leancloud/leantodo-weapp)</a></li>
+<li><a href="https://github.com/kraaas/timer" target="_blank" rel="noopener">微信小程序 - 番茄时钟(kraaas/timer)</a></li>
+<li><a href="https://github.com/ericzyh/wechat-chat" target="_blank" rel="noopener">微信小程序 - 聊天室(ericzyh/wechat-chat)</a></li>
+<li><a href="https://github.com/BelinChung/wxapp-hiapp" target="_blank" rel="noopener">微信小程序 - HiApp(BelinChung/wxapp-hiapp)</a></li>
+<li><a href="https://github.com/charleyw/wechat-weapp-redux" target="_blank" rel="noopener">小程序 Redux 绑定库(charleyw/wechat-weapp-redux)</a></li>
+<li><a href="https://github.com/18380435477/WeApp" target="_blank" rel="noopener">微信小程序版微信(18380435477/WeApp)</a></li>
+<li><a href="https://github.com/hardog/wechat-app-flexlayout" target="_blank" rel="noopener">小程序开发从布局开始(hardog/wechat-app-flexlayout)</a></li>
+<li><a href="https://github.com/eyasliu/wechat-app-music" target="_blank" rel="noopener">微信小程序 - 音乐播放器(eyasliu/wechat-app-music)</a></li>
+<li><a href="https://github.com/dunizb/wxapp-sCalc" target="_blank" rel="noopener">微信小程序 - 简易计算器-适合入门（dunizb/wxapp-sCalc）</a></li>
+<li><a href="https://github.com/zhengxiaowai/weapp-github" target="_blank" rel="noopener">微信小程序 - github(zhengxiaowai/weapp-github)</a></li>
+<li><a href="https://github.com/harveyqing/BearDiary" target="_blank" rel="noopener">微信小程序 - 小熊の日记(harveyqing/BearDiary)</a></li>
+<li><a href="https://github.com/SeaHub/PigRaising" target="_blank" rel="noopener">微信小程序(Seahub/PigRaising)</a></li>
+<li><a href="https://github.com/brucevanfdm/WeChatMeiZhi" target="_blank" rel="noopener">微信小程序(WeChatMeiZhi妹子图)</a></li>
+<li><a href="https://github.com/zce/weapp-boilerplate" target="_blank" rel="noopener">微信小程序快速开发骨架</a></li>
+<li><a href="https://github.com/SuperKieran/weapp-artand" target="_blank" rel="noopener">微信小程序 - Artand 最专业的艺术设计平台</a></li>
+<li><a href="https://github.com/zhijieeeeee/wechat-app-joke" target="_blank" rel="noopener">微信小程序 - 开心一刻(zhijieeeeee/wechat-app-joke)</a></li>
+<li><a href="https://github.com/uniquexiaobai/wechat-app-githubfeed" target="_blank" rel="noopener">微信小程序 - GitHubFeed(uniquexiaobai/wechat-app-githubfeed)</a></li>
+<li><a href="https://github.com/fluency03/weapp-500px" target="_blank" rel="noopener">微信小程序 - 国外摄影社区500px(fluency03/weapp-500px)</a></li>
+<li><a href="https://github.com/bayetech/wechat_mall_applet" target="_blank" rel="noopener">微信小程序 - 巴爷供销社－电商平台(bayetech)</a></li>
+<li><a href="https://github.com/liujians/Wa-UI" target="_blank" rel="noopener">基于微信小程序的 UI 库（Wa-UI）</a></li>
+<li><a href="https://github.com/litt1e-p/weapp-girls" target="_blank" rel="noopener">微信小程序 - 豆瓣美女/妹子图(weapp-girls)</a></li>
+<li><a href="https://github.com/liumulin614/BeautifulGirl" target="_blank" rel="noopener">微信小程序 - 美女模特(BeautifulGirl)</a></li>
+<li><a href="https://github.com/RebeccaHanjw/weapp-wechat-zhihu" target="_blank" rel="noopener">微信小程序 - 知乎仿写(RebeccaHanjw/weapp-wechat-zhihu)</a></li>
+<li><a href="https://github.com/romoo/weapp-demo-breadtrip" target="_blank" rel="noopener">微信小程序 - 面包旅行(romoo/weapp-demo-breadtrip)</a></li>
+<li><a href="https://github.com/luuman/weapp-film" target="_blank" rel="noopener">微信小程序 - 淘票票(weapp-film)</a></li>
+<li><a href="https://github.com/ahonn/weapp-one" target="_blank" rel="noopener">微信小程序 - 仿 ONE(ahonn/weapp-one)</a></li>
+<li><a href="https://github.com/vace/wechatapp-news-reader" target="_blank" rel="noopener">微信小程序 - 新闻阅读器(vace/wechatapp-news-reader)</a></li>
+<li><a href="https://github.com/Symous/WechatApp-BaisiSister" target="_blank" rel="noopener">微信小程序 - 百思不得姐(Symous/WechatApp-BaisiSister)</a></li>
+<li><a href="https://github.com/lanshan-studio/wecqupt" target="_blank" rel="noopener">微信小程序 - We 重邮(lanshan-studio/wecqupt)</a></li>
+<li><a href="https://github.com/DengKe1994/weapp-calculator/tree/master" target="_blank" rel="noopener">微信小程序 - IOS 计算器</a></li>
+<li><a href="https://github.com/monkindey/wx-github" target="_blank" rel="noopener">微信小程序 - github 简历(monkindey/wx-github)</a></li>
+<li><a href="https://github.com/xujinyang/CoderCalendar-WeApp" target="_blank" rel="noopener">微信小程序 - 程序员老黄历(xujinyang/CoderCalendar-WeApp)</a></li>
+<li><a href="https://github.com/zce/weapp-todos" target="_blank" rel="noopener">微信小程序 - TODOS（任务清单）(zce/weapp-todos)</a></li>
+<li><a href="https://github.com/yaoshanliang/weapp-ssha" target="_blank" rel="noopener">微信小程序 - 企业宣传小程序(yaoshanliang/weapp-ssha)</a></li>
+<li><a href="https://github.com/dongweiming/weapp-zhihulive" target="_blank" rel="noopener">微信小程序 - Zhihu Live (dongweiming/weapp-zhihulive)</a></li>
+<li><a href="https://github.com/bruintong/wechat-webapp-douban-movie" target="_blank" rel="noopener">微信小程序 - 豆瓣电影(bruintong/wechat-webapp-douban-movie)</a></li>
+<li><a href="https://github.com/bruintong/wechat-webapp-douban-location" target="_blank" rel="noopener">微信小程序 - 豆瓣同城(bruintong/wechat-webapp-douban-location)</a></li>
+<li><a href="https://github.com/arkilis/weapp-jandan" target="_blank" rel="noopener">微信小程序 - 煎蛋微信小程序(arkilis/weapp-jandan)</a></li>
+<li><a href="https://github.com/bodekjan/wechat-weather" target="_blank" rel="noopener">微信小程序 - 微信天气(bodekjan/wechat-weather)</a></li>
+<li><a href="https://github.com/jasscia/ChristmasHat" target="_blank" rel="noopener">微信小程序 - 我要圣诞帽 (jasscia/ChristmasHat)</a></li>
+<li><a href="https://github.com/yaoshanliang/weapp-jump" target="_blank" rel="noopener">微信小程序 - 跳一跳(yaoshanliang/weapp-jump)</a></li>
+<li><a href="https://github.com/nanwangjkl/sliding_puzzle" target="_blank" rel="noopener">微信小程序 - 滑块拼图(nanwangjkl/sliding_puzzle)</a></li>
+<li><a href="https://github.com/yaoshanliang/weapp-monument-valley" target="_blank" rel="noopener">微信小程序 - 纪念碑谷(yaoshanliang/weapp-monument-valley)</a></li>
+<li><a href="https://github.com/kaiwu/weui-scalajs" target="_blank" rel="noopener">微信小程序 - 使用Scala.js开发(kaiwu/weui-scalajs)</a></li>
+<li><a href="https://github.com/tinajs/tina-hackernews" target="_blank" rel="noopener">微信小程序 - Hacker News 热点 (tinajs/tina-hackernews)</a></li>
+<li><a href="https://github.com/mohuishou/scuplus-wechat" target="_blank" rel="noopener">微信小程序 - We川大 (mohuishou/scuplus-wechat)</a></li>
+</ul>
+<h2 id="轮子"><a href="#轮子" class="headerlink" title="轮子"></a>轮子</h2><ul>
+<li><a href="https://github.com/fanweixiao/wxapp-socket-io" target="_blank" rel="noopener">socket.io 风格的 websocket 类库</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzI0MjYwMjM2NQ==&amp;mid=2247483670&amp;idx=1&amp;sn=5aa5da2fff2415e9b19f848712ddf480&amp;chksm=e9789904de0f1012159332fda391c3eec0bb3d1c0db2c34ab557208ff0c04806a40d00e844fe&amp;mpshare=1&amp;scene=1&amp;srcid=1007cWRXdd0ug9oAceCsIWp6#rd" target="_blank" rel="noopener">微信小程序倒计时组件(微信公众号)</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzI0MjYwMjM2NQ==&amp;mid=2247483674&amp;idx=1&amp;sn=2bf242b391144f3f0e57e0ed0ebce36f&amp;chksm=e9789908de0f101ee23f7c125c9a48c4f9ba3f242a3b1c89b05ca5b9e8e68262c02b47fe3d12&amp;mpshare=1&amp;scene=1&amp;srcid=1008NvO9oI8wWGp4XBxlpLeL#rd" target="_blank" rel="noopener">微信小程序下拉筛选组件(微信公众号)</a></li>
+<li><a href="https://github.com/leancloud/weapp-polyfill" target="_blank" rel="noopener">w3c 标准 API polyfill</a></li>
+<li><a href="https://github.com/kiinlam/wetoast" target="_blank" rel="noopener">WeToast - 微信小程序toast增强插件</a></li>
+<li><a href="https://github.com/icindy/wxParse" target="_blank" rel="noopener">wxParse - 微信小程序富文本解析自定义组件，支持HTML及markdown解析</a></li>
+<li><a href="https://github.com/zhongjie-chen/wx-alphabetical-listview" target="_blank" rel="noopener">wx-alphabetical-listview 带字母滑动的列表</a></li>
+<li><a href="https://github.com/zhongjie-chen/wx-drawer" target="_blank" rel="noopener">wx-drawer 模仿 QQ6.0 侧滑菜单</a></li>
+<li><a href="https://github.com/zhongjie-chen/wx-scrollable-tab-view" target="_blank" rel="noopener">wx-scrollable-tab-view 可滚动的 tabview</a></li>
+<li><a href="https://github.com/o2team/wxapp-img-loader" target="_blank" rel="noopener">wxapp-img-loader 图片预加载组件</a></li>
+<li><a href="https://github.com/dlhandsome/we-swiper" target="_blank" rel="noopener">we-swiper 内容滑动插件</a></li>
+<li><a href="https://github.com/dlhandsome/we-cropper" target="_blank" rel="noopener">we-cropper 微信小程序图片裁剪工具</a></li>
+<li><a href="https://github.com/JoeZheng2015/wx-promise-request" target="_blank" rel="noopener">wx-promise-request 微信小程序请求队列管理库</a></li>
+<li><a href="https://github.com/bobiscool/wxDraw" target="_blank" rel="noopener">wxDraw 全面的小程序 Canvas 动画库 支持创建各种图形，动画以及主要手势交互事件</a></li>
+<li><a href="https://github.com/Hongye567/weapp-mark/blob/master/doc/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8%E5%AD%97%E4%BD%93.md" target="_blank" rel="noopener">小程序使用外部字体</a></li>
+</ul>
+<blockquote>
+<p> <a href="https://github.com/justjavac/awesome-wechat-weapp" target="_blank" rel="noopener">原文链接</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        
+          
+        
+      </div>
+      
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/weixingongzhonghao.jpg" alt="jackie_bobo wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，共同学习！</div>
+</div>
+
+      </div>
+    
+    
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">========本文结束<i class="fa fa-paw"></i>感谢您的阅读========</div>
+    
+</div>
+      
+    </div>
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/小程序/" <i class="fa fa-tag"></i> 小程序</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/从url到页面渲染浏览器经历了什么？/" rel="next" title="从url到页面渲染浏览器经历了什么？">
+                <i class="fa fa-chevron-left"></i> 从url到页面渲染浏览器经历了什么？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDY2MS8xMTE5OA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="jackie_bobo" />
+            
+              <p class="site-author-name" itemprop="name">jackie_bobo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+            <div id="music163player">
+                <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=32507038&auto=0&height=66"></iframe>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ZrbJava" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                   
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:zrbjava@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                   
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/jackie_zhao" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                  </span>
+                   
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.im/user/59d0701df265da066b397b89" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-glass"></i>掘金</a>
+                  </span>
+                   
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.csdn.net/jackie_bobo" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                   
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/jakie-34/activities" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                   
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrgo.top" title="MrGo-Blog" target="_blank">MrGo-Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://liutaochange.github.io/" title="Liu tao" target="_blank">Liu tao</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.lijinghua.club" title="进击的阿斗" target="_blank">进击的阿斗</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微信小程序开发资源汇总"><span class="nav-number">1.</span> <span class="nav-text">微信小程序开发资源汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">1.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#置顶"><span class="nav-number">1.2.</span> <span class="nav-text">置顶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#官方文档"><span class="nav-number">1.3.</span> <span class="nav-text">官方文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">1.4.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件"><span class="nav-number">1.5.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档"><span class="nav-number">1.6.</span> <span class="nav-text">文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#讨论"><span class="nav-number">1.7.</span> <span class="nav-text">讨论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#教程"><span class="nav-number">1.8.</span> <span class="nav-text">教程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视频教程"><span class="nav-number">1.9.</span> <span class="nav-text">视频教程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文章"><span class="nav-number">1.10.</span> <span class="nav-text">文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">1.11.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#轮子"><span class="nav-number">1.12.</span> <span class="nav-text">轮子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      
+      <!-- 我添加的的标签云模板 -->
+      
+        <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+        <div class="widget-wrap">
+            <h3 class="widget-title">Tag Cloud</h3>
+            <div id="myCanvasContainer" class="widget tagcloud">
+                <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ajax/">Ajax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js数组/">js数组</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mpvue/">mpvue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/session-cookie/">session&cookie</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/事件/">事件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端技术发展史/">前端技术发展史</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小程序/">小程序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块工具/">模块工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器渲染原理/">浏览器渲染原理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">1</span></li></ul>
+                </canvas>
+            </div>
+        </div>
+        
+      <!-- 我添加的的标签云模板 -->
+
+      
+
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jackie_bobo 版权所有</span>
+
+  
+</div>
+
+<!--
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+-->
+  <div class="theme-info">
+    <div class="powered-by"></div>
+    <span class="post-count" style="margin-right:40px">博客全站共23.9k字</span>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65390182";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1273065167'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1273065167%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script id="ribbon" type="text/javascript" size="300" alpha="0.6"  zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("jA0lEYcCWFGV8iti1MVipprz-gzGzoHsz", "JTAgzWoWzFlggG2k9vAmsP0B");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 10054,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.4"></script>
+
+
+  <!-- 添加右下动画特效 -->
+  
+</body>
+</html>
+<!-- 添加点击有爱心的特效js -->
+<script type="text/javascript" src="/js/src/love.js"></script>
