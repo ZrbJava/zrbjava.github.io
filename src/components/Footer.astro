@@ -1,0 +1,56 @@
+---
+import { site } from "@/data/site";
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <strong>{site.name}</strong>
+      <p>{site.description}</p>
+    </div>
+    <div class="footer-links">
+      {site.socials.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 36px 0;
+    background: var(--bg-strong);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .footer strong {
+    color: var(--ink);
+  }
+
+  .footer p {
+    max-width: 560px;
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 720px) {
+    .footer-inner {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

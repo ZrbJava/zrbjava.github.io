@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TopicCard from "@/components/TopicCard.astro";
+import { visiblePosts } from "@/utils/content";
+
+const topics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
+const posts = visiblePosts(await getCollection("posts"));
+---
+
+<BaseLayout title="专题" description="围绕复杂前端系统设计组织的系列文章。">
+  <section class="section">
+    <div class="container">
+      <h1 class="section-title">专题系列</h1>
+      <p class="section-copy">把项目经验整理成结构化路径，适合系统复盘，也适合面试时快速展示技术纵深。</p>
+      <div class="grid topic-grid">
+        {topics.map((topic) => (
+          <TopicCard topic={topic} count={posts.filter((post) => post.data.series === topic.data.title).length} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .topic-grid {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 32px;
+  }
+
+  @media (max-width: 760px) {
+    .topic-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

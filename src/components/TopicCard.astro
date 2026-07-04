@@ -1,0 +1,46 @@
+---
+import type { Topic } from "@/utils/content";
+
+interface Props {
+  topic: Topic;
+  count?: number;
+}
+
+const { topic, count = 0 } = Astro.props;
+---
+
+<a class="topic-card" href={`/topics/${topic.id}`}>
+  <span class="topic-index">{String(topic.data.order).padStart(2, "0")}</span>
+  <h2>{topic.data.title}</h2>
+  <p>{topic.data.description}</p>
+  <span class="meta">{count} 篇文章</span>
+</a>
+
+<style>
+  .topic-card {
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .topic-index {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  h2 {
+    margin: 10px 0 8px;
+    color: var(--ink);
+    font-size: 23px;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0 0 16px;
+    color: var(--muted);
+  }
+</style>

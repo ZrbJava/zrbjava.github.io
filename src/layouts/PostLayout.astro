@@ -1,0 +1,131 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatDate, getReadingTime } from "@/utils/content";
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  category?: string;
+  tags?: string[];
+  readingSource?: string;
+}
+
+const { title, description, pubDate, updatedDate, category, tags = [], readingSource = "" } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="article-shell container">
+    <header class="article-header">
+      <a class="back-link" href="/posts">返回文章列表</a>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <div class="article-meta">
+        <span>{formatDate(pubDate)}</span>
+        {updatedDate && <span>更新于 {formatDate(updatedDate)}</span>}
+        {category && <a href={`/categories/${category}`}>{category}</a>}
+        <span>{getReadingTime(readingSource)}</span>
+      </div>
+      {tags.length > 0 && (
+        <div class="tag-list">
+          {tags.map((tag) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+        </div>
+      )}
+    </header>
+    <div class="article-grid">
+      <div class="prose">
+        <slot />
+      </div>
+      <aside class="article-aside" aria-label="文章信息">
+        <div class="aside-box">
+          <strong>阅读建议</strong>
+          <p>先看问题背景，再看方案取舍，最后对照项目复盘思考可迁移的方法。</p>
+        </div>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-shell {
+    padding: 64px 0 88px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .article-header {
+    max-width: 820px;
+  }
+
+  .article-header h1 {
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .article-header p {
+    margin: 18px 0 0;
+    color: var(--muted);
+    font-size: 19px;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 22px 0 18px;
+    color: var(--subtle);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .article-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 760px) minmax(220px, 1fr);
+    gap: 56px;
+    margin-top: 48px;
+    align-items: start;
+  }
+
+  .article-aside {
+    position: sticky;
+    top: 96px;
+  }
+
+  .aside-box {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    background: var(--surface);
+  }
+
+  .aside-box strong {
+    color: var(--ink);
+  }
+
+  .aside-box p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 980px) {
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .article-aside {
+      position: static;
+    }
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { getAllCategories, getAllTags, visiblePosts } from "@/utils/content";
+
+const posts = visiblePosts(await getCollection("posts"));
+const categories = getAllCategories(posts);
+const tags = getAllTags(posts);
+---
+
+<BaseLayout title="文章" description="按分类、标签和时间浏览所有技术文章。">
+  <section class="section">
+    <div class="container grid two-col">
+      <div>
+        <h1 class="section-title">文章</h1>
+        <p class="section-copy">记录前端架构、React、工程化、性能优化和项目复盘中的长期思考。</p>
+        <div class="post-list">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      </div>
+      <aside class="filter-panel card">
+        <h2>分类</h2>
+        <div class="filter-list">
+          {categories.map(([category, count]) => <a href={`/categories/${category}`}>{category}<span>{count}</span></a>)}
+        </div>
+        <h2>标签</h2>
+        <div class="tag-list">
+          {tags.map(([tag, count]) => <a class="tag" href={`/tags/${tag}`}>{tag} · {count}</a>)}
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .post-list {
+    margin-top: 28px;
+  }
+
+  .filter-panel {
+    position: sticky;
+    top: 96px;
+    padding: 22px;
+  }
+
+  .filter-panel h2 {
+    margin: 0 0 14px;
+    color: var(--ink);
+    font-size: 18px;
+  }
+
+  .filter-panel h2:not(:first-child) {
+    margin-top: 28px;
+  }
+
+  .filter-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .filter-list a {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  @media (max-width: 860px) {
+    .filter-panel {
+      position: static;
+    }
+  }
+</style>

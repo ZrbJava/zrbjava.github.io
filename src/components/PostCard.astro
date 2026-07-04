@@ -1,0 +1,60 @@
+---
+import type { Post } from "@/utils/content";
+import { formatDate, getReadingTime } from "@/utils/content";
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+---
+
+<article class:list={["post-card", { featured }]}>
+  <div class="post-top">
+    <span>{post.data.category}</span>
+    <span>{formatDate(post.data.pubDate)}</span>
+    <span>{getReadingTime(post.body)}</span>
+  </div>
+  <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
+  <p>{post.data.description}</p>
+  <div class="tag-list">
+    {post.data.tags.map((tag) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+  </div>
+</article>
+
+<style>
+  .post-card {
+    border-bottom: 1px solid var(--line);
+    padding: 24px 0;
+  }
+
+  .post-card.featured {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .post-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--subtle);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin: 10px 0 8px;
+    color: var(--ink);
+    font-size: 23px;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0 0 16px;
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { visiblePosts } from "@/utils/content";
+
+export async function getStaticPaths() {
+  const topics = await getCollection("topics");
+  return topics.map((topic) => ({ params: { slug: topic.id }, props: { topic } }));
+}
+
+const { topic } = Astro.props;
+const { Content } = await render(topic);
+const posts = visiblePosts(await getCollection("posts")).filter(
+  (post) => post.data.series === topic.data.title
+);
+---
+
+<BaseLayout title={topic.data.title} description={topic.data.description}>
+  <section class="section">
+    <div class="container grid two-col">
+      <div>
+        <a class="back-link" href="/topics">返回专题</a>
+        <h1 class="section-title">{topic.data.title}</h1>
+        <p class="section-copy">{topic.data.description}</p>
+        <div class="prose topic-content">
+          <Content />
+        </div>
+      </div>
+      <aside class="card path-panel">
+        <h2>专题文章</h2>
+        <div>
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-flex;
+    margin-bottom: 18px;
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .topic-content {
+    margin-top: 30px;
+  }
+
+  .path-panel {
+    padding: 22px;
+  }
+
+  .path-panel h2 {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+</style>

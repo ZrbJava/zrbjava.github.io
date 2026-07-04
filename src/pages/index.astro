@@ -1,0 +1,205 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import TopicCard from "@/components/TopicCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { site } from "@/data/site";
+import { visiblePosts, getAllTags } from "@/utils/content";
+
+const posts = visiblePosts(await getCollection("posts"));
+const topics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const featuredPosts = posts.filter((post) => post.data.featured).slice(0, 3);
+const featuredTopics = topics.filter((topic) => topic.data.featured).slice(0, 4);
+const tags = getAllTags(posts).slice(0, 18);
+---
+
+<BaseLayout title="首页" description={site.description}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>{site.name}</h1>
+        <p>{site.description}这里记录一线项目里的技术判断、架构取舍、性能优化和问题复盘。</p>
+        <div class="button-row">
+          <a class="button primary" href="/posts">查看文章</a>
+          <a class="button" href="/topics">浏览专题</a>
+        </div>
+      </div>
+      <div class="hero-panel card">
+        <div class="panel-title">知识地图</div>
+        <div class="map-row"><span>架构</span><strong>权限 / 表单 / 状态 / 监控</strong></div>
+        <div class="map-row"><span>工程</span><strong>CI/CD / 质量门禁 / 组件体系</strong></div>
+        <div class="map-row"><span>性能</span><strong>首屏 / 缓存 / 可观测性</strong></div>
+        <div class="map-row"><span>复盘</span><strong>问题定位 / 方案收益 / 经验沉淀</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">精选文章</h2>
+        <a href="/posts">全部文章</a>
+      </div>
+      <div class="grid featured-grid">
+        {featuredPosts.map((post) => <PostCard post={post} featured />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft-band">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">专题系列</h2>
+          <p class="section-copy">把零散经验沉淀成可复用的方法，而不是只留下临时笔记。</p>
+        </div>
+        <a href="/topics">查看专题</a>
+      </div>
+      <div class="grid topic-grid">
+        {featuredTopics.map((topic) => (
+          <TopicCard topic={topic} count={posts.filter((post) => post.data.series === topic.data.title).length} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid two-col">
+      <div>
+        <h2 class="section-title">最新文章</h2>
+        <div class="latest-list">
+          {posts.slice(0, 5).map((post) => <PostCard post={post} />)}
+        </div>
+      </div>
+      <aside class="side-stack">
+        <div class="card side-card">
+          <h3>技术标签</h3>
+          <div class="tag-list">
+            {tags.map(([tag, count]) => <a class="tag" href={`/tags/${tag}`}>{tag} · {count}</a>)}
+          </div>
+        </div>
+        <div class="card side-card">
+          <h3>项目复盘</h3>
+          <div class="project-mini">
+            {projects.slice(0, 2).map((project) => <ProjectCard project={project} />)}
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 84px 0 72px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .hero-copy h1 {
+    max-width: 780px;
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(44px, 7vw, 82px);
+    line-height: 1.02;
+    letter-spacing: 0;
+  }
+
+  .hero-copy p {
+    max-width: 680px;
+    margin: 24px 0;
+    color: var(--muted);
+    font-size: 20px;
+  }
+
+  .hero-panel {
+    padding: 24px;
+  }
+
+  .panel-title {
+    margin-bottom: 18px;
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 850;
+  }
+
+  .map-row {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 16px;
+    border-top: 1px solid var(--line);
+    padding: 15px 0;
+  }
+
+  .map-row span {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 850;
+  }
+
+  .map-row strong {
+    color: var(--text);
+    font-size: 15px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 26px;
+  }
+
+  .section-head > a {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .soft-band {
+    background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
+  }
+
+  .topic-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .side-stack {
+    display: grid;
+    gap: 20px;
+  }
+
+  .side-card {
+    padding: 22px;
+  }
+
+  .side-card h3 {
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+
+  .project-mini {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (max-width: 980px) {
+    .hero-grid,
+    .featured-grid,
+    .topic-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

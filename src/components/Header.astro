@@ -1,0 +1,129 @@
+---
+import { site } from "@/data/site";
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label={site.name}>
+      <span class="brand-mark">ZR</span>
+      <span>{site.shortName}</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="切换深色模式" data-theme-toggle>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3v2.2M12 18.8V21M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M3 12h2.2M18.8 12H21M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6" />
+        <circle cx="12" cy="12" r="4" />
+      </svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  if (stored === "dark" || (!stored && prefersDark)) root.classList.add("dark");
+
+  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    root.classList.toggle("dark");
+    localStorage.setItem("theme", root.classList.contains("dark") ? "dark" : "light");
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg-strong) 88%, transparent);
+    backdrop-filter: blur(18px);
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: 68px;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-weight: 800;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: white;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .nav a {
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .nav a:hover {
+    background: var(--surface-soft);
+    color: var(--text);
+  }
+
+  .theme-toggle {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  @media (max-width: 720px) {
+    .header-inner {
+      min-height: auto;
+      flex-wrap: wrap;
+      padding: 14px 0;
+    }
+
+    .nav {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+      overflow-x: auto;
+    }
+  }
+</style>

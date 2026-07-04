@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="页面不存在" description="页面不存在。">
+  <section class="section">
+    <div class="container not-found">
+      <h1>404</h1>
+      <p>这个页面还不存在，回到文章列表继续浏览。</p>
+      <a class="button primary" href="/posts">查看文章</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: 620px;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 88px;
+    line-height: 1;
+  }
+
+  p {
+    margin: 16px 0 24px;
+    color: var(--muted);
+    font-size: 18px;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import type { Project } from "@/utils/content";
+import { formatDate } from "@/utils/content";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="project-card">
+  <div class="meta">{formatDate(project.data.pubDate)} · {project.data.role}</div>
+  <h2><a href={`/projects/${project.id}`}>{project.data.title}</a></h2>
+  <p>{project.data.description}</p>
+  <div class="tag-list">
+    {project.data.stack.map((item) => <span class="tag">{item}</span>)}
+  </div>
+</article>
+
+<style>
+  .project-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  h2 {
+    margin: 10px 0 8px;
+    color: var(--ink);
+    font-size: 23px;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0 0 16px;
+    color: var(--muted);
+  }
+</style>

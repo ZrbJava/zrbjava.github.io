@@ -1,0 +1,45 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="关于" description="关于赵若博和这个技术博客。">
+  <section class="section">
+    <div class="container grid two-col">
+      <div>
+        <h1 class="section-title">关于我</h1>
+        <div class="prose">
+          <p>我是一名前端开发者，关注复杂业务系统中的前端架构、工程化、性能优化和团队协作。</p>
+          <p>这个博客用于记录项目实践中的技术判断、问题复盘和体系化总结。相比零散技巧，我更希望沉淀可迁移的方法：如何建模、如何取舍、如何验证收益，以及如何让团队长期维护得住。</p>
+          <h2>关注方向</h2>
+          <ul>
+            <li>React 与 TypeScript 工程实践</li>
+            <li>权限、表单、状态管理等复杂业务建模</li>
+            <li>前端工程化、质量门禁与团队规范</li>
+            <li>性能优化、监控体系与线上问题复盘</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="card about-card">
+        <h2>博客原则</h2>
+        <p>少写流水账，多写背景、约束、方案、收益和反思。</p>
+        <p>把每篇文章都当作一次技术表达训练。</p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-card {
+    padding: 24px;
+  }
+
+  .about-card h2 {
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .about-card p {
+    margin: 0 0 12px;
+    color: var(--muted);
+  }
+</style>
