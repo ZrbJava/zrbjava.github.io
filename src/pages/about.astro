@@ -8,21 +8,35 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       <div>
         <h1 class="section-title">关于我</h1>
         <div class="prose">
-          <p>我是一名前端开发者，关注复杂业务系统中的前端架构、工程化、性能优化和团队协作。</p>
-          <p>这个博客用于记录项目实践中的技术判断、问题复盘和体系化总结。相比零散技巧，我更希望沉淀可迁移的方法：如何建模、如何取舍、如何验证收益，以及如何让团队长期维护得住。</p>
+          <p>我是一名拥有 8 年经验的前端开发者，关注复杂业务系统中的前端架构、工程化、性能优化、跨端开发和 AI 融合。</p>
+          <p>这个博客面向<strong>高级前端面试</strong>和<strong>长期技术沉淀</strong>，覆盖 React、Vue、Electron、TypeScript、浏览器原理、可视化、AI 工程等完整大前端技术栈。</p>
           <h2>关注方向</h2>
           <ul>
-            <li>React 与 TypeScript 工程实践</li>
-            <li>权限、表单、状态管理等复杂业务建模</li>
-            <li>前端工程化、质量门禁与团队规范</li>
-            <li>性能优化、监控体系与线上问题复盘</li>
+            <li>React Fiber / RSC / Vue 3 响应式等框架底层原理</li>
+            <li>Electron 桌面应用架构与安全实践</li>
+            <li>前端工程化：Vite、Monorepo、CI/CD 质量门禁</li>
+            <li>性能优化、监控体系与浏览器渲染原理</li>
+            <li>AI 前端：LLM 集成、RAG 架构、Agent UI 设计</li>
+            <li>Canvas / WebGL 可视化与图形性能优化</li>
+            <li>高级前端面试：系统设计、项目表达、知识地图</li>
+          </ul>
+          <h2>博客结构</h2>
+          <ul>
+            <li><strong>11 个专题系列</strong>：按技术域组织，每个专题有推荐阅读路径</li>
+            <li><strong>25+ 深度文章</strong>：每篇包含原理、代码、面试表达和实践经验</li>
+            <li><strong>项目复盘</strong>：真实项目中的架构决策与问题复盘</li>
           </ul>
         </div>
       </div>
       <aside class="card about-card">
         <h2>博客原则</h2>
-        <p>少写流水账，多写背景、约束、方案、收益和反思。</p>
-        <p>把每篇文章都当作一次技术表达训练。</p>
+        <p>不写 API 速查，写「为什么这样设计」。</p>
+        <p>每篇文章都包含面试表达框架。</p>
+        <p>基于 8 年真实项目经验，不是纸上谈兵。</p>
+        <h2>知识地图</h2>
+        <p>P0 必精：JS 核心、React/Vue 原理、TS、浏览器、工程化、性能</p>
+        <p>P1 掌握：架构、网络、跨端、可视化、AI 前端</p>
+        <p>P2 加分：Node.js、软技能、系统设计、开源</p>
       </aside>
     </div>
   </section>
@@ -36,6 +50,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   .about-card h2 {
     margin: 0 0 12px;
     color: var(--ink);
+  }
+
+  .about-card h2:not(:first-child) {
+    margin-top: 24px;
   }
 
   .about-card p {

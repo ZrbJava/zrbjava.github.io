@@ -2,7 +2,7 @@ export const site = {
   name: "赵若博的前端工程笔记",
   shortName: "ZhaoRubo Blog",
   description:
-    "专注 React、前端架构、工程化、性能优化与复杂业务系统设计的个人技术博客。",
+    "8 年前端实战经验沉淀：React、Vue、Electron、工程化、性能、架构、AI 与高级前端面试体系。",
   author: "赵若博",
   url: "https://example.com",
   nav: [
