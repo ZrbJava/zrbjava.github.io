@@ -1,13 +1,14 @@
 ---
 import type { Project } from "@/utils/content";
 import { formatDate } from "@/utils/content";
+import { withBase } from "@/utils/url";
 
 interface Props {
   project: Project;
 }
 
 const { project } = Astro.props;
-const href = `/projects/${project.id}`;
+const href = withBase(`/projects/${project.id}`);
 ---
 
 <article class="project-card">

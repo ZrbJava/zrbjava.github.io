@@ -1,7 +1,10 @@
 ---
+import { withBase } from "@/utils/url";
+
+const pagefindScript = withBase("/pagefind/pagefind.js");
 ---
 
-<div class="search-palette" data-search-palette aria-hidden="true">
+<div class="search-palette" data-search-palette data-pagefind-script={pagefindScript} aria-hidden="true">
   <div class="search-backdrop" data-search-close></div>
   <div class="search-panel" role="dialog" aria-modal="true" aria-label="搜索">
     <div class="search-input-row">
@@ -100,7 +103,9 @@
   }
 
   async function importPagefind() {
-    return Function('return import("/pagefind/pagefind.js")')() as Promise<PagefindModule>;
+    const palette = document.querySelector<HTMLElement>("[data-search-palette]");
+    const pagefindScript = palette?.dataset.pagefindScript ?? "/pagefind/pagefind.js";
+    return Function(`return import("${pagefindScript}")`)() as Promise<PagefindModule>;
   }
 
   async function loadPagefind() {

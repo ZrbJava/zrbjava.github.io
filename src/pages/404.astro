@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { withBase } from "@/utils/url";
 ---
 
 <BaseLayout title="页面不存在" description="页面不存在。">
@@ -7,7 +8,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     <div class="container not-found">
       <h1>404</h1>
       <p>这个页面还不存在，回到文章列表继续浏览。</p>
-      <a class="button primary" href="/posts">查看文章</a>
+      <a class="button primary" href={withBase("/posts")}>查看文章</a>
     </div>
   </section>
 </BaseLayout>

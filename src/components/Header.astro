@@ -2,14 +2,15 @@
 import { site } from "@/data/site";
 import SearchTrigger from "@/components/SearchTrigger.astro";
 import AuthorAvatar from "@/components/AuthorAvatar.astro";
+import { stripBase, withBase } from "@/utils/url";
 
-const currentPath = Astro.url.pathname;
+const currentPath = stripBase(Astro.url.pathname);
 ---
 
 <a class="skip-link" href="#main-content">跳到主要内容</a>
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label={site.name}>
+    <a class="brand" href={withBase("/")} aria-label={site.name}>
       <AuthorAvatar size="sm" shape="rounded" class="brand-mark" />
       <span class="brand-text">
         <strong>{site.author}</strong>
@@ -19,7 +20,7 @@ const currentPath = Astro.url.pathname;
     <nav class="nav" aria-label="主导航">
       {site.nav.map((item) => (
         <a
-          href={item.href}
+          href={withBase(item.href)}
           aria-current={currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href)) ? "page" : undefined}
         >
           {item.label}

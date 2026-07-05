@@ -3,6 +3,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SearchPalette from "@/components/SearchPalette.astro";
 import { site } from "@/data/site";
+import { withBase } from "@/utils/url";
 import "@/styles/global.css";
 
 interface Props {
@@ -26,8 +27,8 @@ const description = pageDescription ?? site.description;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#146c5f" />
-    <link rel="icon" href="/favicon.svg" />
-    <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
+    <link rel="icon" href={withBase("/favicon.svg")} />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href={withBase("/rss.xml")} />
     <script is:inline>
       const savedTheme = localStorage.getItem("theme");
       const dark = savedTheme === "dark" || (!savedTheme && matchMedia("(prefers-color-scheme: dark)").matches);

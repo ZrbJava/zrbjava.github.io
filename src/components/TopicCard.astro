@@ -1,5 +1,6 @@
 ---
 import type { Topic } from "@/utils/content";
+import { withBase } from "@/utils/url";
 
 interface Props {
   topic: Topic;
@@ -9,7 +10,7 @@ interface Props {
 const { topic, count = 0 } = Astro.props;
 ---
 
-<a class="topic-card" href={`/topics/${topic.id}`}>
+<a class="topic-card" href={withBase(`/topics/${topic.id}`)}>
   <span class="topic-index">{String(topic.data.order).padStart(2, "0")}</span>
   <h2>{topic.data.title}</h2>
   <p>{topic.data.description}</p>

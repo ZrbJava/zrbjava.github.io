@@ -1,5 +1,6 @@
 ---
 import { site } from "@/data/site";
+import { withBase } from "@/utils/url";
 
 interface Props {
   size?: "sm" | "md" | "lg" | "xl" | "hero";
@@ -21,7 +22,7 @@ const px = sizes[size];
 ---
 
 <img
-  src={site.avatar}
+  src={withBase(site.avatar)}
   alt={site.author}
   width={px}
   height={px}

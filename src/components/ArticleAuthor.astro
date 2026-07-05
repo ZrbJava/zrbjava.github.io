@@ -1,5 +1,6 @@
 ---
 import { site } from "@/data/site";
+import { withBase } from "@/utils/url";
 import AuthorAvatar from "@/components/AuthorAvatar.astro";
 ---
 
@@ -12,7 +13,7 @@ import AuthorAvatar from "@/components/AuthorAvatar.astro";
       这个博客是我持续学习、复盘和分享的阵地——把框架原理、工程实践和架构取舍写清楚，
       既帮自己沉淀，也希望能帮到同样在较真的你。
     </p>
-    <a href="/about">了解更多 →</a>
+    <a href={withBase("/about")}>了解更多 →</a>
   </div>
 </aside>
 

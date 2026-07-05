@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
 import { visiblePosts } from "@/utils/content";
+import { withBase } from "@/utils/url";
 
 export async function getStaticPaths() {
   const topics = await getCollection("topics");
@@ -20,7 +21,7 @@ const posts = visiblePosts(await getCollection("posts")).filter(
   <section class="section">
     <div class="container grid two-col topic-layout">
       <div>
-        <a class="back-link" href="/topics">返回专题</a>
+        <a class="back-link" href={withBase("/topics")}>返回专题</a>
         <h1 class="section-title">{topic.data.title}</h1>
         <p class="section-copy">{topic.data.description}</p>
         <div class="prose topic-content">

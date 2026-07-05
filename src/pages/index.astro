@@ -9,6 +9,7 @@ import IdentityCard from "@/components/effects/IdentityCard.astro";
 import HomeEffects from "@/components/effects/HomeEffects.astro";
 import { site } from "@/data/site";
 import { visiblePosts } from "@/utils/content";
+import { withBase } from "@/utils/url";
 
 const posts = visiblePosts(await getCollection("posts"));
 const topics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
@@ -39,8 +40,8 @@ const recentProjects = projects.slice(0, 2);
           {site.highlights.map((item) => `${item.value} ${item.label}`).join(" · ")}
         </p>
         <div class="button-row">
-          <a class="button primary" href="/posts">阅读文章</a>
-          <a class="button" href="/topics">浏览专题</a>
+          <a class="button primary" href={withBase("/posts")}>阅读文章</a>
+          <a class="button" href={withBase("/topics")}>浏览专题</a>
         </div>
       </div>
       <IdentityCard />
@@ -56,7 +57,7 @@ const recentProjects = projects.slice(0, 2);
           <h2>精选文章</h2>
           <p>从这里开始读——每篇都是原理、架构与实践经验，不是 API 清单。</p>
         </div>
-        <a class="text-link" href="/posts">全部 {posts.length} 篇</a>
+        <a class="text-link" href={withBase("/posts")}>全部 {posts.length} 篇</a>
       </header>
 
       {featuredPosts.length > 0 && (
@@ -81,7 +82,7 @@ const recentProjects = projects.slice(0, 2);
           <h2>专题系列</h2>
           <p>{topics.length} 个方向，按领域系统学习。</p>
         </div>
-        <a class="text-link" href="/topics">全部专题</a>
+        <a class="text-link" href={withBase("/topics")}>全部专题</a>
       </header>
 
       <div class="topics-rail" data-reveal style="--reveal-delay: 50ms">
@@ -108,7 +109,7 @@ const recentProjects = projects.slice(0, 2);
         <div class="recent-list">
           {recentPosts.map((post) => <PostCard post={post} />)}
         </div>
-        <a class="text-link recent-more" href="/posts">查看更多文章</a>
+        <a class="text-link recent-more" href={withBase("/posts")}>查看更多文章</a>
       </div>
 
       <aside data-reveal style="--reveal-delay: 80ms">
@@ -119,7 +120,7 @@ const recentProjects = projects.slice(0, 2);
         <div class="project-stack">
           {recentProjects.map((project) => <ProjectCard project={project} />)}
         </div>
-        <a class="text-link recent-more" href="/projects">全部复盘</a>
+        <a class="text-link recent-more" href={withBase("/projects")}>全部复盘</a>
       </aside>
     </div>
   </section>

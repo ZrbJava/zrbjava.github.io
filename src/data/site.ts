@@ -8,7 +8,7 @@ export const site = {
   avatar: "/images/avatar.png",
   role: "大前端 / 全栈偏前端工程师",
   experience: "8 年",
-  url: "https://example.com",
+  url: "https://zrbjava.github.io",
   nav: [
     { href: "/", label: "首页" },
     { href: "/posts", label: "文章" },

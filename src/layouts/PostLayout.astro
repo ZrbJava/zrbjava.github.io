@@ -6,6 +6,7 @@ import SeriesNav from "@/components/SeriesNav.astro";
 import RelatedPosts from "@/components/RelatedPosts.astro";
 import ArticleAuthor from "@/components/ArticleAuthor.astro";
 import Icon from "@/components/Icon.astro";
+import { withBase } from "@/utils/url";
 import type { TocItem } from "@/utils/headings";
 import type { Post } from "@/utils/content";
 import { formatDate, getReadingTime, tagToSlug } from "@/utils/content";
@@ -46,7 +47,7 @@ const {
   <article class="article-shell container">
     <header class="article-header">
       <div class="article-topbar">
-        <a class="back-link" href="/posts">
+        <a class="back-link" href={withBase("/posts")}>
           <Icon name="arrow-left" size={15} />
           返回文章列表
         </a>
@@ -65,7 +66,7 @@ const {
           </span>
         )}
         {category && (
-          <a class="meta-item" href={`/categories/${category}`}>
+          <a class="meta-item" href={withBase(`/categories/${category}`)}>
             <Icon name="folder" size={14} />
             {category}
           </a>
@@ -77,7 +78,7 @@ const {
       </div>
       {tags.length > 0 && (
         <div class="tag-list">
-          {tags.map((tag) => <a class="tag" href={`/tags/${tagToSlug(tag)}`}>{tag}</a>)}
+          {tags.map((tag) => <a class="tag" href={withBase(`/tags/${tagToSlug(tag)}`)}>{tag}</a>)}
         </div>
       )}
     </header>

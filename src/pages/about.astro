@@ -8,6 +8,7 @@ import KnowledgeMap from "@/components/KnowledgeMap.astro";
 import Icon from "@/components/Icon.astro";
 import { site } from "@/data/site";
 import { socialIcon } from "@/utils/icons";
+import { withBase } from "@/utils/url";
 import { visiblePosts } from "@/utils/content";
 
 const posts = visiblePosts(await getCollection("posts"));
@@ -67,8 +68,8 @@ const entries = [
             </div>
             <div class="hero-actions">
               <div class="button-row">
-                <a class="button primary" href="/topics">浏览专题</a>
-                <a class="button" href="/posts">阅读文章</a>
+                <a class="button primary" href={withBase("/topics")}>浏览专题</a>
+                <a class="button" href={withBase("/posts")}>阅读文章</a>
               </div>
               <div class="social-row">
                 {site.socials.map((social) => (
@@ -90,7 +91,7 @@ const entries = [
         <div class="hero-stats">
           {stats.map((stat) =>
             stat.href ? (
-              <a class="stat-link" href={stat.href}>
+              <a class="stat-link" href={withBase(stat.href)}>
                 <strong>{stat.value}</strong>
                 <span>{stat.label}</span>
               </a>
@@ -163,7 +164,7 @@ const entries = [
       </header>
       <div class="entry-grid">
         {entries.map((entry) => (
-          <a class="entry-card" href={entry.href}>
+          <a class="entry-card" href={withBase(entry.href)}>
             <span class="entry-index">{entry.index}</span>
             <strong>{entry.title}</strong>
             <p>{entry.copy}</p>
@@ -182,7 +183,7 @@ const entries = [
           <h2>推荐入门</h2>
           <p>不知道从哪开始？可以先从这些专题入手。</p>
         </div>
-        <a class="text-link" href="/topics">全部专题</a>
+        <a class="text-link" href={withBase("/topics")}>全部专题</a>
       </header>
       <div class="topic-grid">
         {entryTopics.map((topic) => (

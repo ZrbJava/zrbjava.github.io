@@ -2,6 +2,7 @@
 import type { Post } from "@/utils/content";
 import { formatDate, getReadingTime, tagToSlug } from "@/utils/content";
 import Icon from "@/components/Icon.astro";
+import { withBase } from "@/utils/url";
 
 interface Props {
   post: Post;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const { post, featured = false, lead = false } = Astro.props;
-const href = `/posts/${post.id}`;
+const href = withBase(`/posts/${post.id}`);
 ---
 
 <article class:list={["post-card", { featured, lead }]}>
@@ -31,7 +32,7 @@ const href = `/posts/${post.id}`;
   <h2><a class="post-card-link" href={href}>{post.data.title}</a></h2>
   <p>{post.data.description}</p>
   <div class="tag-list">
-    {post.data.tags.map((tag) => <a class="tag" href={`/tags/${tagToSlug(tag)}`}>{tag}</a>)}
+    {post.data.tags.map((tag) => <a class="tag" href={withBase(`/tags/${tagToSlug(tag)}`)}>{tag}</a>)}
   </div>
 </article>
 

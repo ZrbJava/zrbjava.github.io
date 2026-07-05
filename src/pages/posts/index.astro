@@ -4,6 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
 import { getAllCategories, getAllTags, tagToSlug, visiblePosts } from "@/utils/content";
 import { site } from "@/data/site";
+import { withBase } from "@/utils/url";
 
 const posts = visiblePosts(await getCollection("posts"));
 const categories = getAllCategories(posts);
@@ -26,11 +27,11 @@ const tags = getAllTags(posts);
       <aside class="filter-panel card">
         <h2>分类</h2>
         <div class="filter-list">
-          {categories.map(([category, count]) => <a href={`/categories/${category}`}>{category}<span>{count}</span></a>)}
+          {categories.map(([category, count]) => <a href={withBase(`/categories/${category}`)}>{category}<span>{count}</span></a>)}
         </div>
         <h2>标签</h2>
         <div class="tag-list">
-          {tags.map(([tag, count]) => <a class="tag" href={`/tags/${tagToSlug(tag)}`}>{tag} · {count}</a>)}
+          {tags.map(([tag, count]) => <a class="tag" href={withBase(`/tags/${tagToSlug(tag)}`)}>{tag} · {count}</a>)}
         </div>
       </aside>
     </div>
