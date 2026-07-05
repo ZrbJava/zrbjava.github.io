@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import rehypeSlug from "rehype-slug";
@@ -8,19 +9,21 @@ export default defineConfig({
   site: "https://example.com",
   integrations: [mdx(), sitemap()],
   markdown: {
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeMermaid,
-        {
-          strategy: "inline-svg",
-          mermaidConfig: {
-            theme: "neutral",
-            fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+    processor: unified({
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeMermaid,
+          {
+            strategy: "inline-svg",
+            mermaidConfig: {
+              theme: "neutral",
+              fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+            },
           },
-        },
+        ],
       ],
-    ],
+    }),
     syntaxHighlight: {
       type: "shiki",
       excludeLangs: ["mermaid"],
