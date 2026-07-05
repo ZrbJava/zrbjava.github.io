@@ -1,6 +1,7 @@
 ---
 import type { Post } from "@/utils/content";
 import { formatDate, getReadingTime, tagToSlug } from "@/utils/content";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   post: Post;
@@ -14,9 +15,18 @@ const href = `/posts/${post.id}`;
 
 <article class:list={["post-card", { featured, lead }]}>
   <div class="post-top">
-    <span>{post.data.category}</span>
-    <span>{formatDate(post.data.pubDate)}</span>
-    <span>{getReadingTime(post.body)}</span>
+    <span class="meta-item">
+      <Icon name="folder" size={13} />
+      {post.data.category}
+    </span>
+    <span class="meta-item">
+      <Icon name="calendar" size={13} />
+      {formatDate(post.data.pubDate)}
+    </span>
+    <span class="meta-item">
+      <Icon name="clock" size={13} />
+      {getReadingTime(post.body)}
+    </span>
   </div>
   <h2><a class="post-card-link" href={href}>{post.data.title}</a></h2>
   <p>{post.data.description}</p>
@@ -106,11 +116,17 @@ const href = `/posts/${post.id}`;
     z-index: 1;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 10px 14px;
     color: var(--subtle);
     font-size: 13px;
     font-weight: 700;
     pointer-events: none;
+  }
+
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
 
   h2 {

@@ -5,7 +5,9 @@ import AuthorAvatar from "@/components/AuthorAvatar.astro";
 import TopicCard from "@/components/TopicCard.astro";
 import SkillRadar from "@/components/SkillRadar.astro";
 import KnowledgeMap from "@/components/KnowledgeMap.astro";
+import Icon from "@/components/Icon.astro";
 import { site } from "@/data/site";
+import { socialIcon } from "@/utils/icons";
 import { visiblePosts } from "@/utils/content";
 
 const posts = visiblePosts(await getCollection("posts"));
@@ -70,7 +72,13 @@ const entries = [
               </div>
               <div class="social-row">
                 {site.socials.map((social) => (
-                  <a href={social.href} target={social.href.startsWith("http") ? "_blank" : undefined} rel={social.href.startsWith("http") ? "noreferrer" : undefined}>
+                  <a
+                    class="social-link"
+                    href={social.href}
+                    target={social.href.startsWith("http") ? "_blank" : undefined}
+                    rel={social.href.startsWith("http") ? "noreferrer" : undefined}
+                  >
+                    <Icon name={socialIcon(social.label)} size={14} />
                     {social.label}
                   </a>
                 ))}
@@ -298,17 +306,21 @@ const entries = [
 
   .social-row {
     display: flex;
-    gap: 14px;
+    flex-wrap: wrap;
+    gap: 14px 18px;
   }
 
-  .social-row a {
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--subtle);
     font-size: 13px;
     font-weight: 800;
     transition: color 0.15s;
   }
 
-  .social-row a:hover {
+  .social-link:hover {
     color: var(--accent);
   }
 

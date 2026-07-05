@@ -17,7 +17,7 @@ export const site = {
     { href: "/about", label: "关于" },
   ],
   socials: [
-    { href: "https://github.com/", label: "GitHub" },
+    { href: "https://github.com/ZrbJava", label: "GitHub" },
     { href: "/rss.xml", label: "RSS" },
   ],
   highlights: [

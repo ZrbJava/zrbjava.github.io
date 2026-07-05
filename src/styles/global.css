@@ -19,6 +19,10 @@
   --max: 1120px;
   --page-gutter: 20px;
   --header-height: 68px;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --code-size: 0.8125rem;
 }
 
 :root.dark {
@@ -46,10 +50,13 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  overflow-x: clip;
   background:
     radial-gradient(
       circle at top left,
@@ -93,6 +100,11 @@ input {
 .container {
   width: min(var(--max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
+}
+
+.site-main {
+  min-width: 0;
+  overflow-x: clip;
 }
 
 .section-head.row {
@@ -199,6 +211,9 @@ input {
   color: var(--text);
   font-size: 17px;
   line-height: 1.85;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 a:focus-visible,
@@ -257,26 +272,56 @@ button:focus-visible {
   background: color-mix(in srgb, var(--accent-soft) 42%, transparent);
 }
 
-.prose code {
+.prose :not(pre) > code {
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 2px 6px;
   background: var(--surface-soft);
-  font-size: 0.9em;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
 }
 
-.prose pre {
+.prose pre,
+.prose pre.astro-code {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radius);
   padding: 18px;
   background: var(--code-bg) !important;
+  font-family: var(--font-mono);
+  font-size: var(--code-size);
+  line-height: 1.65;
+  tab-size: 2;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
-.prose pre code {
+.prose pre code,
+.prose pre.astro-code code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
   border: 0;
   padding: 0;
   background: transparent;
   color: inherit;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.prose pre .line,
+.prose pre code span {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .prose svg.flowchart,
@@ -352,9 +397,10 @@ button:focus-visible {
     scroll-margin-top: 88px;
   }
 
-  .prose pre {
+  .prose pre,
+  .prose pre.astro-code {
     padding: 14px;
-    font-size: 13px;
+    font-size: var(--code-size);
     border-radius: calc(var(--radius) - 2px);
   }
 

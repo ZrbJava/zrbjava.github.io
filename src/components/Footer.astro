@@ -1,5 +1,7 @@
 ---
 import { site } from "@/data/site";
+import Icon from "@/components/Icon.astro";
+import { socialIcon } from "@/utils/icons";
 ---
 
 <footer class="footer">
@@ -12,7 +14,17 @@ import { site } from "@/data/site";
     <div class="footer-right">
       <nav class="footer-links" aria-label="页脚链接">
         {site.nav.slice(1).map((item) => <a href={item.href}>{item.label}</a>)}
-        {site.socials.map((item) => <a href={item.href}>{item.label}</a>)}
+        {site.socials.map((item) => (
+          <a
+            class="social-link"
+            href={item.href}
+            target={item.href.startsWith("http") ? "_blank" : undefined}
+            rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+          >
+            <Icon name={socialIcon(item.label)} size={14} />
+            {item.label}
+          </a>
+        ))}
       </nav>
       <p class="footer-note">持续更新中 · 写给自己，也写给同样较真的工程师</p>
     </div>
@@ -70,6 +82,12 @@ import { site } from "@/data/site";
 
   .footer-links a:hover {
     color: var(--accent);
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .footer-note {
