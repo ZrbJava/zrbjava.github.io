@@ -11,7 +11,7 @@ const site =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "https://zrbjava.github.io");
+      : "https://zhaorubo.top");
 
 export default defineConfig({
   site,

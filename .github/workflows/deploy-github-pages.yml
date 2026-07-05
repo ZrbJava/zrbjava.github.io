@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SITE_URL: https://zrbjava.github.io
+      SITE_URL: https://zhaorubo.top
     steps:
       - name: Checkout
         uses: actions/checkout@v4
