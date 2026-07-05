@@ -18,9 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DEPLOY_TARGET: github
       SITE_URL: https://zrbjava.github.io
-      GITHUB_PAGES_BASE: /blog
     steps:
       - name: Checkout
         uses: actions/checkout@v4
