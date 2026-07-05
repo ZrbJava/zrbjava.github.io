@@ -32,7 +32,7 @@ CSS  → CSSOM Tree
 
 ```html
 <!-- CSS 阻塞渲染，放 head 并最小化 -->
-<link rel="stylesheet" href="critical.css">
+<link rel="stylesheet" href="critical.css" />
 
 <!-- JS 阻塞解析，用 defer/async -->
 <script defer src="app.js"></script>
@@ -41,24 +41,24 @@ CSS  → CSSOM Tree
 
 ### 2. 重排（Reflow）vs 重绘（Repaint）
 
-| 操作 | 触发 Reflow | 触发 Repaint | 只触发 Composite |
-|------|-------------|--------------|------------------|
-| 修改 width/height | ✅ | ✅ | |
-| 修改 color | | ✅ | |
-| 修改 transform | | | ✅ |
-| 修改 opacity | | | ✅ |
-| 读取 offsetHeight | ✅（强制同步布局） | | |
+| 操作              | 触发 Reflow        | 触发 Repaint | 只触发 Composite |
+| ----------------- | ------------------ | ------------ | ---------------- |
+| 修改 width/height | ✅                 | ✅           |                  |
+| 修改 color        |                    | ✅           |                  |
+| 修改 transform    |                    |              | ✅               |
+| 修改 opacity      |                    |              | ✅               |
+| 读取 offsetHeight | ✅（强制同步布局） |              |                  |
 
 ```js
 // ❌ 强制同步布局（Layout Thrashing）
-elements.forEach(el => {
-  el.style.width = el.offsetWidth + 10 + 'px'; // 读 → 写 → 读 → 写
+elements.forEach((el) => {
+  el.style.width = el.offsetWidth + 10 + "px"; // 读 → 写 → 读 → 写
 });
 
 // ✅ 批量读，批量写
-const widths = elements.map(el => el.offsetWidth);
+const widths = elements.map((el) => el.offsetWidth);
 elements.forEach((el, i) => {
-  el.style.width = widths[i] + 10 + 'px';
+  el.style.width = widths[i] + 10 + "px";
 });
 ```
 
@@ -101,10 +101,10 @@ elements.forEach((el, i) => {
 ```
 
 ```js
-console.log('1');
-setTimeout(() => console.log('2'), 0);
-Promise.resolve().then(() => console.log('3'));
-console.log('4');
+console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
 // 输出：1 → 4 → 3 → 2
 ```
 
@@ -134,13 +134,13 @@ function bindData(el, data) {
 
 ## 性能指标关联
 
-| 指标 | 渲染阶段 | 优化方向 |
-|------|----------|----------|
-| TTFB | 网络 + 服务端 | CDN、缓存、SSR |
-| FCP | 首次 Paint | 关键 CSS 内联、字体优化 |
-| LCP | 最大内容 Paint | 图片优化、preload、SSR |
-| CLS | Layout 偏移 | 预留尺寸、font-display |
-| INP | 事件处理 + 渲染 | 减少 JS 执行、Web Worker |
+| 指标 | 渲染阶段        | 优化方向                 |
+| ---- | --------------- | ------------------------ |
+| TTFB | 网络 + 服务端   | CDN、缓存、SSR           |
+| FCP  | 首次 Paint      | 关键 CSS 内联、字体优化  |
+| LCP  | 最大内容 Paint  | 图片优化、preload、SSR   |
+| CLS  | Layout 偏移     | 预留尺寸、font-display   |
+| INP  | 事件处理 + 渲染 | 减少 JS 执行、Web Worker |
 
 ## 面试综合题
 

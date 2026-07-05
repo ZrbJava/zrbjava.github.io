@@ -2,13 +2,13 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
-import { visiblePosts } from "@/utils/content";
+import { tagToSlug, visiblePosts } from "@/utils/content";
 
 export async function getStaticPaths() {
   const posts = visiblePosts(await getCollection("posts"));
   const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
   return tags.map((tag) => ({
-    params: { tag },
+    params: { tag: tagToSlug(tag) },
     props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) }
   }));
 }

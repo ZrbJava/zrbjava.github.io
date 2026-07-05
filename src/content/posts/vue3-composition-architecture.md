@@ -71,12 +71,12 @@ src/
 
 ## 与 React Hooks 的对比
 
-| 维度 | Vue Composable | React Hook |
-|------|---------------|------------|
+| 维度     | Vue Composable               | React Hook            |
+| -------- | ---------------------------- | --------------------- |
 | 调用限制 | 无限制（可在条件分支中调用） | 不可在条件/循环中调用 |
-| 依赖追踪 | 自动（ref/reactive） | 手动（deps 数组） |
-| 命名约定 | `use` 前缀 | `use` 前缀 |
-| 状态隔离 | 每次调用独立 ref | 每次调用独立 state |
+| 依赖追踪 | 自动（ref/reactive）         | 手动（deps 数组）     |
+| 命名约定 | `use` 前缀                   | `use` 前缀            |
+| 状态隔离 | 每次调用独立 ref             | 每次调用独立 state    |
 
 Vue Composable 的一个独特优势：**可以在任何地方调用**，不受 Hooks 规则限制。
 
@@ -94,7 +94,7 @@ Phase 3: 稳定模块保持 Options API，不强制迁移
 
 ```vue
 <script setup lang="ts">
-import { useOrderForm } from './composables/useOrderForm';
+import { useOrderForm } from "./composables/useOrderForm";
 
 const props = defineProps<{ orderId?: string }>();
 const emit = defineEmits<{ submit: [order: Order] }>();
@@ -102,9 +102,9 @@ const emit = defineEmits<{ submit: [order: Order] }>();
 const { form, validate, submit, loading } = useOrderForm(props.orderId);
 
 async function handleSubmit() {
-  if (!await validate()) return;
+  if (!(await validate())) return;
   const order = await submit();
-  emit('submit', order);
+  emit("submit", order);
 }
 </script>
 ```
@@ -115,7 +115,3 @@ async function handleSubmit() {
 2. **Composable 中直接操作 DOM** → 封装为 `useElementSize` 等专用 Composable
 3. **Composable 之间循环依赖** → 提取共享逻辑到第三个 Composable
 4. **忽略 cleanup** → `onUnmounted` 中清理定时器、事件监听、WebSocket
-
-## 面试表达
-
-「我们的 Vue 3 项目按 feature 组织，每个 feature 有自己的 composables 目录。通用逻辑如分页、权限、WebSocket 抽到全局 composables。这样新同学加入只需要理解一个 feature 的 composable 就能上手，而不是读 800 行的 Options API 组件。」

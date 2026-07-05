@@ -20,13 +20,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   h1 {
     margin: 0;
     color: var(--ink);
-    font-size: 88px;
+    font-size: clamp(56px, 18vw, 88px);
     line-height: 1;
   }
 
   p {
     margin: 16px 0 24px;
     color: var(--muted);
-    font-size: 18px;
+    font-size: clamp(16px, 4vw, 18px);
   }
 </style>

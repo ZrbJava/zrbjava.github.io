@@ -27,15 +27,15 @@ featured: true
 
 ```tsx
 // app/api/chat/route.ts — Server Route
-import { streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
   const result = streamText({
-    model: openai('gpt-4o'),
+    model: openai("gpt-4o"),
     messages,
-    system: '你是一个前端技术助手。',
+    system: "你是一个前端技术助手。",
   });
   return result.toDataStreamResponse();
 }
@@ -43,23 +43,28 @@ export async function POST(req: Request) {
 
 ```tsx
 // components/Chat.tsx — Client Component
-'use client';
-import { useChat } from 'ai/react';
+"use client";
+import { useChat } from "ai/react";
 
 export function Chat() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/chat',
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: "/api/chat",
+    });
 
   return (
     <div>
-      {messages.map(m => (
+      {messages.map((m) => (
         <div key={m.id} className={m.role}>
           {m.content}
         </div>
       ))}
       <form onSubmit={handleSubmit}>
-        <input value={input} onChange={handleInputChange} disabled={isLoading} />
+        <input
+          value={input}
+          onChange={handleInputChange}
+          disabled={isLoading}
+        />
       </form>
     </div>
   );
@@ -95,8 +100,8 @@ AI 输出 Markdown 时，流式渲染的挑战是**不完整的 Markdown 语法*
 ```tsx
 function StreamingMarkdown({ content }: { content: string }) {
   // 策略 1：逐字追加，最后统一渲染
-  const [displayContent, setDisplayContent] = useState('');
-  
+  const [displayContent, setDisplayContent] = useState("");
+
   useEffect(() => {
     // 防抖：每 50ms 更新一次渲染，避免频繁 re-render
     const timer = setTimeout(() => setDisplayContent(content), 50);
@@ -111,12 +116,12 @@ function StreamingMarkdown({ content }: { content: string }) {
 
 ```tsx
 const { messages, error, reload, stop } = useChat({
-  api: '/api/chat',
+  api: "/api/chat",
   onError: (err) => {
-    if (err.message.includes('rate_limit')) {
-      toast.error('请求过于频繁，请稍后再试');
-    } else if (err.message.includes('context_length')) {
-      toast.error('对话过长，请开启新对话');
+    if (err.message.includes("rate_limit")) {
+      toast.error("请求过于频繁，请稍后再试");
+    } else if (err.message.includes("context_length")) {
+      toast.error("对话过长，请开启新对话");
     }
   },
 });
@@ -133,7 +138,7 @@ const { messages, error, reload, stop } = useChat({
 
 ```ts
 // Server 端 Token 计数
-import { encode } from 'gpt-tokenizer';
+import { encode } from "gpt-tokenizer";
 
 function trimMessages(messages: Message[], maxTokens: number) {
   let total = 0;
@@ -147,7 +152,3 @@ function trimMessages(messages: Message[], maxTokens: number) {
   return trimmed;
 }
 ```
-
-## 面试表达
-
-「我们的 AI 助手集成在管理后台，日处理 5000+ 对话。前端用 Vercel AI SDK 的 useChat 管理流式状态，Server Route 转发 OpenAI API。关键设计：Token 窗口滑动截断、流式 Markdown 防抖渲染、三级错误回退。API Key 只在服务端，客户端零泄露。」

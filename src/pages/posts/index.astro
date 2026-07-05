@@ -2,7 +2,8 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
-import { getAllCategories, getAllTags, visiblePosts } from "@/utils/content";
+import { getAllCategories, getAllTags, tagToSlug, visiblePosts } from "@/utils/content";
+import { site } from "@/data/site";
 
 const posts = visiblePosts(await getCollection("posts"));
 const categories = getAllCategories(posts);
@@ -11,10 +12,13 @@ const tags = getAllTags(posts);
 
 <BaseLayout title="文章" description="按分类、标签和时间浏览所有技术文章。">
   <section class="section">
-    <div class="container grid two-col">
+    <div class="container grid two-col posts-layout">
       <div>
         <h1 class="section-title">文章</h1>
-        <p class="section-copy">记录前端架构、React、工程化、性能优化和项目复盘中的长期思考。</p>
+        <p class="section-copy">
+          {site.author} 的技术笔记——覆盖前端架构、框架原理、工程化、性能优化与 AI 融合。
+          每篇都力求把「为什么」讲清楚，而不只是罗列结论。
+        </p>
         <div class="post-list">
           {posts.map((post) => <PostCard post={post} />)}
         </div>
@@ -26,7 +30,7 @@ const tags = getAllTags(posts);
         </div>
         <h2>标签</h2>
         <div class="tag-list">
-          {tags.map(([tag, count]) => <a class="tag" href={`/tags/${tag}`}>{tag} · {count}</a>)}
+          {tags.map(([tag, count]) => <a class="tag" href={`/tags/${tagToSlug(tag)}`}>{tag} · {count}</a>)}
         </div>
       </aside>
     </div>
@@ -40,7 +44,7 @@ const tags = getAllTags(posts);
 
   .filter-panel {
     position: sticky;
-    top: 96px;
+    top: calc(var(--header-height) + 28px);
     padding: 22px;
   }
 
@@ -69,8 +73,17 @@ const tags = getAllTags(posts);
   }
 
   @media (max-width: 860px) {
+    .posts-layout {
+      gap: 32px;
+    }
+
+    .posts-layout aside {
+      order: -1;
+    }
+
     .filter-panel {
       position: static;
+      padding: 18px;
     }
   }
 </style>

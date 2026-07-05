@@ -37,13 +37,13 @@ featured: true
 
 ## 生产构建
 
-| | Vite | Webpack |
-|---|------|---------|
-| 生产打包器 | Rollup | Webpack 自身 |
-| Tree Shaking | Rollup 静态分析 | 模块标记 + 副作用分析 |
-| Code Splitting | 动态 import | SplitChunksPlugin |
-| CSS 处理 | PostCSS 内置 | css-loader + mini-css-extract |
-| 产物格式 | ESM 优先 | 可配置 |
+|                | Vite            | Webpack                       |
+| -------------- | --------------- | ----------------------------- |
+| 生产打包器     | Rollup          | Webpack 自身                  |
+| Tree Shaking   | Rollup 静态分析 | 模块标记 + 副作用分析         |
+| Code Splitting | 动态 import     | SplitChunksPlugin             |
+| CSS 处理       | PostCSS 内置    | css-loader + mini-css-extract |
+| 产物格式       | ESM 优先        | 可配置                        |
 
 ## Webpack 核心概念
 
@@ -54,8 +54,8 @@ Webpack 的插件机制基于 Tapable：
 ```ts
 class MyPlugin {
   apply(compiler: Compiler) {
-    compiler.hooks.compilation.tap('MyPlugin', (compilation) => {
-      compilation.hooks.optimizeChunks.tap('MyPlugin', (chunks) => {
+    compiler.hooks.compilation.tap("MyPlugin", (compilation) => {
+      compilation.hooks.optimizeChunks.tap("MyPlugin", (chunks) => {
         // 在 chunk 优化阶段介入
       });
     });
@@ -108,9 +108,3 @@ Webpack 项目 → 替换 webpack 为 @rspack/core → 大部分插件/Loader �
 3. **并行处理**：thread-loader / esbuild-loader
 4. **DLL / External**：第三方库不重复打包
 5. **Source Map 策略**：开发 `eval-cheap-module-source-map`，生产 `hidden-source-map`
-
-## 面试表达
-
-「我们的 Monorepo 有 3 个 Webpack 应用，冷启动 45 秒。评估后选择 Rspack 替换 Webpack，API 兼容度 90%+，冷启动降到 8 秒。新应用直接用 Vite，老应用逐步迁移。」
-
-这种表达展示了：**基于数据做选型，而非追新**。

@@ -13,14 +13,14 @@ Pinia 是 Vue 3 官方推荐的状态管理方案，解决了 Vuex 的 TypeScrip
 
 ## Pinia vs Vuex 核心差异
 
-| 维度 | Vuex 4 | Pinia |
-|------|--------|-------|
-| Mutation | 必需 | 无（直接修改 state） |
-| Module | 嵌套命名空间 | 扁平 Store |
-| TypeScript | 需要大量类型体操 | 原生 TS 支持 |
-| DevTools | 支持 | 支持 |
-| SSR | 需要额外配置 | 内置支持 |
-| 体积 | ~3KB | ~1.5KB |
+| 维度       | Vuex 4           | Pinia                |
+| ---------- | ---------------- | -------------------- |
+| Mutation   | 必需             | 无（直接修改 state） |
+| Module     | 嵌套命名空间     | 扁平 Store           |
+| TypeScript | 需要大量类型体操 | 原生 TS 支持         |
+| DevTools   | 支持             | 支持                 |
+| SSR        | 需要额外配置     | 内置支持             |
+| 体积       | ~3KB             | ~1.5KB               |
 
 ## Store 设计模式
 
@@ -28,11 +28,11 @@ Pinia 是 Vue 3 官方推荐的状态管理方案，解决了 Vuex 的 TypeScrip
 
 ```ts
 // stores/user.ts
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore("user", () => {
   const profile = ref<UserProfile | null>(null);
   const permissions = ref<string[]>([]);
 
-  const isAdmin = computed(() => permissions.value.includes('admin'));
+  const isAdmin = computed(() => permissions.value.includes("admin"));
 
   async function fetchProfile() {
     profile.value = await userApi.getProfile();
@@ -47,18 +47,24 @@ export const useUserStore = defineStore('user', () => {
 
 ```ts
 // Setup Store（推荐，Composition API 风格）
-export const useCartStore = defineStore('cart', () => {
+export const useCartStore = defineStore("cart", () => {
   const items = ref<CartItem[]>([]);
-  const total = computed(() => items.value.reduce((sum, i) => sum + i.price, 0));
-  function addItem(item: CartItem) { items.value.push(item); }
+  const total = computed(() =>
+    items.value.reduce((sum, i) => sum + i.price, 0),
+  );
+  function addItem(item: CartItem) {
+    items.value.push(item);
+  }
   return { items, total, addItem };
 });
 
 // Options Store（Vuex 迁移友好）
-export const useSettingsStore = defineStore('settings', {
-  state: () => ({ theme: 'light' as 'light' | 'dark' }),
+export const useSettingsStore = defineStore("settings", {
+  state: () => ({ theme: "light" as "light" | "dark" }),
   actions: {
-    toggleTheme() { this.theme = this.theme === 'light' ? 'dark' : 'light'; },
+    toggleTheme() {
+      this.theme = this.theme === "light" ? "dark" : "light";
+    },
   },
 });
 ```
@@ -67,16 +73,20 @@ export const useSettingsStore = defineStore('settings', {
 
 ```ts
 // 使用 pinia-plugin-persistedstate
-export const useAuthStore = defineStore('auth', () => {
-  const token = ref<string | null>(null);
-  return { token };
-}, {
-  persist: {
-    key: 'auth',
-    storage: sessionStorage, // 敏感数据用 sessionStorage
-    paths: ['token'],         // 只持久化必要字段
+export const useAuthStore = defineStore(
+  "auth",
+  () => {
+    const token = ref<string | null>(null);
+    return { token };
   },
-});
+  {
+    persist: {
+      key: "auth",
+      storage: sessionStorage, // 敏感数据用 sessionStorage
+      paths: ["token"], // 只持久化必要字段
+    },
+  },
+);
 ```
 
 **安全原则：**
@@ -89,8 +99,8 @@ export const useAuthStore = defineStore('auth', () => {
 
 ```vue
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useUserStore } from '@/stores/user';
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 // ✅ 解构响应式 state

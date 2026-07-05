@@ -25,7 +25,7 @@ for (const point of points) {
 }
 
 // ✅ 按颜色分组批量绘制
-const groups = groupBy(points, 'color');
+const groups = groupBy(points, "color");
 for (const [color, group] of Object.entries(groups)) {
   ctx.fillStyle = color;
   ctx.beginPath();
@@ -63,12 +63,12 @@ class DirtyRectRenderer {
 ```js
 // main.ts
 const offscreen = canvas.transferControlToOffscreen();
-const worker = new Worker('render-worker.js');
+const worker = new Worker("render-worker.js");
 worker.postMessage({ canvas: offscreen }, [offscreen]);
 
 // render-worker.js
 self.onmessage = (e) => {
-  const ctx = e.data.canvas.getContext('2d');
+  const ctx = e.data.canvas.getContext("2d");
   // 在 Worker 中绘制，不阻塞 UI
 };
 ```
@@ -93,7 +93,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
 // 3. 设置 attribute 并绘制
-const posLoc = gl.getAttribLocation(program, 'a_position');
+const posLoc = gl.getAttribLocation(program, "a_position");
 gl.enableVertexAttribArray(posLoc);
 gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
@@ -101,13 +101,13 @@ gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
 
 ## Canvas 2D vs WebGL 选型
 
-| 维度 | Canvas 2D | WebGL |
-|------|-----------|-------|
-| 学习曲线 | 低 | 高 |
-| 性能上限 | 中（万级元素） | 高（百万级顶点） |
-| 3D 支持 | 无 | 原生 |
+| 维度     | Canvas 2D            | WebGL                  |
+| -------- | -------------------- | ---------------------- |
+| 学习曲线 | 低                   | 高                     |
+| 性能上限 | 中（万级元素）       | 高（百万级顶点）       |
+| 3D 支持  | 无                   | 原生                   |
 | 适用场景 | 图表、标注、简单动画 | 3D、粒子、大数据可视化 |
-| 库生态 | ECharts, Fabric.js | Three.js, PixiJS, regl |
+| 库生态   | ECharts, Fabric.js   | Three.js, PixiJS, regl |
 
 **选型建议：**
 

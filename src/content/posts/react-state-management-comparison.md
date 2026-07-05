@@ -13,14 +13,14 @@ featured: false
 
 ## 先分类，再选型
 
-| 状态类型 | 特征 | 推荐方案 |
-|----------|------|----------|
-| 本地 UI 状态 | 开关、输入值、hover | useState / useReducer |
-| 共享 UI 状态 | 主题、侧边栏、Modal | Context + useReducer |
-| 服务端缓存 | API 数据、分页、失效 | TanStack Query / SWR |
-| 全局客户端状态 | 用户信息、权限、购物车 | Zustand / Redux Toolkit |
-| 原子化派生状态 | 表单字段间联动 | Jotai / Valtio |
-| URL 状态 | 筛选、分页、Tab | nuqs / React Router searchParams |
+| 状态类型       | 特征                   | 推荐方案                         |
+| -------------- | ---------------------- | -------------------------------- |
+| 本地 UI 状态   | 开关、输入值、hover    | useState / useReducer            |
+| 共享 UI 状态   | 主题、侧边栏、Modal    | Context + useReducer             |
+| 服务端缓存     | API 数据、分页、失效   | TanStack Query / SWR             |
+| 全局客户端状态 | 用户信息、权限、购物车 | Zustand / Redux Toolkit          |
+| 原子化派生状态 | 表单字段间联动         | Jotai / Valtio                   |
+| URL 状态       | 筛选、分页、Tab        | nuqs / React Router searchParams |
 
 **核心原则：不要把所有状态都放进全局 Store。**
 
@@ -33,10 +33,12 @@ featured: false
 ```ts
 // RTK Slice 示例
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: { profile: null, loading: false },
   reducers: {
-    setProfile: (state, action) => { state.profile = action.payload; },
+    setProfile: (state, action) => {
+      state.profile = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -55,7 +57,7 @@ const userSlice = createSlice({
 适合：中等复杂度、快速迭代、不需要中间件生态
 
 ```ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface AuthStore {
   user: User | null;
@@ -81,7 +83,7 @@ const useAuthStore = create<AuthStore>((set) => ({
 适合：原子化状态、细粒度订阅、表单联动
 
 ```ts
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom } from "jotai";
 
 const priceAtom = atom(0);
 const quantityAtom = atom(1);
@@ -109,9 +111,3 @@ const totalAtom = atom((get) => get(priceAtom) * get(quantityAtom));
 2. **团队 > 15 人且状态逻辑复杂**：考虑 Redux Toolkit + RTK Query
 3. **不要重复造轮子**：URL 状态、表单状态、缓存失效都有成熟方案
 4. **状态迁移策略**：新功能用新方案，旧模块逐步迁移，避免大爆炸重写
-
-## 面试加分表达
-
-「我们之前全量 Redux，随着业务拆分发现 80% 的 Store 其实是服务端缓存。迁移到 TanStack Query + Zustand 后，Store 代码量减少 60%，首屏请求瀑布也消除了。」
-
-这种表达展示了：**不是追新，而是基于问题演进架构**。

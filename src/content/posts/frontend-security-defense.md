@@ -15,11 +15,11 @@ featured: false
 
 ### 三种类型
 
-| 类型 | 注入点 | 特点 |
-|------|--------|------|
+| 类型   | 注入点                 | 特点               |
+| ------ | ---------------------- | ------------------ |
 | 存储型 | 数据库（评论、用户名） | 危害最大，持久存在 |
-| 反射型 | URL 参数 | 需要诱骗用户点击 |
-| DOM 型 | 前端 JS 直接操作 DOM | 不经过服务端 |
+| 反射型 | URL 参数               | 需要诱骗用户点击   |
+| DOM 型 | 前端 JS 直接操作 DOM   | 不经过服务端       |
 
 ### 防御策略
 
@@ -77,7 +77,9 @@ if (req.headers.origin !== 'https://myapp.com') reject();
 CSP 是浏览器端的「白名单防火墙」：
 
 ```html
-<meta http-equiv="Content-Security-Policy" content="
+<meta
+  http-equiv="Content-Security-Policy"
+  content="
   default-src 'self';
   script-src 'self' https://cdn.example.com;
   style-src 'self' 'unsafe-inline';
@@ -86,7 +88,8 @@ CSP 是浏览器端的「白名单防火墙」：
   frame-ancestors 'none';
   base-uri 'self';
   form-action 'self';
-">
+"
+/>
 ```
 
 **关键指令：**
@@ -99,12 +102,12 @@ CSP 是浏览器端的「白名单防火墙」：
 
 ```ts
 // 收集 CSP 违规报告
-app.post('/api/csp-report', (req, res) => {
-  const report = req.body['csp-report'];
-  logger.warn('CSP Violation', {
-    blockedUri: report['blocked-uri'],
-    violatedDirective: report['violated-directive'],
-    sourceFile: report['source-file'],
+app.post("/api/csp-report", (req, res) => {
+  const report = req.body["csp-report"];
+  logger.warn("CSP Violation", {
+    blockedUri: report["blocked-uri"],
+    violatedDirective: report["violated-directive"],
+    sourceFile: report["source-file"],
   });
   res.status(204).end();
 });
@@ -115,11 +118,17 @@ app.post('/api/csp-report', (req, res) => {
 ```ts
 // Next.js 配置示例
 const securityHeaders = [
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains",
+  },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
+  },
 ];
 ```
 
@@ -147,7 +156,3 @@ webPreferences: {
   enableRemoteModule: false, // 已废弃
 }
 ```
-
-## 面试表达
-
-「我在项目中建立了前端安全基线：CSP 策略覆盖所有页面，用户生成内容用 DOMPurify 消毒，Cookie 全部 SameSite=Strict。CSP 报告监控发现了 3 处第三方脚本违规，及时清理。Electron 应用严格执行 Context Isolation，通过安全审计。」

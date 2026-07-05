@@ -72,7 +72,7 @@ type Getters<T> = {
 ## 模板字面量类型
 
 ```ts
-type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
 type APIPath = `/api/${string}`;
 
 type RouteConfig<M extends HTTPMethod, P extends APIPath> = {
@@ -83,9 +83,9 @@ type RouteConfig<M extends HTTPMethod, P extends APIPath> = {
 
 // 事件名类型安全
 type EventMap = {
-  'user:login': { userId: string };
-  'user:logout': { userId: string };
-  'order:created': { orderId: string };
+  "user:login": { userId: string };
+  "user:logout": { userId: string };
+  "order:created": { orderId: string };
 };
 
 type EventName = keyof EventMap;
@@ -103,10 +103,10 @@ type RouteParams<T extends string> =
   T extends `${infer _Start}:${infer Param}/${infer Rest}`
     ? { [K in Param | keyof RouteParams<Rest>]: string }
     : T extends `${infer _Start}:${infer Param}`
-    ? { [K in Param]: string }
-    : {};
+      ? { [K in Param]: string }
+      : {};
 
-type UserRoute = RouteParams<'/users/:userId/posts/:postId'>;
+type UserRoute = RouteParams<"/users/:userId/posts/:postId">;
 // { userId: string; postId: string }
 ```
 
@@ -114,12 +114,12 @@ type UserRoute = RouteParams<'/users/:userId/posts/:postId'>;
 
 ```ts
 type ApiEndpoints = {
-  'GET /users': { response: User[] };
-  'GET /users/:id': { response: User };
-  'POST /users': { body: CreateUserDto; response: User };
+  "GET /users": { response: User[] };
+  "GET /users/:id": { response: User };
+  "POST /users": { body: CreateUserDto; response: User };
 };
 
-type ApiResponse<E extends keyof ApiEndpoints> = ApiEndpoints[E]['response'];
+type ApiResponse<E extends keyof ApiEndpoints> = ApiEndpoints[E]["response"];
 
 async function apiCall<E extends keyof ApiEndpoints>(
   endpoint: E,
@@ -128,8 +128,8 @@ async function apiCall<E extends keyof ApiEndpoints>(
   // 实现...
 }
 
-const users = await apiCall('GET /users');       // User[]
-const user = await apiCall('POST /users', dto);  // User
+const users = await apiCall("GET /users"); // User[]
+const user = await apiCall("POST /users", dto); // User
 ```
 
 ## 类型体操的边界

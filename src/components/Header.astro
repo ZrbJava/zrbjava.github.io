@@ -1,22 +1,43 @@
 ---
 import { site } from "@/data/site";
+import SearchTrigger from "@/components/SearchTrigger.astro";
+import AuthorAvatar from "@/components/AuthorAvatar.astro";
+
+const currentPath = Astro.url.pathname;
 ---
 
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label={site.name}>
-      <span class="brand-mark">ZR</span>
-      <span>{site.shortName}</span>
+      <AuthorAvatar size="sm" shape="rounded" class="brand-mark" />
+      <span class="brand-text">
+        <strong>{site.author}</strong>
+        <small>{site.tagline}</small>
+      </span>
     </a>
     <nav class="nav" aria-label="主导航">
-      {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      {site.nav.map((item) => (
+        <a
+          href={item.href}
+          aria-current={currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href)) ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
     </nav>
-    <button class="theme-toggle" type="button" aria-label="切换深色模式" data-theme-toggle>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+    <div class="header-actions">
+      <SearchTrigger />
+      <button class="theme-toggle" type="button" aria-label="切换深色模式" data-theme-toggle>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 3v2.2M12 18.8V21M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M3 12h2.2M18.8 12H21M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6" />
         <circle cx="12" cy="12" r="4" />
       </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z" />
+      </svg>
     </button>
+    </div>
   </div>
 </header>
 
@@ -33,6 +54,23 @@ import { site } from "@/data/site";
 </script>
 
 <style>
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 16px;
+    z-index: 100;
+    border-radius: var(--radius);
+    padding: 8px 16px;
+    background: var(--accent);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .skip-link:focus {
+    top: 16px;
+  }
+
   .site-header {
     position: sticky;
     top: 0;
@@ -40,11 +78,12 @@ import { site } from "@/data/site";
     border-bottom: 1px solid var(--line);
     background: color-mix(in srgb, var(--bg-strong) 88%, transparent);
     backdrop-filter: blur(18px);
+    padding-top: env(safe-area-inset-top, 0);
   }
 
   .header-inner {
     display: flex;
-    min-height: 68px;
+    min-height: var(--header-height);
     align-items: center;
     gap: 24px;
   }
@@ -54,20 +93,28 @@ import { site } from "@/data/site";
     align-items: center;
     gap: 10px;
     color: var(--ink);
-    font-weight: 800;
+    flex-shrink: 0;
   }
 
-  .brand-mark {
-    display: grid;
-    width: 34px;
-    height: 34px;
-    place-items: center;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius);
-    background: var(--accent);
-    color: white;
-    font-size: 12px;
-    letter-spacing: 0.04em;
+  .brand-mark :global(.author-avatar) {
+    border-color: var(--line-strong);
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .brand-text strong {
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  .brand-text small {
+    color: var(--subtle);
+    font-size: 11px;
+    font-weight: 600;
   }
 
   .nav {
@@ -83,11 +130,24 @@ import { site } from "@/data/site";
     color: var(--muted);
     font-size: 14px;
     font-weight: 700;
+    white-space: nowrap;
   }
 
-  .nav a:hover {
+  .nav a:hover,
+  .nav a[aria-current="page"] {
     background: var(--surface-soft);
     color: var(--text);
+  }
+
+  .nav a[aria-current="page"] {
+    color: var(--accent);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
   }
 
   .theme-toggle {
@@ -112,18 +172,56 @@ import { site } from "@/data/site";
     stroke-width: 1.8;
   }
 
+  .icon-moon {
+    display: none;
+  }
+
+  :global(.dark) .icon-sun {
+    display: none;
+  }
+
+  :global(.dark) .icon-moon {
+    display: block;
+  }
+
   @media (max-width: 720px) {
     .header-inner {
       min-height: auto;
       flex-wrap: wrap;
-      padding: 14px 0;
+      justify-content: space-between;
+      gap: 12px 16px;
+      padding: 12px 0;
+    }
+
+    .brand-text small {
+      display: none;
     }
 
     .nav {
       order: 3;
+      flex: none;
       width: 100%;
       justify-content: flex-start;
+      gap: 2px;
+      margin: 0 calc(var(--page-gutter) * -1);
+      padding: 0 var(--page-gutter) 2px;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+    }
+
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav a {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .header-actions {
+      margin-left: auto;
     }
   }
 </style>

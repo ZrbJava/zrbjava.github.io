@@ -1,0 +1,212 @@
+---
+import { site } from "@/data/site";
+import AuthorAvatar from "@/components/AuthorAvatar.astro";
+---
+
+<div class="identity-card" data-identity-card data-roles={JSON.stringify(site.intro.roles)}>
+  <div class="identity-panel" data-identity-panel tabindex="0">
+    <AuthorAvatar size="xl" class="identity-avatar" />
+    <p class="identity-role">
+      <span class="role-text" data-role-text>{site.intro.roles[0]}</span>
+      <span class="role-cursor" aria-hidden="true"></span>
+    </p>
+    <div class="identity-tags">
+      {site.intro.techTags.slice(0, 6).map((tag) => <span>{tag}</span>)}
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  function initIdentityCard() {
+    const root = document.querySelector("[data-identity-card]");
+    const panel = document.querySelector("[data-identity-panel]");
+    const roleEl = document.querySelector("[data-role-text]");
+    if (!root || root.dataset.ready === "true") return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    root.dataset.ready = "true";
+
+    const roles = JSON.parse(root.dataset.roles || "[]");
+    if (roleEl && roles.length > 1 && !reduced) {
+      let roleIndex = 0;
+      let charIndex = roles[0]?.length ?? 0;
+      let deleting = false;
+
+      const tick = () => {
+        const current = roles[roleIndex];
+        if (!deleting) {
+          charIndex += 1;
+          roleEl.textContent = current.slice(0, charIndex);
+          if (charIndex === current.length) {
+            deleting = true;
+            setTimeout(tick, 2000);
+            return;
+          }
+          setTimeout(tick, 65);
+          return;
+        }
+        charIndex -= 1;
+        roleEl.textContent = current.slice(0, charIndex);
+        if (charIndex === 0) {
+          deleting = false;
+          roleIndex = (roleIndex + 1) % roles.length;
+          setTimeout(tick, 400);
+          return;
+        }
+        setTimeout(tick, 32);
+      };
+      setTimeout(tick, 1200);
+    }
+
+    if (!panel || reduced) return;
+
+    panel.addEventListener("pointermove", (event) => {
+      const rect = panel.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      panel.style.transform = `perspective(800px) rotateX(${y * -5}deg) rotateY(${x * 6}deg)`;
+      panel.style.setProperty("--mx", `${x * 100 + 50}%`);
+      panel.style.setProperty("--my", `${y * 100 + 50}%`);
+    });
+
+    panel.addEventListener("pointerleave", () => {
+      panel.style.transform = "";
+      panel.style.setProperty("--mx", "50%");
+      panel.style.setProperty("--my", "50%");
+    });
+  }
+
+  initIdentityCard();
+  document.addEventListener("astro:page-load", initIdentityCard);
+</script>
+
+<style>
+  .identity-card {
+    width: min(100%, 360px);
+    margin-inline: auto;
+    perspective: 900px;
+    pointer-events: auto;
+  }
+
+  .identity-panel {
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) + 6px);
+    padding: 32px 28px 28px;
+    background: var(--surface);
+    text-align: center;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (max-width: 480px) {
+    .identity-panel {
+      padding: 24px 20px 20px;
+    }
+
+    .identity-avatar :global(.author-avatar-xl) {
+      width: 72px;
+      height: 72px;
+    }
+  }
+
+  .identity-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at var(--mx) var(--my),
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 55%
+    );
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .identity-avatar {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .identity-avatar :global(.author-avatar-xl) {
+    width: 80px;
+    height: 80px;
+  }
+
+  .identity-role {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 22px;
+    margin: 16px 0 0;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 750;
+  }
+
+  .role-cursor {
+    width: 2px;
+    height: 14px;
+    margin-left: 2px;
+    background: var(--accent);
+    animation: blink 1.1s step-end infinite;
+  }
+
+  .identity-tags {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 22px;
+  }
+
+  .identity-tags span {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+    background: var(--surface-soft);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      transform 0.2s;
+  }
+
+  .identity-panel:hover .identity-tags span {
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--line));
+  }
+
+  .identity-tags span:hover {
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .identity-panel {
+      transition: none;
+    }
+
+    .role-cursor {
+      animation: none;
+    }
+  }
+</style>

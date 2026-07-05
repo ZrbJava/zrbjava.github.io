@@ -1,6 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { formatDate, getReadingTime } from "@/utils/content";
+import TableOfContents from "@/components/TableOfContents.astro";
+import ReadingProgress from "@/components/ReadingProgress.astro";
+import SeriesNav from "@/components/SeriesNav.astro";
+import RelatedPosts from "@/components/RelatedPosts.astro";
+import ArticleAuthor from "@/components/ArticleAuthor.astro";
+import type { TocItem } from "@/utils/headings";
+import type { Post } from "@/utils/content";
+import { formatDate, getReadingTime, tagToSlug } from "@/utils/content";
 
 interface Props {
   title: string;
@@ -9,39 +16,62 @@ interface Props {
   updatedDate?: Date;
   category?: string;
   tags?: string[];
+  series?: string;
   readingSource?: string;
+  prevInSeries?: Post | null;
+  nextInSeries?: Post | null;
+  relatedPosts?: Post[];
+  toc?: TocItem[];
 }
 
-const { title, description, pubDate, updatedDate, category, tags = [], readingSource = "" } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  category,
+  tags = [],
+  series,
+  readingSource = "",
+  prevInSeries = null,
+  nextInSeries = null,
+  relatedPosts = [],
+  toc = []
+} = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
+  <ReadingProgress />
   <article class="article-shell container">
     <header class="article-header">
-      <a class="back-link" href="/posts">返回文章列表</a>
+      <div class="article-topbar">
+        <a class="back-link" href="/posts">← 返回文章列表</a>
+      </div>
       <h1>{title}</h1>
-      <p>{description}</p>
+      <p class="article-lead">{description}</p>
       <div class="article-meta">
         <span>{formatDate(pubDate)}</span>
         {updatedDate && <span>更新于 {formatDate(updatedDate)}</span>}
         {category && <a href={`/categories/${category}`}>{category}</a>}
-        <span>{getReadingTime(readingSource)}</span>
+        <span>{getReadingTime(readingSource)} 阅读</span>
       </div>
       {tags.length > 0 && (
         <div class="tag-list">
-          {tags.map((tag) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+          {tags.map((tag) => <a class="tag" href={`/tags/${tagToSlug(tag)}`}>{tag}</a>)}
         </div>
       )}
     </header>
     <div class="article-grid">
-      <div class="prose">
-        <slot />
-      </div>
-      <aside class="article-aside" aria-label="文章信息">
-        <div class="aside-box">
-          <strong>阅读建议</strong>
-          <p>先看问题背景，再看方案取舍，最后对照项目复盘思考可迁移的方法。</p>
+      <div class="article-main">
+        <div class="prose">
+          <slot />
         </div>
+        <SeriesNav series={series} prev={prevInSeries} next={nextInSeries} />
+        <ArticleAuthor />
+        <RelatedPosts posts={relatedPosts} />
+      </div>
+      <aside class="article-aside" aria-label="文章导航">
+        <TableOfContents items={toc} />
       </aside>
     </div>
   </article>
@@ -52,12 +82,20 @@ const { title, description, pubDate, updatedDate, category, tags = [], readingSo
     padding: 64px 0 88px;
   }
 
+  .article-topbar {
+    margin-bottom: 20px;
+  }
+
   .back-link {
     display: inline-flex;
-    margin-bottom: 22px;
-    color: var(--accent);
+    color: var(--muted);
     font-size: 14px;
-    font-weight: 800;
+    font-weight: 700;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
   }
 
   .article-header {
@@ -67,15 +105,16 @@ const { title, description, pubDate, updatedDate, category, tags = [], readingSo
   .article-header h1 {
     margin: 0;
     color: var(--ink);
-    font-size: clamp(38px, 6vw, 68px);
-    line-height: 1.05;
+    font-size: clamp(34px, 5.5vw, 60px);
+    line-height: 1.08;
     letter-spacing: 0;
   }
 
-  .article-header p {
+  .article-lead {
     margin: 18px 0 0;
     color: var(--muted);
     font-size: 19px;
+    line-height: 1.65;
   }
 
   .article-meta {
@@ -88,6 +127,10 @@ const { title, description, pubDate, updatedDate, category, tags = [], readingSo
     font-weight: 700;
   }
 
+  .article-meta a:hover {
+    color: var(--accent);
+  }
+
   .article-grid {
     display: grid;
     grid-template-columns: minmax(0, 760px) minmax(220px, 1fr);
@@ -98,34 +141,50 @@ const { title, description, pubDate, updatedDate, category, tags = [], readingSo
 
   .article-aside {
     position: sticky;
-    top: 96px;
-  }
-
-  .aside-box {
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 18px;
-    background: var(--surface);
-  }
-
-  .aside-box strong {
-    color: var(--ink);
-  }
-
-  .aside-box p {
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.7;
+    top: calc(var(--header-height) + 28px);
   }
 
   @media (max-width: 980px) {
+    .article-shell {
+      padding: 40px 0 64px;
+    }
+
     .article-grid {
       grid-template-columns: 1fr;
+      gap: 32px;
+      margin-top: 32px;
     }
 
     .article-aside {
       position: static;
+      order: -1;
+    }
+
+    .article-header h1 {
+      font-size: clamp(28px, 8vw, 44px);
+    }
+
+    .article-lead {
+      font-size: 17px;
+    }
+
+    .article-meta {
+      gap: 8px 12px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .article-shell {
+      padding: 32px 0 56px;
+    }
+
+    .article-lead {
+      font-size: 16px;
+    }
+
+    .article-topbar {
+      margin-bottom: 14px;
     }
   }
 </style>

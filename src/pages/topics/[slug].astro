@@ -18,7 +18,7 @@ const posts = visiblePosts(await getCollection("posts")).filter(
 
 <BaseLayout title={topic.data.title} description={topic.data.description}>
   <section class="section">
-    <div class="container grid two-col">
+    <div class="container grid two-col topic-layout">
       <div>
         <a class="back-link" href="/topics">返回专题</a>
         <h1 class="section-title">{topic.data.title}</h1>
@@ -50,11 +50,32 @@ const posts = visiblePosts(await getCollection("posts")).filter(
   }
 
   .path-panel {
+    position: sticky;
+    top: calc(var(--header-height) + 28px);
     padding: 22px;
   }
 
   .path-panel h2 {
     margin: 0 0 12px;
     color: var(--ink);
+  }
+
+  @media (max-width: 860px) {
+    .topic-layout {
+      gap: 32px;
+    }
+
+    .topic-layout aside {
+      order: 2;
+    }
+
+    .path-panel {
+      position: static;
+      padding: 18px;
+    }
+
+    .path-panel :global(.post-card:first-child) {
+      padding-top: 16px;
+    }
   }
 </style>

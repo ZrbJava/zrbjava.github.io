@@ -1,0 +1,221 @@
+---
+import { skillRadar } from "@/data/skills";
+
+interface Props {
+  animate?: boolean;
+  large?: boolean;
+}
+
+const { animate = false, large = false } = Astro.props;
+
+const size = large ? 340 : 280;
+const center = size / 2;
+const radius = 98;
+const levels = 4;
+const angleStep = (Math.PI * 2) / skillRadar.length;
+
+function point(value: number, index: number) {
+  const ratio = value / 100;
+  const angle = angleStep * index - Math.PI / 2;
+  return {
+    x: center + Math.cos(angle) * radius * ratio,
+    y: center + Math.sin(angle) * radius * ratio
+  };
+}
+
+const targetPoints = skillRadar.map((skill, index) => point(skill.value, index));
+const polygon = targetPoints.map((p) => `${p.x},${p.y}`).join(" ");
+
+const gridLevels = Array.from({ length: levels }, (_, level) => {
+  const ratio = (level + 1) / levels;
+  return skillRadar
+    .map((_, index) => {
+      const angle = angleStep * index - Math.PI / 2;
+      return `${center + Math.cos(angle) * radius * ratio},${center + Math.sin(angle) * radius * ratio}`;
+    })
+    .join(" ");
+});
+
+const axes = skillRadar.map((skill, index) => {
+  const angle = angleStep * index - Math.PI / 2;
+  const x = center + Math.cos(angle) * radius;
+  const y = center + Math.sin(angle) * radius;
+  const labelX = center + Math.cos(angle) * (radius + (large ? 26 : 22));
+  const labelY = center + Math.sin(angle) * (radius + (large ? 26 : 22));
+  return { skill, x, y, labelX, labelY };
+});
+---
+
+<div class="skill-radar" class:list={{ large }} data-skill-radar={animate ? "" : undefined}>
+  <svg viewBox={`0 0 ${size} ${size}`} role="img" aria-label="大前端技能雷达图">
+    {gridLevels.map((level) => (
+      <polygon points={level} class="radar-grid" />
+    ))}
+    {axes.map(({ x, y }) => (
+      <line x1={center} y1={center} x2={x} y2={y} class="radar-axis" />
+    ))}
+    <polygon
+      class="radar-area"
+      data-radar-area
+      points={animate ? `${center},${center}` : polygon}
+    />
+    {targetPoints.map(({ x, y }, index) => (
+      <circle
+        cx={animate ? center : x}
+        cy={animate ? center : y}
+        r="3.5"
+        class="radar-dot"
+        data-radar-dot
+        data-target-x={x}
+        data-target-y={y}
+        style={animate ? `--delay: ${index * 40}ms` : undefined}
+      />
+    ))}
+    {axes.map(({ skill, labelX, labelY }) => (
+      <text x={labelX} y={labelY} class="radar-label">{skill.label}</text>
+    ))}
+  </svg>
+</div>
+
+{animate && (
+  <script is:inline define:vars={{ targetPoints, center }}>
+    function initRadarAnim() {
+      const root = document.querySelector("[data-skill-radar]");
+      const area = document.querySelector("[data-radar-area]");
+      const dots = document.querySelectorAll("[data-radar-dot]");
+      if (!root || !area || root.dataset.animated === "true") return;
+
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) {
+        area.setAttribute(
+          "points",
+          targetPoints.map((p) => `${p.x},${p.y}`).join(" ")
+        );
+        dots.forEach((dot) => {
+          dot.setAttribute("cx", dot.dataset.targetX ?? center);
+          dot.setAttribute("cy", dot.dataset.targetY ?? center);
+        });
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries[0]?.isIntersecting) return;
+          root.dataset.animated = "true";
+          observer.disconnect();
+
+          const start = performance.now();
+          const duration = 1100;
+
+          const tick = (now) => {
+            const t = Math.min((now - start) / duration, 1);
+            const ease = 1 - Math.pow(1 - t, 3);
+
+            area.setAttribute(
+              "points",
+              targetPoints
+                .map((p) => {
+                  const x = center + (p.x - center) * ease;
+                  const y = center + (p.y - center) * ease;
+                  return `${x},${y}`;
+                })
+                .join(" ")
+            );
+
+            dots.forEach((dot) => {
+              const tx = Number(dot.dataset.targetX);
+              const ty = Number(dot.dataset.targetY);
+              dot.setAttribute("cx", String(center + (tx - center) * ease));
+              dot.setAttribute("cy", String(center + (ty - center) * ease));
+            });
+
+            if (t < 1) requestAnimationFrame(tick);
+          };
+
+          requestAnimationFrame(tick);
+        },
+        { threshold: 0.35 }
+      );
+
+      observer.observe(root);
+    }
+
+    initRadarAnim();
+    document.addEventListener("astro:page-load", initRadarAnim);
+  </script>
+)}
+
+<style>
+  .skill-radar {
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .skill-radar.large {
+    max-width: 420px;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .skill-radar.large svg {
+    max-width: min(380px, 100%);
+  }
+
+  .radar-grid {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+
+  .radar-axis {
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+
+  .radar-area {
+    fill: color-mix(in srgb, var(--accent) 28%, transparent);
+    stroke: var(--accent);
+    stroke-width: 2;
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 40%, transparent));
+  }
+
+  .radar-dot {
+    fill: var(--accent);
+  }
+
+  .radar-label {
+    fill: var(--subtle);
+    font-size: 9px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .skill-radar.large .radar-label {
+    font-size: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .skill-radar.large {
+      max-width: 100%;
+    }
+
+    .skill-radar.large svg {
+      max-width: 100%;
+    }
+
+    .radar-label {
+      font-size: 8px;
+    }
+
+    .skill-radar.large .radar-label {
+      font-size: 8.5px;
+    }
+  }
+</style>

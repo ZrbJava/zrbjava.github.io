@@ -23,12 +23,12 @@ type Fiber = {
   type: any;
   key: string | null;
   stateNode: any;
-  return: Fiber | null;   // 父节点
-  child: Fiber | null;    // 第一个子节点
-  sibling: Fiber | null;  // 下一个兄弟节点
+  return: Fiber | null; // 父节点
+  child: Fiber | null; // 第一个子节点
+  sibling: Fiber | null; // 下一个兄弟节点
   alternate: Fiber | null; // 对应 current tree 的节点
-  flags: number;          // 副作用标记
-  lanes: Lanes;         // 优先级车道
+  flags: number; // 副作用标记
+  lanes: Lanes; // 优先级车道
 };
 ```
 
@@ -45,13 +45,13 @@ React 维护两棵 Fiber 树：
 
 React 18 用 Lane（位掩码）表达优先级，不同事件触发不同 Lane：
 
-| 触发源 | 典型 Lane | 优先级 |
-|--------|-----------|--------|
-| 离散输入（click） | SyncLane | 最高 |
-| 连续输入（scroll） | ContinuousLane | 高 |
-| 默认 setState | DefaultLane | 中 |
-| Transition | TransitionLane | 低 |
-| Suspense | RetryLane | 最低 |
+| 触发源             | 典型 Lane      | 优先级 |
+| ------------------ | -------------- | ------ |
+| 离散输入（click）  | SyncLane       | 最高   |
+| 连续输入（scroll） | ContinuousLane | 高     |
+| 默认 setState      | DefaultLane    | 中     |
+| Transition         | TransitionLane | 低     |
+| Suspense           | RetryLane      | 最低   |
 
 `startTransition` 包裹的更新会被标记为 TransitionLane，React 可以在渲染过程中被更高优先级更新打断。
 
@@ -70,14 +70,14 @@ React 的 Diff 基于两个假设：
 
 ```jsx
 // key 的正确用法：稳定且唯一
-{items.map(item => (
-  <ListItem key={item.id} data={item} />
-))}
+{
+  items.map((item) => <ListItem key={item.id} data={item} />);
+}
 
 // 错误：用 index 作为 key，在插入/删除时会导致状态错乱
-{items.map((item, index) => (
-  <ListItem key={index} data={item} />
-))}
+{
+  items.map((item, index) => <ListItem key={index} data={item} />);
+}
 ```
 
 ## 面试高频追问

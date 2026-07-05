@@ -1,0 +1,83 @@
+---
+import { site } from "@/data/site";
+import AuthorAvatar from "@/components/AuthorAvatar.astro";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<div class:list={["author-card", { compact }]}>
+  <AuthorAvatar size={compact ? "md" : "lg"} />
+  <div class="author-body">
+    <strong>{site.author}</strong>
+    <span class="author-role">{site.role}</span>
+    {!compact && (
+      <>
+        <p>{site.description}</p>
+        <div class="author-tags">
+          {site.intro.techTags.map((tag) => (
+            <span>{tag}</span>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</div>
+
+<style>
+  .author-card {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .author-card.compact {
+    padding: 18px;
+  }
+
+  .author-body strong {
+    display: block;
+    color: var(--ink);
+    font-size: 20px;
+  }
+
+  .author-role {
+    display: block;
+    margin-top: 4px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .author-body p {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .author-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .author-tags span {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 10px;
+    background: var(--surface-soft);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+</style>

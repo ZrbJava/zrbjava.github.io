@@ -1,0 +1,98 @@
+---
+import type { Post } from "@/utils/content";
+
+interface Props {
+  series?: string;
+  prev: Post | null;
+  next: Post | null;
+}
+
+const { series, prev, next } = Astro.props;
+---
+
+{(prev || next) && series && (
+  <nav class="series-nav" aria-label="系列导航">
+    <span class="series-label">系列 · {series}</span>
+    <div class="series-links">
+      {prev ? (
+        <a class="series-link prev" href={`/posts/${prev.id}`}>
+          <span>上一篇</span>
+          <strong>{prev.data.title}</strong>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a class="series-link next" href={`/posts/${next.id}`}>
+          <span>下一篇</span>
+          <strong>{next.data.title}</strong>
+        </a>
+      ) : (
+        <span />
+      )}
+    </div>
+  </nav>
+)}
+
+<style>
+  .series-nav {
+    margin-top: 40px;
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+  }
+
+  .series-label {
+    display: block;
+    margin-bottom: 16px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .series-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .series-link {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    background: var(--surface-soft);
+    transition: border-color 0.15s;
+  }
+
+  .series-link:hover {
+    border-color: var(--accent);
+  }
+
+  .series-link span {
+    display: block;
+    color: var(--subtle);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .series-link strong {
+    display: block;
+    margin-top: 6px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .series-link.next {
+    text-align: right;
+  }
+
+  @media (max-width: 720px) {
+    .series-links {
+      grid-template-columns: 1fr;
+    }
+
+    .series-link.next {
+      text-align: left;
+    }
+  }
+</style>

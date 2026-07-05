@@ -62,10 +62,10 @@ interface RAGResponse {
 
 interface Citation {
   id: string;
-  source: string;      // 文档名
-  page?: number;       // 页码
-  snippet: string;     // 引用片段
-  score: number;       // 相似度分数
+  source: string; // 文档名
+  page?: number; // 页码
+  snippet: string; // 引用片段
+  score: number; // 相似度分数
 }
 
 function RAGMessage({ response }: { response: RAGResponse }) {
@@ -74,7 +74,7 @@ function RAGMessage({ response }: { response: RAGResponse }) {
       <MarkdownContent content={response.answer} />
       <div className="citations">
         <h4>参考来源</h4>
-        {response.citations.map(cite => (
+        {response.citations.map((cite) => (
           <CitationCard
             key={cite.id}
             source={cite.source}
@@ -98,10 +98,13 @@ function DocumentUploader() {
 
   async function handleUpload(file: File) {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     // 1. 上传文件
-    const { docId } = await fetch('/api/upload', { method: 'POST', body: formData });
+    const { docId } = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
 
     // 2. 轮询索引状态
     const status = await pollIndexStatus(docId);
@@ -110,7 +113,7 @@ function DocumentUploader() {
 
   return (
     <DropZone onDrop={handleUpload}>
-      {files.map(f => (
+      {files.map((f) => (
         <FileStatus key={f.id} name={f.name} status={f.indexStatus} />
       ))}
     </DropZone>
@@ -126,10 +129,10 @@ function DocumentUploader() {
 function SearchSettings() {
   return (
     <SettingsPanel>
-      <Select label="检索模式" options={['精确', '语义', '混合']} />
+      <Select label="检索模式" options={["精确", "语义", "混合"]} />
       <Slider label="引用数量" min={1} max={10} defaultValue={5} />
       <Toggle label="包含历史对话上下文" />
-      <Select label="回答风格" options={['简洁', '详细', '技术']}/>
+      <Select label="回答风格" options={["简洁", "详细", "技术"]} />
     </SettingsPanel>
   );
 }
@@ -144,14 +147,10 @@ function SearchSettings() {
 
 ## 与纯 Chat 的架构差异
 
-| 维度 | 纯 Chat | RAG Chat |
-|------|---------|----------|
-| 上下文来源 | 对话历史 | 对话历史 + 检索文档 |
-| 回答可信度 | 依赖模型 | 引用溯源 |
-| 前端复杂度 | 低 | 中（引用 UI、文档管理） |
-| 延迟 | 低 | 中（多一次检索） |
-| 知识更新 | 无法更新 | 上传新文档即可 |
-
-## 面试表达
-
-「我们的 RAG 系统服务内部知识库，包含 5000+ 技术文档。前端负责文档上传索引状态追踪、检索结果引用展示、以及 Prompt 参数的用户配置。关键设计决策：引用片段高亮跳转、索引失败的优雅降级、检索结果的用户反馈闭环（点赞/踩优化检索质量）。」
+| 维度       | 纯 Chat  | RAG Chat                |
+| ---------- | -------- | ----------------------- |
+| 上下文来源 | 对话历史 | 对话历史 + 检索文档     |
+| 回答可信度 | 依赖模型 | 引用溯源                |
+| 前端复杂度 | 低       | 中（引用 UI、文档管理） |
+| 延迟       | 低       | 中（多一次检索）        |
+| 知识更新   | 无法更新 | 上传新文档即可          |

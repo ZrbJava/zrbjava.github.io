@@ -1,23 +1,26 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import SearchPalette from "@/components/SearchPalette.astro";
 import { site } from "@/data/site";
 import "@/styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
+  bodyClass?: string;
 }
 
-const title = Astro.props.title ? `${Astro.props.title} | ${site.shortName}` : site.name;
-const description = Astro.props.description ?? site.description;
+const { title: pageTitle, description: pageDescription, bodyClass } = Astro.props;
+const title = pageTitle ? `${pageTitle} | ${site.shortName}` : site.name;
+const description = pageDescription ?? site.description;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -32,11 +35,12 @@ const description = Astro.props.description ?? site.description;
     </script>
     <title>{title}</title>
   </head>
-  <body>
+  <body class={bodyClass}>
     <Header />
-    <main>
+    <main id="main-content" data-pagefind-body>
       <slot />
     </main>
     <Footer />
+    <SearchPalette />
   </body>
 </html>

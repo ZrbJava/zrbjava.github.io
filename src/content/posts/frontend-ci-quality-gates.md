@@ -114,10 +114,10 @@ module.exports = {
   ci: {
     assert: {
       assertions: {
-        'categories:performance': ['error', { minScore: 0.85 }],
-        'categories:accessibility': ['error', { minScore: 0.90 }],
-        'first-contentful-paint': ['error', { maxNumericValue: 2000 }],
-        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
+        "categories:performance": ["error", { minScore: 0.85 }],
+        "categories:accessibility": ["error", { minScore: 0.9 }],
+        "first-contentful-paint": ["error", { maxNumericValue: 2000 }],
+        "largest-contentful-paint": ["error", { maxNumericValue: 2500 }],
       },
     },
   },
@@ -142,19 +142,15 @@ feature/xxx ───── Preview 环境（每个 PR 自动部署）
 
 ## 覆盖率策略
 
-| 代码类型 | 覆盖率目标 | 测试类型 |
-|----------|-----------|----------|
-| 工具函数 | 90%+ | Unit Test |
-| 组件 | 70%+ | Component Test |
-| 页面流程 | 核心路径 | E2E Test |
-| API 层 | 80%+ | Integration Test |
+| 代码类型 | 覆盖率目标 | 测试类型         |
+| -------- | ---------- | ---------------- |
+| 工具函数 | 90%+       | Unit Test        |
+| 组件     | 70%+       | Component Test   |
+| 页面流程 | 核心路径   | E2E Test         |
+| API 层   | 80%+       | Integration Test |
 
 **不追求 100% 覆盖率**，重点覆盖：
 
 - 核心业务逻辑
 - 边界条件和错误处理
 - 历史 Bug 回归
-
-## 面试表达
-
-「我搭建的前端 CI 流水线包含 4 层门禁：pre-commit 的 lint-staged、PR 的 CI（lint + typecheck + test + build + bundle size）、merge 后的 E2E + Lighthouse CI、发布的 Canary 灰度。覆盖率门禁 80%，Bundle Size 超限自动 block PR。团队 Bug 率下降 35%。」

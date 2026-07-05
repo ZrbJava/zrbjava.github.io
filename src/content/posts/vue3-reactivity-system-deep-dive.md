@@ -40,7 +40,9 @@ function trigger(target: object, key: string | symbol) {
   const depsMap = targetMap.get(target);
   if (!depsMap) return;
   const dep = depsMap.get(key);
-  dep?.forEach(effect => effect.scheduler ? effect.scheduler() : effect.run());
+  dep?.forEach((effect) =>
+    effect.scheduler ? effect.scheduler() : effect.run(),
+  );
 }
 
 function reactive<T extends object>(target: T): T {
@@ -60,20 +62,20 @@ function reactive<T extends object>(target: T): T {
 
 ## ref vs reactive 的设计哲学
 
-| | ref | reactive |
-|---|-----|----------|
-| 适用类型 | 基本类型 + 对象 | 仅对象 |
-| 访问方式 | `.value` | 直接访问 |
-| 解构 | 保持响应式（RefImpl） | 丢失响应式 |
-| 模板中 | 自动解包 | 直接使用 |
+|          | ref                   | reactive   |
+| -------- | --------------------- | ---------- |
+| 适用类型 | 基本类型 + 对象       | 仅对象     |
+| 访问方式 | `.value`              | 直接访问   |
+| 解构     | 保持响应式（RefImpl） | 丢失响应式 |
+| 模板中   | 自动解包              | 直接使用   |
 
 ```ts
 const count = ref(0);
-const state = reactive({ name: 'Vue', items: [] });
+const state = reactive({ name: "Vue", items: [] });
 
 // 解构 reactive 会丢失响应式
 const { name } = state; // ❌ 不再响应式
-const nameRef = toRef(state, 'name'); // ✅ 保持响应式
+const nameRef = toRef(state, "name"); // ✅ 保持响应式
 ```
 
 ## computed 的实现：lazy effect
@@ -105,9 +107,13 @@ class ComputedRefImpl {
 
 ```ts
 // watch：精确控制
-watch(() => props.id, async (newId, oldId) => {
-  data.value = await fetchData(newId);
-}, { immediate: true });
+watch(
+  () => props.id,
+  async (newId, oldId) => {
+    data.value = await fetchData(newId);
+  },
+  { immediate: true },
+);
 
 // watchEffect：自动追踪
 watchEffect(() => {
@@ -124,12 +130,12 @@ watchEffect(() => {
 
 ## 面试追问：Vue 3 响应式 vs React
 
-| 维度 | Vue 3 | React |
-|------|-------|-------|
-| 粒度 | 属性级自动追踪 | 组件级 setState 触发 |
-| 更新方式 | 异步批量（微任务队列） | 18 自动 batching |
-| 派生状态 | computed 自动缓存 | useMemo 手动声明 |
-| 心智模型 | 可变数据 + 拦截 | 不可变数据 + 重渲染 |
+| 维度     | Vue 3                  | React                |
+| -------- | ---------------------- | -------------------- |
+| 粒度     | 属性级自动追踪         | 组件级 setState 触发 |
+| 更新方式 | 异步批量（微任务队列） | 18 自动 batching     |
+| 派生状态 | computed 自动缓存      | useMemo 手动声明     |
+| 心智模型 | 可变数据 + 拦截        | 不可变数据 + 重渲染  |
 
 ## 项目中的实际应用
 

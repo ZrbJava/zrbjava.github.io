@@ -1,0 +1,40 @@
+---
+---
+
+<div class="reading-progress" data-reading-progress aria-hidden="true"></div>
+
+<script>
+  function initProgress() {
+    const bar = document.querySelector<HTMLElement>("[data-reading-progress]");
+    const articleEl = document.querySelector<HTMLElement>(".article-shell");
+    if (!bar || !articleEl) return;
+
+    const update = () => {
+      const rect = articleEl.getBoundingClientRect();
+      const total = articleEl.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const progress = total > 0 ? (scrolled / total) * 100 : 0;
+      bar.style.width = `${progress}%`;
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+
+  initProgress();
+  document.addEventListener("astro:page-load", initProgress);
+</script>
+
+<style>
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;
+    width: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 0.1s linear;
+    pointer-events: none;
+  }
+</style>

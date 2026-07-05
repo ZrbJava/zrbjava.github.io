@@ -1,0 +1,79 @@
+---
+import { site } from "@/data/site";
+
+interface Props {
+  size?: "sm" | "md" | "lg" | "xl" | "hero";
+  shape?: "circle" | "rounded";
+  class?: string;
+}
+
+const { size = "md", shape = "circle", class: className } = Astro.props;
+
+const sizes = {
+  sm: 36,
+  md: 44,
+  lg: 52,
+  xl: 72,
+  hero: 112
+} as const;
+
+const px = sizes[size];
+---
+
+<img
+  src={site.avatar}
+  alt={site.author}
+  width={px}
+  height={px}
+  class:list={["author-avatar", `author-avatar-${size}`, `author-avatar-${shape}`, className]}
+  loading={size === "xl" || size === "hero" ? "eager" : "lazy"}
+  decoding="async"
+/>
+
+<style>
+  .author-avatar {
+    flex-shrink: 0;
+    object-fit: cover;
+    object-position: center 22%;
+    border: 1px solid var(--line);
+    background: var(--surface-soft);
+  }
+
+  .author-avatar-circle {
+    border-radius: 50%;
+  }
+
+  .author-avatar-rounded {
+    border-radius: var(--radius);
+  }
+
+  .author-avatar-sm {
+    width: 36px;
+    height: 36px;
+  }
+
+  .author-avatar-md {
+    width: 44px;
+    height: 44px;
+  }
+
+  .author-avatar-lg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .author-avatar-xl {
+    width: 72px;
+    height: 72px;
+    border-width: 2px;
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  }
+
+  .author-avatar-hero {
+    width: 112px;
+    height: 112px;
+    border-width: 2px;
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+    box-shadow: var(--shadow);
+  }
+</style>

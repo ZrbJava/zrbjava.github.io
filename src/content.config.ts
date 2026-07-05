@@ -13,8 +13,8 @@ const posts = defineCollection({
     tags: z.array(z.string()),
     series: z.string().optional(),
     draft: z.boolean().default(false),
-    featured: z.boolean().default(false)
-  })
+    featured: z.boolean().default(false),
+  }),
 });
 
 const topics = defineCollection({
@@ -24,8 +24,8 @@ const topics = defineCollection({
     description: z.string(),
     order: z.number(),
     featured: z.boolean().default(false),
-    tags: z.array(z.string()).default([])
-  })
+    tags: z.array(z.string()).default([]),
+  }),
 });
 
 const projects = defineCollection({
@@ -36,8 +36,8 @@ const projects = defineCollection({
     pubDate: z.coerce.date(),
     role: z.string(),
     stack: z.array(z.string()),
-    featured: z.boolean().default(false)
-  })
+    featured: z.boolean().default(false),
+  }),
 });
 
 export const collections = { posts, topics, projects };

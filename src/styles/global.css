@@ -17,6 +17,8 @@
   --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
   --radius: 8px;
   --max: 1120px;
+  --page-gutter: 20px;
+  --header-height: 68px;
 }
 
 :root.dark {
@@ -49,11 +51,20 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(20, 108, 95, 0.08), transparent 32rem),
+    radial-gradient(
+      circle at top left,
+      rgba(20, 108, 95, 0.08),
+      transparent 32rem
+    ),
     linear-gradient(180deg, var(--bg-strong), var(--bg));
   color: var(--text);
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
   font-size: 16px;
   line-height: 1.7;
@@ -80,8 +91,15 @@ input {
 }
 
 .container {
-  width: min(var(--max), calc(100% - 40px));
+  width: min(var(--max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
+}
+
+.section-head.row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .section {
@@ -183,11 +201,30 @@ input {
   line-height: 1.85;
 }
 
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .prose h2,
 .prose h3 {
   margin: 2.2em 0 0.7em;
   color: var(--ink);
   line-height: 1.25;
+  scroll-margin-top: 96px;
+}
+
+.prose h2:target,
+.prose h3:target {
+  color: var(--accent);
+}
+
+.prose h2:target::before,
+.prose h3:target::before {
+  content: "# ";
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .prose h2 {
@@ -242,8 +279,25 @@ input {
   color: inherit;
 }
 
-.prose table {
+.prose svg.flowchart,
+.prose svg.sequenceDiagram,
+.prose svg[class*="mermaid"] {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 1.6em 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.prose table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-collapse: collapse;
   margin: 1.4em 0;
   font-size: 15px;
@@ -261,8 +315,13 @@ input {
 }
 
 @media (max-width: 860px) {
+  :root {
+    --page-gutter: 16px;
+    --header-height: 60px;
+  }
+
   .container {
-    width: min(100% - 28px, var(--max));
+    width: min(100% - var(--page-gutter) * 2, var(--max));
   }
 
   .section {
@@ -271,5 +330,83 @@ input {
 
   .two-col {
     grid-template-columns: 1fr;
+  }
+
+  .section-head.row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .prose {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .prose h2 {
+    font-size: 24px;
+    scroll-margin-top: 88px;
+  }
+
+  .prose h3 {
+    font-size: 20px;
+    scroll-margin-top: 88px;
+  }
+
+  .prose pre {
+    padding: 14px;
+    font-size: 13px;
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  .prose svg.flowchart,
+  .prose svg.sequenceDiagram,
+  .prose svg[class*="mermaid"] {
+    padding: 12px;
+    margin: 1.2em 0;
+  }
+
+  .section-copy {
+    font-size: 16px;
+  }
+
+  .button {
+    min-height: 44px;
+    padding: 0 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-gutter: 14px;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .section {
+    padding: 40px 0;
+  }
+
+  .section-title {
+    font-size: clamp(26px, 8vw, 36px);
+  }
+
+  .prose h2 {
+    font-size: 22px;
+  }
+
+  .prose h3 {
+    font-size: 18px;
+  }
+
+  .prose th,
+  .prose td {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .card {
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
   }
 }

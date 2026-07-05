@@ -1,0 +1,125 @@
+---
+import { knowledgeDomains } from "@/data/skills";
+interface Props {
+  columns?: 1 | 2;
+}
+
+const { columns = 1 } = Astro.props;
+---
+
+<div class="knowledge-map card" data-columns={columns}>
+  <div class="map-head">
+    <strong>大前端知识地图</strong>
+    <span>{knowledgeDomains.length} 大域 · 全栈能力</span>
+  </div>
+  <div class="domain-grid">
+    {knowledgeDomains.map((domain) => (
+      <div class="domain-card">
+        <div class="domain-top">
+          <strong>{domain.title}</strong>
+          <span class={`level level-${domain.level}`}>{domain.level}</span>
+        </div>
+        <div class="domain-tags">
+          {domain.topics.map((topic) => <span>{topic}</span>)}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .knowledge-map {
+    padding: 22px;
+  }
+
+  .map-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .map-head strong {
+    color: var(--ink);
+    font-size: 16px;
+  }
+
+  .map-head span {
+    color: var(--subtle);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .domain-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .knowledge-map[data-columns="2"] .domain-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 720px) {
+    .knowledge-map[data-columns="2"] .domain-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .domain-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px;
+    background: var(--surface-soft);
+  }
+
+  .domain-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .domain-top strong {
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  .level {
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .level-熟练 {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--accent);
+  }
+
+  .level-掌握 {
+    background: color-mix(in srgb, #7c3aed 14%, transparent);
+    color: #7c3aed;
+  }
+
+  :global(.dark) .level-掌握 {
+    color: #c4b5fd;
+  }
+
+  .domain-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .domain-tags span {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 2px 8px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 650;
+  }
+</style>

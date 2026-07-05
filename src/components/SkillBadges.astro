@@ -1,0 +1,120 @@
+---
+import { skillRadar, knowledgeDomains } from "@/data/skills";
+---
+
+<div class="skill-badges">
+  <h2>技术栈</h2>
+  <div class="badge-grid">
+    {skillRadar.map((skill) => (
+      <div class="badge">
+        <strong>{skill.label}</strong>
+        <span class="bar"><span style={`width: ${skill.value}%`}></span></span>
+        <em>{skill.value}%</em>
+      </div>
+    ))}
+  </div>
+  <h2>知识域</h2>
+  <div class="domain-list">
+    {knowledgeDomains.map((domain) => (
+      <div class="domain-row">
+        <span class={`level level-${domain.level}`}>{domain.level}</span>
+        <strong>{domain.title}</strong>
+        <span class="topics">{domain.topics.join(" · ")}</span>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .skill-badges h2 {
+    margin: 0 0 14px;
+    color: var(--ink);
+    font-size: 18px;
+  }
+
+  .skill-badges h2:not(:first-child) {
+    margin-top: 28px;
+  }
+
+  .badge-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .badge {
+    display: grid;
+    grid-template-columns: 88px 1fr 36px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .badge strong {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  }
+
+  .badge em {
+    color: var(--accent);
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 850;
+    text-align: right;
+  }
+
+  .domain-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .domain-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 10px;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    font-size: 13px;
+  }
+
+  .domain-row strong {
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .domain-row .topics {
+    color: var(--subtle);
+    line-height: 1.5;
+  }
+
+  .level {
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .level-熟练 {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--accent);
+  }
+
+  .level-掌握 {
+    background: color-mix(in srgb, #7c3aed 14%, transparent);
+    color: #7c3aed;
+  }
+</style>

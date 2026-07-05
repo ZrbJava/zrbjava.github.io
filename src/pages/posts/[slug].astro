@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
+import { getAdjacentInSeries, getRelatedPosts, visiblePosts } from "@/utils/content";
+import { buildTocTree, extractHeadings } from "@/utils/headings";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("posts")).filter((post) => !post.data.draft);
@@ -9,6 +11,10 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const allPosts = visiblePosts(await getCollection("posts"));
+const { prev, next } = getAdjacentInSeries(allPosts, post);
+const relatedPosts = getRelatedPosts(allPosts, post);
+const toc = buildTocTree(extractHeadings(post.body ?? ""));
 ---
 
 <PostLayout
@@ -18,7 +24,12 @@ const { Content } = await render(post);
   updatedDate={post.data.updatedDate}
   category={post.data.category}
   tags={post.data.tags}
+  series={post.data.series}
   readingSource={post.body}
+  prevInSeries={prev}
+  nextInSeries={next}
+  relatedPosts={relatedPosts}
+  toc={toc}
 >
   <Content />
 </PostLayout>

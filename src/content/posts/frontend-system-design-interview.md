@@ -111,13 +111,13 @@ A: 各团队独立 CI/CD，主应用统一入口
 
 ### 方案对比
 
-| 方案 | 隔离性 | 技术栈 | 复杂度 | 推荐场景 |
-|------|--------|--------|--------|----------|
-| iframe | 完全 | 任意 | 低 | 旧系统接入 |
-| Module Federation | JS 级 | 同构建工具 | 中 | Webpack 生态 |
-| qiankun | JS 级 | 任意 | 中 | 国内主流 |
-| Web Components | DOM 级 | 任意 | 高 | 长期方案 |
-| Single-SPA | 路由级 | 任意 | 中 | 路由驱动 |
+| 方案              | 隔离性 | 技术栈     | 复杂度 | 推荐场景     |
+| ----------------- | ------ | ---------- | ------ | ------------ |
+| iframe            | 完全   | 任意       | 低     | 旧系统接入   |
+| Module Federation | JS 级  | 同构建工具 | 中     | Webpack 生态 |
+| qiankun           | JS 级  | 任意       | 中     | 国内主流     |
+| Web Components    | DOM 级 | 任意       | 高     | 长期方案     |
+| Single-SPA        | 路由级 | 任意       | 中     | 路由驱动     |
 
 ### 推荐架构（qiankun + Module Federation 混合）
 
@@ -173,7 +173,7 @@ interface PageSchema {
 
 interface ComponentNode {
   id: string;
-  type: string;          // 'Button' | 'Table' | 'Form'
+  type: string; // 'Button' | 'Table' | 'Form'
   props: Record<string, unknown>;
   children?: ComponentNode[];
   style?: CSSProperties;
@@ -191,10 +191,10 @@ interface ComponentNode {
 
 ## 面试评分维度
 
-| 维度 | 权重 | 考察点 |
-|------|------|--------|
-| 需求分析 | 20% | 是否主动澄清，覆盖 edge case |
-| 架构设计 | 30% | 模块划分合理，职责清晰 |
-| 技术深度 | 25% | 核心模块有细节，不是空泛描述 |
-| 权衡能力 | 15% | 能解释为什么选 A 不选 B |
-| 沟通表达 | 10% | 逻辑清晰，能画架构图 |
+| 维度     | 权重 | 考察点                       |
+| -------- | ---- | ---------------------------- |
+| 需求分析 | 20%  | 是否主动澄清，覆盖 edge case |
+| 架构设计 | 30%  | 模块划分合理，职责清晰       |
+| 技术深度 | 25%  | 核心模块有细节，不是空泛描述 |
+| 权衡能力 | 15%  | 能解释为什么选 A 不选 B      |
+| 沟通表达 | 10%  | 逻辑清晰，能画架构图         |

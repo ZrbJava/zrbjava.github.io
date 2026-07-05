@@ -35,38 +35,41 @@ Electron 让前端开发者用 Web 技术构建桌面应用，但「会写 React
 
 ```ts
 // preload.ts — 在隔离上下文中运行
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld('electronAPI', {
-  readFile: (path: string) => ipcRenderer.invoke('file:read', path),
+contextBridge.exposeInMainWorld("electronAPI", {
+  readFile: (path: string) => ipcRenderer.invoke("file:read", path),
   onProgress: (callback: (percent: number) => void) => {
-    ipcRenderer.on('download:progress', (_event, percent) => callback(percent));
+    ipcRenderer.on("download:progress", (_event, percent) => callback(percent));
   },
 });
 ```
 
 ```ts
 // main.ts — 主进程处理
-ipcMain.handle('file:read', async (_event, filePath: string) => {
+ipcMain.handle("file:read", async (_event, filePath: string) => {
   // 验证路径，防止目录遍历攻击
-  const safePath = path.resolve(app.getPath('userData'), path.basename(filePath));
-  return fs.readFile(safePath, 'utf-8');
+  const safePath = path.resolve(
+    app.getPath("userData"),
+    path.basename(filePath),
+  );
+  return fs.readFile(safePath, "utf-8");
 });
 ```
 
 ```tsx
 // renderer — React 组件中使用
-const content = await window.electronAPI.readFile('config.json');
+const content = await window.electronAPI.readFile("config.json");
 ```
 
 ### IPC 通信方式对比
 
-| 方式 | 方向 | 特点 |
-|------|------|------|
-| ipcRenderer.send | Renderer → Main | 单向，不等待返回 |
-| ipcRenderer.invoke | Renderer → Main | 双向，Promise 返回 |
-| webContents.send | Main → Renderer | 主进程主动推送 |
-| MessagePort | 双向 | 高性能，适合大量数据传输 |
+| 方式               | 方向            | 特点                     |
+| ------------------ | --------------- | ------------------------ |
+| ipcRenderer.send   | Renderer → Main | 单向，不等待返回         |
+| ipcRenderer.invoke | Renderer → Main | 双向，Promise 返回       |
+| webContents.send   | Main → Renderer | 主进程主动推送           |
+| MessagePort        | 双向            | 高性能，适合大量数据传输 |
 
 ## 安全 checklist
 
@@ -76,10 +79,10 @@ Electron 官方安全指南的核心要求：
 // ✅ 安全的 BrowserWindow 配置
 new BrowserWindow({
   webPreferences: {
-    nodeIntegration: false,        // 禁止渲染进程直接访问 Node.js
-    contextIsolation: true,        // 隔离 preload 和页面上下文
-    sandbox: true,                 // 启用沙箱
-    webSecurity: true,             // 启用同源策略
+    nodeIntegration: false, // 禁止渲染进程直接访问 Node.js
+    contextIsolation: true, // 隔离 preload 和页面上下文
+    sandbox: true, // 启用沙箱
+    webSecurity: true, // 启用同源策略
     allowRunningInsecureContent: false,
   },
 });
@@ -95,10 +98,10 @@ new BrowserWindow({
 ## 自动更新
 
 ```ts
-import { autoUpdater } from 'electron-updater';
+import { autoUpdater } from "electron-updater";
 
 autoUpdater.checkForUpdatesAndNotify();
-autoUpdater.on('update-downloaded', () => {
+autoUpdater.on("update-downloaded", () => {
   autoUpdater.quitAndInstall();
 });
 ```
@@ -111,15 +114,15 @@ autoUpdater.on('update-downloaded', () => {
 
 ## Electron vs Tauri 选型
 
-| 维度 | Electron | Tauri 2 |
-|------|----------|---------|
-| 运行时 | Chromium + Node.js | 系统 WebView + Rust |
-| 安装包体积 | 80-150MB | 3-10MB |
-| 内存占用 | 较高 | 较低 |
-| 生态成熟度 | 非常成熟 | 快速增长 |
-| 前端技术栈 | 任意 Web 技术 | 任意 Web 技术 |
-| 原生能力 | Node.js 全生态 | Rust 插件 |
-| 适合场景 | 复杂桌面应用 | 轻量工具类应用 |
+| 维度       | Electron           | Tauri 2             |
+| ---------- | ------------------ | ------------------- |
+| 运行时     | Chromium + Node.js | 系统 WebView + Rust |
+| 安装包体积 | 80-150MB           | 3-10MB              |
+| 内存占用   | 较高               | 较低                |
+| 生态成熟度 | 非常成熟           | 快速增长            |
+| 前端技术栈 | 任意 Web 技术      | 任意 Web 技术       |
+| 原生能力   | Node.js 全生态     | Rust 插件           |
+| 适合场景   | 复杂桌面应用       | 轻量工具类应用      |
 
 ## 面试项目表达
 

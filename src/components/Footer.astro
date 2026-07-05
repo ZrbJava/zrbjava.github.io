@@ -4,12 +4,17 @@ import { site } from "@/data/site";
 
 <footer class="footer">
   <div class="container footer-inner">
-    <div>
-      <strong>{site.name}</strong>
+    <div class="footer-brand">
+      <strong>{site.author}</strong>
+      <span class="footer-tagline">{site.tagline}</span>
       <p>{site.description}</p>
     </div>
-    <div class="footer-links">
-      {site.socials.map((item) => <a href={item.href}>{item.label}</a>)}
+    <div class="footer-right">
+      <nav class="footer-links" aria-label="页脚链接">
+        {site.nav.slice(1).map((item) => <a href={item.href}>{item.label}</a>)}
+        {site.socials.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+      <p class="footer-note">持续更新中 · 写给自己，也写给同样较真的工程师</p>
     </div>
   </div>
 </footer>
@@ -17,40 +22,78 @@ import { site } from "@/data/site";
 <style>
   .footer {
     border-top: 1px solid var(--line);
-    padding: 36px 0;
+    padding: 40px 0 calc(40px + env(safe-area-inset-bottom, 0));
     background: var(--bg-strong);
   }
 
   .footer-inner {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 24px;
+    gap: 32px;
   }
 
-  .footer strong {
+  .footer-brand strong {
     color: var(--ink);
+    font-size: 18px;
   }
 
-  .footer p {
-    max-width: 560px;
-    margin: 6px 0 0;
+  .footer-tagline {
+    display: block;
+    margin-top: 4px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .footer-brand p {
+    max-width: 480px;
+    margin: 10px 0 0;
     color: var(--muted);
     font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .footer-right {
+    text-align: right;
   }
 
   .footer-links {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 14px;
     color: var(--muted);
     font-size: 14px;
     font-weight: 700;
   }
 
+  .footer-links a:hover {
+    color: var(--accent);
+  }
+
+  .footer-note {
+    margin: 14px 0 0;
+    color: var(--subtle);
+    font-size: 13px;
+  }
+
   @media (max-width: 720px) {
+    .footer {
+      padding: 32px 0 calc(32px + env(safe-area-inset-bottom, 0));
+    }
+
     .footer-inner {
-      align-items: flex-start;
       flex-direction: column;
+      gap: 24px;
+    }
+
+    .footer-right {
+      text-align: left;
+    }
+
+    .footer-links {
+      justify-content: flex-start;
     }
   }
 </style>

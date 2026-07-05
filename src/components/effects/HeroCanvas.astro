@@ -1,0 +1,240 @@
+---
+---
+
+<canvas class="hero-canvas" data-hero-canvas aria-hidden="true"></canvas>
+<div class="cursor-glow" data-cursor-glow aria-hidden="true"></div>
+
+<script is:inline>
+  function initHeroCanvas() {
+    const hero = document.querySelector("[data-hero]");
+    const canvas = document.querySelector("[data-hero-canvas]");
+    const glow = document.querySelector("[data-cursor-glow]");
+    if (!hero || !canvas || canvas.dataset.ready === "true") return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    canvas.dataset.ready = "true";
+    const g = canvas.getContext("2d");
+    if (!g) return;
+
+    let width = 0;
+    let height = 0;
+    let nodes = [];
+    let mouse = { x: -9999, y: -9999, active: false };
+    let smooth = { x: -9999, y: -9999 };
+    let raf = 0;
+
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const nodeCount = isMobile ? 18 : 36;
+    const linkDistance = isMobile ? 100 : 130;
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#146c5f";
+
+    function resize() {
+      width = hero.clientWidth;
+      height = hero.clientHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      g.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+
+      if (nodes.length === 0) {
+        nodes = Array.from({ length: nodeCount }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.28,
+          vy: (Math.random() - 0.5) * 0.28,
+          r: Math.random() * 1 + 1.2
+        }));
+      }
+    }
+
+    function spotlight(x, y) {
+      if (!mouse.active) return 0;
+      const dist = Math.hypot(x - smooth.x, y - smooth.y);
+      return Math.max(0, 1 - dist / 200);
+    }
+
+    function parseAccentAlpha(fallback) {
+      if (accent.startsWith("#") && accent.length >= 7) {
+        const r = parseInt(accent.slice(1, 3), 16);
+        const gr = parseInt(accent.slice(3, 5), 16);
+        const b = parseInt(accent.slice(5, 7), 16);
+        return `rgba(${r}, ${gr}, ${b}, ${fallback})`;
+      }
+      return `rgba(20, 108, 95, ${fallback})`;
+    }
+
+    function drawCursorEffects() {
+      if (!mouse.active) return;
+
+      const ring = g.createRadialGradient(smooth.x, smooth.y, 0, smooth.x, smooth.y, 200);
+      ring.addColorStop(0, parseAccentAlpha(0.14));
+      ring.addColorStop(0.45, parseAccentAlpha(0.05));
+      ring.addColorStop(1, parseAccentAlpha(0));
+      g.fillStyle = ring;
+      g.fillRect(0, 0, width, height);
+
+      g.beginPath();
+      g.arc(smooth.x, smooth.y, 22, 0, Math.PI * 2);
+      g.strokeStyle = parseAccentAlpha(0.35);
+      g.lineWidth = 1;
+      g.stroke();
+
+      g.beginPath();
+      g.arc(smooth.x, smooth.y, 3.5, 0, Math.PI * 2);
+      g.fillStyle = parseAccentAlpha(0.75);
+      g.fill();
+    }
+
+    function step() {
+      smooth.x += (mouse.x - smooth.x) * 0.12;
+      smooth.y += (mouse.y - smooth.y) * 0.12;
+
+      if (glow && canHover) {
+        glow.style.opacity = mouse.active ? "1" : "0";
+        glow.style.transform = `translate(${smooth.x}px, ${smooth.y}px)`;
+      }
+
+      g.clearRect(0, 0, width, height);
+
+      for (const node of nodes) {
+        node.x += node.vx;
+        node.y += node.vy;
+        if (node.x < 0 || node.x > width) node.vx *= -1;
+        if (node.y < 0 || node.y > height) node.vy *= -1;
+
+        if (mouse.active) {
+          const dx = node.x - smooth.x;
+          const dy = node.y - smooth.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 130 && dist > 0) {
+            const force = (130 - dist) / 130;
+            node.x += (dx / dist) * force * 1.6;
+            node.y += (dy / dist) * force * 1.6;
+          }
+        }
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i];
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist > linkDistance) continue;
+
+          const spot = Math.max(spotlight(a.x, a.y), spotlight(b.x, b.y));
+          const alpha = (1 - dist / linkDistance) * (0.1 + spot * 0.45);
+          g.strokeStyle = accent;
+          g.globalAlpha = alpha;
+          g.lineWidth = spot > 0.2 ? 1.2 : 0.8;
+          g.beginPath();
+          g.moveTo(a.x, a.y);
+          g.lineTo(b.x, b.y);
+          g.stroke();
+        }
+      }
+
+      for (const node of nodes) {
+        const spot = spotlight(node.x, node.y);
+        const alpha = 0.18 + spot * 0.72;
+        g.beginPath();
+        g.fillStyle = accent;
+        g.globalAlpha = alpha;
+        g.arc(node.x, node.y, node.r + spot * 2.2, 0, Math.PI * 2);
+        g.fill();
+
+        if (spot > 0.35) {
+          g.beginPath();
+          g.globalAlpha = spot * 0.25;
+          g.arc(node.x, node.y, node.r + 6, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      g.globalAlpha = 1;
+      if (canHover) drawCursorEffects();
+
+      raf = requestAnimationFrame(step);
+    }
+
+    const onMove = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
+      mouse.active = true;
+    };
+
+    const onLeave = () => {
+      mouse.active = false;
+    };
+
+    resize();
+    step();
+    window.addEventListener("resize", resize);
+    hero.addEventListener("pointermove", onMove);
+    hero.addEventListener("pointerleave", onLeave);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", resize);
+        hero.removeEventListener("pointermove", onMove);
+        hero.removeEventListener("pointerleave", onLeave);
+      },
+      { once: true }
+    );
+  }
+
+  initHeroCanvas();
+  document.addEventListener("astro:page-load", initHeroCanvas);
+</script>
+
+<style>
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .cursor-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent) 18%, transparent),
+      transparent 68%
+    );
+    pointer-events: none;
+    opacity: 0;
+    translate: -50% -50%;
+    transition: opacity 0.35s ease;
+    will-change: transform, opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-canvas,
+    .cursor-glow {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .cursor-glow {
+      display: none;
+    }
+  }
+</style>

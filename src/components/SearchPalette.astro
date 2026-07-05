@@ -1,0 +1,496 @@
+---
+---
+
+<div class="search-palette" data-search-palette aria-hidden="true">
+  <div class="search-backdrop" data-search-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="搜索">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="M20 20l-3.5-3.5" />
+      </svg>
+      <input
+        type="search"
+        placeholder="搜索文章、专题、标签…"
+        autocomplete="off"
+        spellcheck="false"
+        data-search-input
+      />
+      <button class="search-close" type="button" aria-label="关闭搜索" data-search-close>
+        <kbd>Esc</kbd>
+      </button>
+    </div>
+    <div class="search-body">
+      <ul class="search-list" data-search-list role="listbox"></ul>
+      <p class="search-empty" data-search-empty>输入关键词开始搜索</p>
+    </div>
+    <div class="search-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> 导航</span>
+      <span><kbd>↵</kbd> 打开</span>
+      <span><kbd>Esc</kbd> 关闭</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  type PagefindResult = {
+    url: string;
+    meta: { title?: string };
+    excerpt: string;
+  };
+
+  type PagefindModule = {
+    init(): Promise<void>;
+    search(query: string): Promise<{
+      results: Array<{ data: () => Promise<PagefindResult> }>;
+    }>;
+  };
+
+  let initialized = false;
+  let pagefindReady = false;
+  let activeIndex = -1;
+  let currentItems: PagefindResult[] = [];
+  let currentQuery = "";
+
+  function escapeHtml(text: string) {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escapeRegex(text: string) {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function getHighlightTerms(query: string) {
+    const trimmed = query.trim();
+    if (!trimmed) return [];
+    const parts = trimmed.split(/\s+/).filter(Boolean);
+    const terms = parts.length > 1 ? [trimmed, ...parts] : [trimmed];
+    return [...new Set(terms)].sort((a, b) => b.length - a.length);
+  }
+
+  function highlightText(text: string, query: string) {
+    if (!query.trim()) return escapeHtml(text);
+    let html = escapeHtml(text);
+    for (const term of getHighlightTerms(query)) {
+      html = html.replace(
+        new RegExp(escapeRegex(term), "gi"),
+        (match) => `<mark class="search-highlight">${match}</mark>`
+      );
+    }
+    return html;
+  }
+
+  function formatExcerpt(html: string, query: string) {
+    const sanitized = html
+      .replace(/<(?!\/?mark\b)[^>]+>/gi, "")
+      .replace(/<mark>/gi, '<mark class="search-highlight">');
+
+    if (!query.trim() || sanitized.includes("search-highlight")) {
+      return sanitized;
+    }
+
+    return highlightText(
+      sanitized.replace(/<\/?mark[^>]*>/gi, ""),
+      query
+    );
+  }
+
+  async function importPagefind() {
+    return Function('return import("/pagefind/pagefind.js")')() as Promise<PagefindModule>;
+  }
+
+  async function loadPagefind() {
+    if (pagefindReady) return true;
+    try {
+      const pagefind = await importPagefind();
+      await pagefind.init();
+      pagefindReady = true;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function initSearchPalette() {
+    if (initialized) return;
+    initialized = true;
+
+    const palette = document.querySelector<HTMLElement>("[data-search-palette]");
+    const input = document.querySelector<HTMLInputElement>("[data-search-input]");
+    const list = document.querySelector<HTMLUListElement>("[data-search-list]");
+    const empty = document.querySelector<HTMLElement>("[data-search-empty]");
+    if (!palette || !input || !list || !empty) return;
+
+    const openButtons = document.querySelectorAll("[data-search-open]");
+    const closeTargets = document.querySelectorAll("[data-search-close]");
+
+    const renderResults = () => {
+      list.innerHTML = "";
+      activeIndex = currentItems.length > 0 ? 0 : -1;
+
+      currentItems.forEach((item, index) => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.className = "search-item";
+        link.href = item.url;
+        link.setAttribute("role", "option");
+        link.dataset.index = String(index);
+        if (index === activeIndex) link.classList.add("active");
+
+        const title = document.createElement("strong");
+        title.innerHTML = highlightText(item.meta.title ?? item.url, currentQuery);
+
+        const excerpt = document.createElement("span");
+        excerpt.innerHTML = formatExcerpt(item.excerpt, currentQuery);
+
+        link.append(title, excerpt);
+        li.append(link);
+        list.append(li);
+      });
+
+      empty.hidden = currentItems.length > 0;
+      list.hidden = currentItems.length === 0;
+    };
+
+    const setActive = (index: number) => {
+      if (currentItems.length === 0) return;
+      activeIndex = Math.max(0, Math.min(index, currentItems.length - 1));
+      list.querySelectorAll(".search-item").forEach((el, i) => {
+        el.classList.toggle("active", i === activeIndex);
+      });
+      list.querySelectorAll(".search-item")[activeIndex]?.scrollIntoView({ block: "nearest" });
+    };
+
+    const open = () => {
+      palette.classList.add("is-open");
+      palette.setAttribute("aria-hidden", "false");
+      document.body.classList.add("search-open");
+      input.value = "";
+      currentItems = [];
+      renderResults();
+      empty.textContent = "输入关键词开始搜索";
+      empty.hidden = false;
+      list.hidden = true;
+      window.setTimeout(() => input.focus(), 50);
+    };
+
+    const close = () => {
+      palette.classList.remove("is-open");
+      palette.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("search-open");
+    };
+
+    const navigateActive = () => {
+      const active = list.querySelector<HTMLAnchorElement>(".search-item.active");
+      if (active) window.location.href = active.href;
+    };
+
+    openButtons.forEach((btn) => btn.addEventListener("click", open));
+    closeTargets.forEach((el) => el.addEventListener("click", close));
+
+    document.addEventListener("keydown", (event) => {
+      const isOpen = palette.classList.contains("is-open");
+
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        isOpen ? close() : open();
+        return;
+      }
+
+      if (!isOpen) return;
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setActive(activeIndex + 1);
+        return;
+      }
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setActive(activeIndex <= 0 ? currentItems.length - 1 : activeIndex - 1);
+        return;
+      }
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        navigateActive();
+      }
+    });
+
+    let timer: number | undefined;
+    input.addEventListener("input", () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(async () => {
+        const query = input.value.trim();
+        if (!query) {
+          currentQuery = "";
+          currentItems = [];
+          renderResults();
+          empty.textContent = "输入关键词开始搜索";
+          empty.hidden = false;
+          list.hidden = true;
+          return;
+        }
+
+        const ready = await loadPagefind();
+        if (!ready) {
+          currentItems = [];
+          renderResults();
+          empty.textContent = "搜索索引未就绪，请运行 pnpm build && pnpm preview";
+          empty.hidden = false;
+          list.hidden = true;
+          return;
+        }
+
+        const pagefind = await importPagefind();
+        const response = await pagefind.search(query);
+        currentQuery = query;
+        currentItems = await Promise.all(
+          response.results.slice(0, 10).map(async (item) => item.data())
+        );
+        renderResults();
+
+        if (currentItems.length === 0) {
+          empty.textContent = `未找到「${query}」相关结果`;
+          empty.hidden = false;
+          list.hidden = true;
+        }
+      }, 150);
+    });
+
+    list.addEventListener("mousemove", (event) => {
+      const target = (event.target as HTMLElement).closest<HTMLAnchorElement>(".search-item");
+      if (target?.dataset.index) setActive(Number(target.dataset.index));
+    });
+  }
+
+  initSearchPalette();
+  document.addEventListener("astro:page-load", initSearchPalette);
+</script>
+
+<style>
+  .search-palette {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    place-items: flex-start center;
+    padding: 14vh 16px 16px;
+    pointer-events: none;
+  }
+
+  .search-palette.is-open {
+    display: grid;
+    pointer-events: auto;
+  }
+
+  .search-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 20, 27, 0.6);
+    backdrop-filter: blur(4px);
+    animation: search-fade-in 0.15s ease;
+  }
+
+  .search-panel {
+    position: relative;
+    z-index: 1;
+    width: min(560px, 100%);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow:
+      0 24px 48px rgba(15, 23, 42, 0.18),
+      0 0 0 1px rgba(255, 255, 255, 0.04);
+    overflow: hidden;
+    animation: search-slide-in 0.18s ease;
+  }
+
+  .search-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    padding: 12px 14px;
+  }
+
+  .search-input-row svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--subtle);
+    stroke-linecap: round;
+    stroke-width: 2;
+  }
+
+  .search-input-row input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-size: 15px;
+    outline: none;
+  }
+
+  .search-input-row input::placeholder {
+    color: var(--subtle);
+  }
+
+  .search-close {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .search-close kbd {
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 2px 6px;
+    background: var(--surface-soft);
+    color: var(--subtle);
+    font-size: 11px;
+    font-family: inherit;
+  }
+
+  .search-body {
+    max-height: min(360px, 50vh);
+    overflow: auto;
+  }
+
+  .search-list {
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+  }
+
+  .search-list[hidden] {
+    display: none;
+  }
+
+  .search-list :global(.search-item) {
+    display: block;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: background 0.12s;
+  }
+
+  .search-list :global(.search-item:hover),
+  .search-list :global(.search-item.active) {
+    background: var(--surface-soft);
+  }
+
+  .search-list :global(.search-item.active) {
+    outline: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  .search-list :global(.search-item strong) {
+    display: block;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .search-list :global(.search-item span) {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .search-list :global(mark.search-highlight) {
+    border-radius: 3px;
+    padding: 0 2px;
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+    color: var(--accent-strong);
+    font-weight: 800;
+  }
+
+  .search-list :global(strong mark.search-highlight) {
+    color: var(--accent);
+  }
+
+  .search-empty {
+    margin: 0;
+    padding: 28px 16px;
+    color: var(--subtle);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .search-empty[hidden] {
+    display: none;
+  }
+
+  .search-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1px solid var(--line);
+    padding: 10px 14px;
+    background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
+    color: var(--subtle);
+    font-size: 11px;
+  }
+
+  .search-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .search-footer kbd {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 10px;
+    font-family: inherit;
+  }
+
+  :global(body.search-open) {
+    overflow: hidden;
+  }
+
+  @keyframes search-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes search-slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .search-palette {
+      padding-top: 10vh;
+    }
+
+    .search-footer {
+      display: none;
+    }
+  }
+</style>
