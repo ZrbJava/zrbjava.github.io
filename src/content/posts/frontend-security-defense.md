@@ -7,6 +7,7 @@ tags: ["Security", "XSS", "CSRF", "CSP"]
 series: "浏览器与网络底层"
 draft: false
 featured: false
+cover: "/images/covers/frontend-security-defense.svg"
 ---
 
 安全是高级前端必须掌握的领域。不需要成为安全专家，但要能在项目中**识别风险、实施防御、通过安全审计**。
@@ -156,3 +157,19 @@ webPreferences: {
   enableRemoteModule: false, // 已废弃
 }
 ```
+
+## Trusted Types 与 DOM Clobbering
+
+```ts
+// 对必须 innerHTML 的富文本区域
+if (window.trustedTypes) {
+  const policy = trustedTypes.createPolicy('app', {
+    createHTML: (input) => DOMPurify.sanitize(input),
+  });
+  el.innerHTML = policy.createHTML(untrusted);
+}
+```
+
+**DOM Clobbering**：恶意 HTML 用 `<form id="config">` 覆盖全局变量——避免用 `window.config` 读 DOM；配置走 JSON API。
+
+依赖：`npm audit` + CI Snyk；**生产 Source Map 不公开**（见 [监控](/posts/frontend-monitoring-system) 私有化上传）。

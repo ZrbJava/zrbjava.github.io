@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="AI 应用工程化：MCP 工作流与 Agent 编排">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#7c3aed" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1180" cy="560" r="220" fill="rgba(0,0,0,0.1)"/>
+  
+        <rect x="840" y="150" width="70" height="70" rx="14" fill="rgba(255,255,255,0.12)"/>
+        <rect x="940" y="150" width="70" height="70" rx="14" fill="rgba(255,255,255,0.16)"/>
+        <rect x="1040" y="150" width="70" height="70" rx="14" fill="rgba(255,255,255,0.2)"/>
+        <path d="M910 185 H940 M1010 185 H1040" stroke="rgba(255,255,255,0.35)" stroke-width="4"/>
+</svg>

@@ -1,0 +1,70 @@
+---
+import TextLink from "@/components/TextLink.astro";
+
+interface Props {
+  index?: string;
+  title: string;
+  description?: string;
+  href?: string;
+  linkLabel?: string;
+  row?: boolean;
+  as?: "h1" | "h2";
+}
+
+const { index, title, description, href, linkLabel, row = false, as = "h2" } = Astro.props;
+const HeadingTag = as;
+---
+
+<header class:list={["section-header", { "section-header-row": row }]}>
+  <div class="section-header-copy">
+    {index && <p class="section-index">{index}</p>}
+    <HeadingTag class:list={[{ "section-title": as === "h1" }, "section-heading"]}>{title}</HeadingTag>
+    {description && <p class="section-desc">{description}</p>}
+  </div>
+  {href && linkLabel && <TextLink href={href}>{linkLabel}</TextLink>}
+</header>
+
+<style>
+  .section-header {
+    margin-bottom: var(--space-block);
+  }
+
+  .section-header-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .section-index {
+    margin: 0 0 4px;
+    color: var(--accent);
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.06em;
+  }
+
+  .section-heading {
+    margin: 0;
+    color: var(--ink);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-extrabold);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .section-desc {
+    max-width: 42rem;
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: var(--text-md);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    .section-header-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

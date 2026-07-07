@@ -5,100 +5,119 @@ pubDate: 2026-07-01
 category: "React"
 tags: ["React", "Fiber", "Reconciliation", "Performance"]
 series: "React 工程实践"
+seriesOrder: 1
 draft: false
 featured: true
+cover: "/images/covers/react-fiber-reconciliation-deep-dive.svg"
 ---
 
-React 16 引入 Fiber 架构，本质上是为了解决 Stack Reconciler 的两个致命问题：**渲染过程不可中断**和**无法区分更新优先级**。作为 8 年经验的前端，理解 Fiber 不是背概念，而是要在面试和项目中回答「React 为什么需要可中断渲染」以及「Concurrent Mode 如何影响你的业务代码」。
+数据表格 800 行 + 多列筛选，每次 keystroke 触发全表重算，输入框延迟 300ms+。Profiler 显示 **SyncLane 下的 reconcile 占 180ms 主线程**。用 `startTransition` 把筛选降到 TransitionLane 后，输入 INP 回到 50ms 以内——理解 Fiber 不是为了面试背链表，而是为了**知道该把哪类更新标成可中断**。
 
-## 为什么需要 Fiber
+## 为什么 Stack Reconciler 不够
 
-Stack Reconciler 采用递归遍历 Virtual DOM，一旦开始就无法暂停。当组件树很深或单次更新计算量大时，主线程会被长时间占用，导致输入延迟、动画掉帧。
+递归遍历 VDOM，深度 200 时单次 reconcile 无法让出主线程。用户点击、输入与「重渲染整张表」抢同一条 Sync 路径，就会掉帧。
 
-Fiber 把递归拆成**可中断的工作单元**（Fiber Node），每个 Fiber 节点对应一个组件实例，通过 `child`、`sibling`、`return` 三个指针构成链表树，遍历变成循环：
+Fiber 把「一个组件的 reconcile」拆成 **Fiber 工作单元**，用 `child / sibling / return` 链表代替递归栈，配合 Scheduler **可中断、可恢复**。
 
 ```ts
-// Fiber 节点的核心结构（简化）
 type Fiber = {
+  tag: WorkTag;
   type: any;
-  key: string | null;
+  key: null | string;
   stateNode: any;
-  return: Fiber | null; // 父节点
-  child: Fiber | null; // 第一个子节点
-  sibling: Fiber | null; // 下一个兄弟节点
-  alternate: Fiber | null; // 对应 current tree 的节点
-  flags: number; // 副作用标记
-  lanes: Lanes; // 优先级车道
+  return: Fiber | null;
+  child: Fiber | null;
+  sibling: Fiber | null;
+  alternate: Fiber | null;
+  flags: Flags;
+  lanes: Lanes;
+  memoizedProps: any;
+  memoizedState: any;
 };
 ```
 
-## 双缓冲：current 与 workInProgress
+## 两阶段：render vs commit
 
-React 维护两棵 Fiber 树：
+| 阶段 | 可中断 | 做什么 |
+|------|--------|--------|
+| **render** | 是 | 构建 workInProgress 树，打 flags |
+| **commit** | 否 | DOM 变更、useLayoutEffect、useEffect 调度 |
 
-- **current tree**：当前屏幕上渲染的内容
-- **workInProgress tree**：正在构建的新树
+commit 又分三步（React 18）：
 
-更新完成后，两棵树指针互换（`root.current = finishedWork`），这个过程叫 **commit**，是不可中断的。而 **render 阶段**（构建 workInProgress tree）是可中断的。
+1. **before mutation** — getSnapshotBeforeUpdate
+2. **mutation** — 插入/更新/删除 DOM
+3. **layout** — useLayoutEffect
 
-## 调度优先级：Lane 模型
+**useEffect** 在 paint 之后异步执行；测量布局应走 useLayoutEffect，但避免长时间阻塞。
 
-React 18 用 Lane（位掩码）表达优先级，不同事件触发不同 Lane：
+## Scheduler 与 workLoop
 
-| 触发源             | 典型 Lane      | 优先级 |
-| ------------------ | -------------- | ------ |
-| 离散输入（click）  | SyncLane       | 最高   |
-| 连续输入（scroll） | ContinuousLane | 高     |
-| 默认 setState      | DefaultLane    | 中     |
-| Transition         | TransitionLane | 低     |
-| Suspense           | RetryLane      | 最低   |
-
-`startTransition` 包裹的更新会被标记为 TransitionLane，React 可以在渲染过程中被更高优先级更新打断。
-
-## Diff 算法三策略
-
-React 的 Diff 基于两个假设：
-
-1. 不同类型的元素会产生不同的树
-2. 开发者可以通过 key 标识哪些子元素是稳定的
-
-同层比较规则：
-
-- **type 不同**：直接卸载旧树，挂载新树
-- **type 相同**：复用 DOM，只更新 props
-- **列表 diff**：从左到右比对，遇到 key 不一致时用 Map 查找可复用节点
-
-```jsx
-// key 的正确用法：稳定且唯一
-{
-  items.map((item) => <ListItem key={item.id} data={item} />);
-}
-
-// 错误：用 index 作为 key，在插入/删除时会导致状态错乱
-{
-  items.map((item, index) => <ListItem key={index} data={item} />);
+```ts
+// 概念简化：并发模式下时间片
+function workLoopConcurrent() {
+  while (workInProgress !== null && !shouldYield()) {
+    workInProgress = performUnitOfWork(workInProgress);
+  }
+  if (workInProgress !== null) {
+    // 让出主线程，下次 requestIdleCallback / MessageChannel 继续
+    return RootInProgress;
+  }
+  return RootCompleted;
 }
 ```
 
-## 面试高频追问
+`shouldYield()` 默认约 5ms 时间片——不是「每帧一次」，而是 **多次短 burst**。
 
-**Q：useEffect 和 useLayoutEffect 的执行时机？**
+## Lane 优先级（React 18）
 
-- `useLayoutEffect` 在 DOM 变更后、浏览器绘制前同步执行
-- `useEffect` 在浏览器绘制后异步执行
-- SSR 场景下两者都不应在服务端执行副作用
+| 触发源 | Lane | 行为 |
+|--------|------|------|
+| click、keydown | SyncLane | 同步完成 render+commit |
+| scroll、mousemove | ContinuousLane | 可中断，但高于 default |
+| setState（默认） | DefaultLane | 并发可中断 |
+| startTransition | TransitionLane | 最低，常被饿死需配合 useDeferredValue |
+| Suspense retry | RetryLane | 重试边界 |
 
-**Q：React 18 的 Automatic Batching 是什么？**
+```tsx
+const [query, setQuery] = useState('');
+const [deferredQuery, setDeferredQuery] = useState('');
+const isPending = query !== deferredQuery;
 
-React 18 之前，只有 React 事件处理器内的 setState 会批量更新。18 之后，Promise、setTimeout、原生事件中的多次 setState 也会合并为一次渲染。
+const handleChange = (v: string) => {
+  setQuery(v); // 输入框 Sync，立即更新
+  startTransition(() => {
+    setDeferredQuery(v); // 表格筛选 Transition
+  });
+};
 
-**Q：如何向面试官展示 Fiber 的实际价值？**
+const filtered = useMemo(
+  () => heavyFilter(rows, deferredQuery),
+  [rows, deferredQuery],
+);
+```
 
-结合项目案例：「我们的数据表格有 500+ 行，筛选时会卡顿。通过 `startTransition` 把筛选状态标记为低优先级，输入框响应从 300ms 降到 50ms。」
+表格项目：**筛选 INP 300ms → 48ms**；表格本身仍慢，但输入不再卡。
 
-## 实践建议
+## Diff 与 key
 
-1. 用 React DevTools Profiler 定位渲染瓶颈，而不是盲目 memo
-2. 大列表用虚拟滚动（react-window / @tanstack/virtual）
-3. 状态更新分「紧急」和「可延迟」，配合 `useDeferredValue`
-4. 理解 Fiber 后，Concurrent Features（Suspense、Transitions）才有正确使用场景
+同层比较；列表用 key Map 复用。`key={index}` 在头部插入会导致 **state 错位**（输入框内容跟错行）。
+
+React 19 相关：**Activity API**（原 Offscreen 演进）可保留隐藏子树的 state 并降低优先级；**useOptimistic** 适合 transition 内的乐观 UI。Concurrent 特性在 19 里更默认，但 Lane 模型仍是底层逻辑。
+
+## 常见误区
+
+| 误区 | 事实 |
+|------|------|
+| `memo` 万能 |  props 引用变仍 re-render；先 Profiler |
+| Concurrent = 多线程 | 仍是单线程，只是可中断 |
+| Transition 一定快 | 只保证 **高优任务先响应**，低优总时间可能更长 |
+
+## 实践清单
+
+1. Profiler 找 **Self time 高** 的组件，不是盲目 memo
+2. 搜索/筛选/大列表过滤 → `startTransition` + `useDeferredValue`
+3. 大列表 → 虚拟滚动（@tanstack/virtual）
+4. 读性能问题先问：**这条更新在哪个 Lane？**
+
+Fiber 的价值在于 **把「用户感知延迟」和「后台重计算」拆开**。面试能讲清 render/commit、Lane、Transition，再配一个表格筛选案例，比背 Fiber 链表指针更有说服力。

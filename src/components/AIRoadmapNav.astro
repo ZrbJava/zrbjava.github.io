@@ -1,0 +1,106 @@
+---
+import type { Post } from "@/utils/content";
+import { withBase } from "@/utils/url";
+
+interface Props {
+  level?: string;
+  order?: number;
+  prev?: Post | null;
+  next?: Post | null;
+}
+
+const { level, order, prev = null, next = null } = Astro.props;
+---
+
+{(level || order) && (
+  <nav class="ai-roadmap-nav" aria-label="AI 学习路线">
+    <div class="ai-roadmap-meta">
+      {order && <span class="ai-roadmap-step">第 {order} 篇</span>}
+      {level && <span class="ai-roadmap-level">{level}</span>}
+      <a class="ai-roadmap-hub" href={withBase("/topics/ai-engineering")}>完整路线 →</a>
+    </div>
+    {(prev || next) && (
+      <div class="ai-roadmap-links">
+        {prev ? (
+          <a class="ai-roadmap-link" href={withBase(`/posts/${prev.id}`)}>
+            ← 上一篇：{prev.data.title}
+          </a>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <a class="ai-roadmap-link ai-roadmap-link-next" href={withBase(`/posts/${next.id}`)}>
+            下一篇：{next.data.title} →
+          </a>
+        ) : null}
+      </div>
+    )}
+  </nav>
+)}
+
+<style>
+  .ai-roadmap-nav {
+    margin: 0 0 28px;
+    padding: 14px 16px;
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--accent-soft) 30%, var(--surface));
+  }
+
+  .ai-roadmap-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-bottom: 10px;
+  }
+
+  .ai-roadmap-step,
+  .ai-roadmap-level {
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .ai-roadmap-step {
+    color: var(--muted);
+  }
+
+  .ai-roadmap-level {
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .ai-roadmap-hub {
+    margin-left: auto;
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    color: var(--accent);
+  }
+
+  .ai-roadmap-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ai-roadmap-link {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--muted);
+    transition: color 0.15s;
+  }
+
+  .ai-roadmap-link:hover {
+    color: var(--accent);
+  }
+
+  .ai-roadmap-link-next {
+    text-align: right;
+    margin-left: auto;
+  }
+</style>

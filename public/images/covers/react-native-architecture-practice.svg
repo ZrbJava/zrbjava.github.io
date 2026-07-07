@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="React Native 新架构与跨端性能实践">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#6366f1" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#312e81" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1180" cy="560" r="220" fill="rgba(0,0,0,0.1)"/>
+  
+        <rect x="850" y="130" width="110" height="160" rx="16" fill="rgba(255,255,255,0.1)"/>
+        <rect x="980" y="130" width="110" height="160" rx="16" fill="rgba(255,255,255,0.14)"/>
+        <path d="M960 210 H980" stroke="rgba(255,255,255,0.35)" stroke-width="6"/>
+</svg>

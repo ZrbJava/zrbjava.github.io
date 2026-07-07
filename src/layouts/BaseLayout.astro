@@ -4,6 +4,7 @@ import Footer from "@/components/Footer.astro";
 import SearchPalette from "@/components/SearchPalette.astro";
 import { site } from "@/data/site";
 import { absoluteUrl, withBase } from "@/utils/url";
+import "@/styles/tokens.css";
 import "@/styles/global.css";
 
 interface Props {
@@ -55,7 +56,14 @@ const jsonLdPayload = jsonLd
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={shareImage} />
-    <meta name="theme-color" content="#146c5f" />
+    <meta name="theme-color" content="#0f5c52" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f141b" media="(prefers-color-scheme: dark)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={withBase("/images/avatar.png")} />
     <link rel="alternate" type="application/rss+xml" title={site.name} href={withBase("/rss.xml")} />
@@ -72,6 +80,24 @@ const jsonLdPayload = jsonLd
     <title>{title}</title>
   </head>
   <body class={bodyClass}>
+    <script is:inline>
+      (function () {
+        var NAV_PREV = "blog:nav:prev";
+        var NAV_CUR = "blog:nav:current";
+        function trackNavHistory() {
+          try {
+            var current = location.pathname + location.search;
+            var stored = sessionStorage.getItem(NAV_CUR);
+            if (stored !== current) {
+              if (stored) sessionStorage.setItem(NAV_PREV, stored);
+              sessionStorage.setItem(NAV_CUR, current);
+            }
+          } catch (e) {}
+        }
+        trackNavHistory();
+        document.addEventListener("astro:page-load", trackNavHistory);
+      })();
+    </script>
     <Header />
     <main id="main-content" data-pagefind-body class="site-main">
       <slot />

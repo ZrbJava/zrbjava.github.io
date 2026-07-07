@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="大型项目中的组件分层与状态管理">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#61dafb"/>
+      <stop offset="100%" stop-color="#20232a"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#61dafb" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#61dafb" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#20232a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1180" cy="560" r="220" fill="rgba(0,0,0,0.1)"/>
+  
+        <rect x="860" y="240" width="220" height="36" rx="8" fill="rgba(255,255,255,0.08)"/>
+        <rect x="880" y="190" width="220" height="36" rx="8" fill="rgba(255,255,255,0.12)"/>
+        <rect x="900" y="140" width="220" height="36" rx="8" fill="rgba(255,255,255,0.16)"/>
+</svg>

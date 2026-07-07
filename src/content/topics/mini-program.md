@@ -10,11 +10,12 @@ tags: ["Mini Program", "WeChat", "Taro", "Cross-Platform"]
 
 ## 学习路线
 
-1. 理解逻辑层/渲染层分离与 setData 性能陷阱
-2. 掌握分包、预加载、Skyline 渲染等优化手段
-3. 对比 Taro / UniApp / 原生开发的选型
-4. 打通登录、支付、订阅消息等业务链路
+1. [架构与性能优化](/posts/wechat-mini-program-architecture) — 双线程、setData、分包
+2. [登录、支付与订阅消息](/posts/mini-program-login-payment-flow) — 业务闭环与安全
 
 ## 系列文章
 
-- [微信小程序架构与性能优化实战](/posts/wechat-mini-program-architecture)
+| 序号 | 文章 | 目标 |
+|------|------|------|
+| 01 | [微信小程序架构与性能](/posts/wechat-mini-program-architecture) | 理解渲染/逻辑层与性能手段 |
+| 02 | [登录、支付与订阅消息](/posts/mini-program-login-payment-flow) | 打通核心业务链路 |

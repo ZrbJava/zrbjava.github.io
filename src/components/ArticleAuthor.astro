@@ -7,13 +7,9 @@ import AuthorAvatar from "@/components/AuthorAvatar.astro";
 <aside class="article-author" aria-label="作者信息">
   <AuthorAvatar size="md" />
   <div>
-    <strong>关于作者</strong>
-    <p>
-      我是 <em>{site.author}</em>，{site.experience}经验的 {site.role}。
-      这个博客是我持续学习、复盘和分享的阵地——把框架原理、工程实践和架构取舍写清楚，
-      既帮自己沉淀，也希望能帮到同样在较真的你。
-    </p>
-    <a href={withBase("/about")}>了解更多 →</a>
+    <strong>{site.author}</strong>
+    <p>{site.role} · {site.experience}经验。{site.intro.heroLine}</p>
+    <a href={withBase("/about")}>关于我 →</a>
   </div>
 </aside>
 
@@ -23,34 +19,29 @@ import AuthorAvatar from "@/components/AuthorAvatar.astro";
     gap: 16px;
     margin-top: 48px;
     border-top: 1px solid var(--line);
-    padding-top: 32px;
+    padding-top: 28px;
   }
 
   .article-author strong {
     display: block;
     color: var(--ink);
-    font-size: 16px;
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
   }
 
   .article-author p {
-    margin: 8px 0 0;
+    margin: 6px 0 0;
     color: var(--muted);
-    font-size: 15px;
-    line-height: 1.75;
-  }
-
-  .article-author em {
-    color: var(--ink);
-    font-style: normal;
-    font-weight: 700;
+    font-size: var(--text-md);
+    line-height: 1.7;
   }
 
   .article-author a {
     display: inline-flex;
     margin-top: 10px;
     color: var(--accent);
-    font-size: 14px;
-    font-weight: 800;
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
   }
 
   @media (max-width: 480px) {

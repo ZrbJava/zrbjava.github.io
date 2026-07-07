@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="React Fiber 与调和机制深度解析">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#61dafb"/>
+      <stop offset="100%" stop-color="#20232a"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#61dafb" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#61dafb" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#20232a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1180" cy="560" r="220" fill="rgba(0,0,0,0.1)"/>
+  
+        <circle cx="930" cy="170" r="18" fill="rgba(255,255,255,0.2)"/>
+        <circle cx="990" cy="120" r="14" fill="rgba(255,255,255,0.16)"/>
+        <circle cx="1050" cy="180" r="14" fill="rgba(255,255,255,0.16)"/>
+        <circle cx="1010" cy="250" r="14" fill="rgba(255,255,255,0.16)"/>
+        <path d="M930 170 L990 120 L1050 180 L1010 250 Z" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+</svg>

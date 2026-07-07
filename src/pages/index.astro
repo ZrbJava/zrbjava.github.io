@@ -2,27 +2,26 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
+import AIPathPreview from "@/components/AIPathPreview.astro";
 import TopicCard from "@/components/TopicCard.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import TextLink from "@/components/TextLink.astro";
 import HeroCanvas from "@/components/effects/HeroCanvas.astro";
 import IdentityCard from "@/components/effects/IdentityCard.astro";
 import HomeEffects from "@/components/effects/HomeEffects.astro";
 import { site } from "@/data/site";
-import { visiblePosts } from "@/utils/content";
+import { getAISystemPosts, getAIPosts, getRecentPosts, getTopicPostCount, getTopicsWithPosts, sortTopicsAIFirst, visiblePosts } from "@/utils/content";
 import { withBase } from "@/utils/url";
 
 const posts = visiblePosts(await getCollection("posts"));
-const topics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
-const projects = (await getCollection("projects")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const featuredPosts = posts.filter((post) => post.data.featured).slice(0, 3);
-const railTopics = (topics.filter((t) => t.data.featured).length >= 6
-  ? topics.filter((t) => t.data.featured)
-  : topics
-).slice(0, 8);
-const recentPosts = posts.slice(0, 5);
-const recentProjects = projects.slice(0, 2);
+const allTopics = sortTopicsAIFirst(await getCollection("topics"));
+const topics = getTopicsWithPosts(allTopics, posts);
+const aiPosts = getAIPosts(posts);
+const aiSystemPosts = getAISystemPosts(posts);
+const railTopics = topics.slice(0, 8);
+const recentPosts = getRecentPosts(posts, 8);
+
+const statsLine = `${aiPosts.length} 篇 AI 笔记 · ${posts.length} 篇总计 · ${topics.length} 个专题 · ${site.experience}大前端经验`;
 
 const websiteJsonLd = {
   "@context": "https://schema.org",
@@ -38,21 +37,18 @@ const websiteJsonLd = {
 ---
 
 <BaseLayout title="首页" description={site.description} jsonLd={websiteJsonLd}>
-  <!-- 01 Hero -->
   <section class="hero" data-hero>
     <HeroCanvas />
     <div class="container hero-inner">
       <div class="hero-copy" data-reveal data-reveal-hero>
         <p class="hero-eyebrow">{site.tagline}</p>
-        <h1>{site.author}</h1>
-        <p class="hero-role">{site.role} · {site.experience}经验</p>
+        <h1>{site.intro.headline}</h1>
+        <p class="hero-byline">{site.author} · {site.role} · {site.experience}经验</p>
         <p class="hero-lead">{site.intro.lead}</p>
-        <p class="hero-sub">{site.intro.heroLine}</p>
-        <p class="hero-proof">
-          {site.highlights.map((item) => `${item.value} ${item.label}`).join(" · ")}
-        </p>
+        <p class="hero-proof">{statsLine}</p>
         <div class="button-row">
-          <a class="button primary" href={withBase("/posts")}>阅读文章</a>
+          <a class="button primary" href={withBase("/topics/ai-engineering")}>AI 知识专题</a>
+          <a class="button" href={withBase("/posts")}>全部文章</a>
           <a class="button" href={withBase("/topics")}>浏览专题</a>
         </div>
       </div>
@@ -60,49 +56,42 @@ const websiteJsonLd = {
     </div>
   </section>
 
-  <!-- 02 Featured -->
   <section class="section">
     <div class="container">
-      <header class="section-head row" data-reveal>
-        <div>
-          <p class="section-index">02</p>
-          <h2>精选文章</h2>
-          <p>从这里开始读——每篇都是原理、架构与实践经验，不是 API 清单。</p>
-        </div>
-        <a class="text-link" href={withBase("/posts")}>全部 {posts.length} 篇</a>
-      </header>
+      <SectionHeader
+        index="01"
+        title="AI 工程笔记"
+        description="7 篇系统路线，按序阅读：入门 Chat → RAG → Agent → MCP → 生产工程化。"
+        href="/topics/ai-engineering"
+        linkLabel="完整路线"
+        row
+      />
 
-      {featuredPosts.length > 0 && (
-        <div class="magazine" data-reveal style="--reveal-delay: 60ms">
-          <div class="magazine-lead">
-            <PostCard post={featuredPosts[0]} featured lead />
-          </div>
-          {featuredPosts.slice(1).map((post) => (
-            <PostCard post={post} featured />
-          ))}
+      {aiSystemPosts.length > 0 && (
+        <div data-reveal style="--reveal-delay: 60ms">
+          <AIPathPreview posts={aiSystemPosts} />
         </div>
       )}
     </div>
   </section>
 
-  <!-- 03 Topics -->
   <section class="section section-muted">
     <div class="container">
-      <header class="section-head row" data-reveal>
-        <div>
-          <p class="section-index">03</p>
-          <h2>专题系列</h2>
-          <p>{topics.length} 个方向，按领域系统学习。</p>
-        </div>
-        <a class="text-link" href={withBase("/topics")}>全部专题</a>
-      </header>
+      <SectionHeader
+        index="02"
+        title="专题系列"
+        description={`AI 相关专题优先展示 · 共 ${topics.length} 个方向。`}
+        href="/topics"
+        linkLabel="全部专题"
+        row
+      />
 
       <div class="topics-rail" data-reveal style="--reveal-delay: 50ms">
         {railTopics.map((topic) => (
           <div class="topics-rail-item">
             <TopicCard
               topic={topic}
-              count={posts.filter((post) => post.data.series === topic.data.title).length}
+              count={getTopicPostCount(posts, topic)}
             />
           </div>
         ))}
@@ -110,30 +99,13 @@ const websiteJsonLd = {
     </div>
   </section>
 
-  <!-- 04 Recent + Projects -->
   <section class="section section-end">
-    <div class="container recent-grid">
-      <div data-reveal>
-        <header class="section-head">
-          <p class="section-index">04</p>
-          <h2>最新更新</h2>
-        </header>
-        <div class="recent-list">
-          {recentPosts.map((post) => <PostCard post={post} />)}
-        </div>
-        <a class="text-link recent-more" href={withBase("/posts")}>查看更多文章</a>
+    <div class="container" data-reveal>
+      <SectionHeader index="03" title="最新更新" />
+      <div class="recent-list">
+        {recentPosts.map((post) => <PostCard post={post} layout="list" />)}
       </div>
-
-      <aside data-reveal style="--reveal-delay: 80ms">
-        <header class="section-head">
-          <h2>项目复盘</h2>
-          <p>{projects.length} 个真实项目的架构决策与踩坑记录。</p>
-        </header>
-        <div class="project-stack">
-          {recentProjects.map((project) => <ProjectCard project={project} />)}
-        </div>
-        <a class="text-link recent-more" href={withBase("/projects")}>全部复盘</a>
-      </aside>
+      <TextLink href="/posts" class="recent-more">查看更多文章</TextLink>
     </div>
   </section>
 
@@ -144,10 +116,11 @@ const websiteJsonLd = {
   .hero {
     position: relative;
     overflow: hidden;
-    min-height: min(70vh, 640px);
+    min-height: min(68vh, 600px);
     display: flex;
     align-items: center;
-    padding: 64px 0 56px;
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
+    padding-top: max(clamp(2.5rem, 5vw, 4rem), env(safe-area-inset-top, 0px));
     border-bottom: 1px solid var(--line);
   }
 
@@ -156,7 +129,7 @@ const websiteJsonLd = {
     z-index: 1;
     display: grid;
     grid-template-columns: minmax(0, 1.12fr) minmax(260px, 340px);
-    gap: 56px;
+    gap: clamp(2rem, 4vw, 3.5rem);
     align-items: center;
     pointer-events: none;
   }
@@ -177,59 +150,47 @@ const websiteJsonLd = {
   }
 
   .hero-eyebrow {
-    margin: 0 0 14px;
+    margin: 0 0 12px;
     color: var(--accent);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.02em;
   }
 
   .hero-copy h1 {
     margin: 0;
     color: var(--ink);
-    font-size: clamp(42px, 6.5vw, 68px);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.03em;
+    font-size: var(--text-display);
+    font-weight: var(--font-extrabold);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    max-width: 14ch;
   }
 
-  .hero-role {
-    margin: 12px 0 0;
+  .hero-byline {
+    margin: 14px 0 0;
     color: var(--muted);
-    font-size: 16px;
-    font-weight: 650;
+    font-size: var(--text-md);
+    font-weight: var(--font-medium);
   }
 
   .hero-lead {
-    max-width: 520px;
-    margin: 22px 0 0;
+    max-width: 36rem;
+    margin: 18px 0 0;
     color: var(--text);
-    font-size: 18px;
-    line-height: 1.7;
-  }
-
-  .hero-sub {
-    max-width: 480px;
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: 15px;
+    font-size: var(--text-lg);
     line-height: 1.7;
   }
 
   .hero-proof {
-    margin: 20px 0 0;
+    margin: 18px 0 0;
     color: var(--subtle);
-    font-size: 13px;
-    font-weight: 700;
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
   }
 
   .hero-copy .button-row {
-    margin-top: 26px;
-  }
-
-  .section {
-    padding: 64px 0;
+    margin-top: 24px;
   }
 
   .section-muted {
@@ -238,61 +199,7 @@ const websiteJsonLd = {
   }
 
   .section-end {
-    padding-bottom: 80px;
-  }
-
-  .section-index {
-    margin: 0 0 4px;
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 850;
-    letter-spacing: 0.14em;
-  }
-
-  .section-head {
-    margin-bottom: 28px;
-  }
-
-  .section-head.row {
-    margin-bottom: 28px;
-  }
-
-  .section-head h2 {
-    margin: 0;
-    color: var(--ink);
-    font-size: clamp(22px, 3vw, 28px);
-    font-weight: 850;
-    letter-spacing: -0.02em;
-  }
-
-  .section-head p {
-    margin: 6px 0 0;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .text-link {
-    flex-shrink: 0;
-    color: var(--subtle);
-    font-size: 13px;
-    font-weight: 800;
-    transition: color 0.15s;
-  }
-
-  .text-link:hover {
-    color: var(--accent);
-  }
-
-  .magazine {
-    display: grid;
-    grid-template-columns: 1.15fr 1fr;
-    grid-template-rows: repeat(2, auto);
-    gap: 14px;
-  }
-
-  .magazine-lead {
-    grid-row: span 2;
+    padding-bottom: var(--space-section);
   }
 
   .topics-rail {
@@ -303,34 +210,17 @@ const websiteJsonLd = {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
+    mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent);
   }
 
   .topics-rail-item {
     flex: 0 0 min(272px, 76vw);
     scroll-snap-align: start;
+    display: flex;
   }
 
   .topics-rail-item :global(.topic-card) {
-    height: 100%;
-    transition: border-color 0.2s;
-  }
-
-  .topics-rail-item:hover :global(.topic-card) {
-    border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
-  }
-
-  .recent-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
-    gap: 48px;
-    align-items: start;
-  }
-
-  .recent-list {
-    border: 1px solid var(--line);
-    border-radius: calc(var(--radius) + 2px);
-    padding: 4px 22px;
-    background: var(--surface);
+    flex: 1;
   }
 
   .recent-list :global(.post-card:last-child) {
@@ -342,65 +232,19 @@ const websiteJsonLd = {
     margin-top: 16px;
   }
 
-  .project-stack {
-    display: grid;
-    gap: 14px;
-  }
-
-  .project-stack :global(.project-card) {
-    box-shadow: none;
-    transition: border-color 0.2s;
-  }
-
-  .project-stack :global(.project-card:hover) {
-    border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
-  }
-
-  @media (max-width: 980px) {
+  @media (max-width: 1024px) {
     .hero {
       min-height: auto;
-      padding: 40px 0 36px;
     }
 
     .hero-inner {
-      gap: 32px;
-    }
-
-    .hero-inner,
-    .magazine,
-    .recent-grid {
       grid-template-columns: 1fr;
-    }
-
-    .magazine-lead {
-      grid-row: auto;
-    }
-
-    .hero-copy h1 {
-      font-size: clamp(36px, 10vw, 52px);
-    }
-
-    .hero-lead {
-      font-size: 16px;
-    }
-
-    .recent-list {
-      padding: 4px 16px;
     }
   }
 
   @media (max-width: 480px) {
-    .hero {
-      padding: 32px 0 28px;
-    }
-
-    .hero-inner {
-      gap: 24px;
-    }
-
-    .hero-proof {
-      font-size: 12px;
-      line-height: 1.6;
+    .hero-copy h1 {
+      max-width: none;
     }
 
     .hero-copy .button-row {

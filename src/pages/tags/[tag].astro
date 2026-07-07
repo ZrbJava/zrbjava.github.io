@@ -1,15 +1,19 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import BackLink from "@/components/BackLink.astro";
 import PostCard from "@/components/PostCard.astro";
-import { tagToSlug, visiblePosts } from "@/utils/content";
+import { sortByDate, tagToSlug, visiblePosts } from "@/utils/content";
 
 export async function getStaticPaths() {
   const posts = visiblePosts(await getCollection("posts"));
   const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
   return tags.map((tag) => ({
     params: { tag: tagToSlug(tag) },
-    props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) }
+    props: {
+      tag,
+      posts: sortByDate(posts.filter((post) => post.data.tags.includes(tag))),
+    },
   }));
 }
 
@@ -19,7 +23,9 @@ const { tag, posts } = Astro.props;
 <BaseLayout title={`标签：${tag}`} description={`标签 ${tag} 下的文章。`}>
   <section class="section">
     <div class="container">
+      <BackLink fallbackHref="/posts" />
       <h1 class="section-title">#{tag}</h1>
+      <p class="section-copy">{posts.length} 篇文章</p>
       <div class="post-list">
         {posts.map((post) => <PostCard post={post} />)}
       </div>
@@ -28,6 +34,16 @@ const { tag, posts } = Astro.props;
 </BaseLayout>
 
 <style>
+  .section-title {
+    margin-top: 16px;
+  }
+
+  .section-copy {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: var(--text-md);
+  }
+
   .post-list {
     margin-top: 28px;
     max-width: 820px;

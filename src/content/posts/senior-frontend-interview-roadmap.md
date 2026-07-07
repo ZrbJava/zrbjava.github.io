@@ -7,6 +7,7 @@ tags: ["Interview", "Career", "Senior", "Roadmap"]
 series: "高级前端面试体系"
 draft: false
 featured: true
+cover: "/images/covers/senior-frontend-interview-roadmap.svg"
 ---
 
 8 年经验面试高级前端，面试官期待的不是「知道很多」，而是**有体系、有深度、有业务价值表达**。这篇是我整理的知识地图和准备策略。

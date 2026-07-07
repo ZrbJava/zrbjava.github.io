@@ -5,8 +5,10 @@ pubDate: 2026-06-18
 category: "TypeScript"
 tags: ["TypeScript", "Generics", "Conditional Types"]
 series: "TypeScript 高级实践"
+seriesOrder: 1
 draft: false
 featured: false
+cover: "/images/covers/typescript-advanced-type-patterns.svg"
 ---
 
 TypeScript 高级类型是区分「会用 TS」和「用 TS 做架构约束」的分水岭。高级前端面试中，类型体操不是目的，而是**用类型系统表达业务约束**。

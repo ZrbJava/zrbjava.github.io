@@ -6,10 +6,16 @@ featured: false
 tags: ["TypeScript", "类型系统"]
 ---
 
-这个专题面向需要在大型项目中用 TypeScript 做架构约束的开发者，而非 API 语法速查。
+面向需要在大型项目中用 TypeScript 做架构约束的开发者，而非 API 语法速查。
 
-推荐阅读路径：
+## 学习路线
 
-1. 掌握泛型约束与类型推导的边界。
-2. 理解条件类型、映射类型在 API 设计中的应用。
-3. 建立类型测试与 strict 模式治理策略。
+1. [高级类型模式](/posts/typescript-advanced-type-patterns) — 泛型、条件类型、映射类型
+2. [契约类型与 API 建模](/posts/typescript-api-contract-modeling) — zod、OpenAPI、运行时校验
+
+## 系列文章
+
+| 序号 | 文章 | 目标 |
+|------|------|------|
+| 01 | [高级类型模式](/posts/typescript-advanced-type-patterns) | 类型层面的抽象能力 |
+| 02 | [契约类型与 API 建模](/posts/typescript-api-contract-modeling) | 前后端边界不漂移 |

@@ -7,6 +7,7 @@ tags: ["CI/CD", "Quality", "Testing", "DevOps"]
 series: "前端工程化体系"
 draft: false
 featured: false
+cover: "/images/covers/frontend-ci-quality-gates.svg"
 ---
 
 质量门禁是前端工程化的「最后防线」。高级前端不仅要会写代码，还要设计**让团队无法提交烂代码**的自动化体系。
@@ -154,3 +155,11 @@ feature/xxx ───── Preview 环境（每个 PR 自动部署）
 - 核心业务逻辑
 - 边界条件和错误处理
 - 历史 Bug 回归
+
+## Flaky Test 与 Preview 环境
+
+**Flaky 治理**：CI 失败重跑 1 次仍红才 block；每周统计 flaky 排行榜，Top 5 必须修或 `@skip` 并建 issue。E2E 用 `data-testid`，禁止纯 CSS 选择器。
+
+**Preview 环境**：每个 PR 自动部署 Vercel/静态 preview URL，Lighthouse CI 指向 preview；QA 在 PR 评论贴 checklist。Merge 前 **E2E 对 preview 跑 smoke**（登录 + 主路径），不全量 2h 套件。
+
+与 [Code Review](/posts/code-review-practice) 联动：Blocking comment 未清零 / Coverage 降且无说明 → CI 标签 `needs-work` 不可 merge。

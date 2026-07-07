@@ -7,9 +7,10 @@ tags: ["Browser", "Rendering", "Performance", "GPU"]
 series: "浏览器与网络底层"
 draft: false
 featured: true
+cover: "/images/covers/browser-rendering-pipeline.svg"
 ---
 
-「从输入 URL 到页面展示发生了什么？」是前端面试的永恒经典。8 年经验的高级前端不仅要背流程，更要能关联到**具体的性能优化手段**。
+「从输入 URL 到页面展示发生了什么？」是前端面试高频题——更重要的是能把它接到**具体优化**：LCP 元素是谁、哪次 Layout 触发了 Thrashing、合成层是否值得开。
 
 ## 完整渲染流水线
 

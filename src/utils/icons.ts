@@ -3,6 +3,7 @@ export const iconNames = [
   "clock",
   "folder",
   "arrow-left",
+  "arrow-up",
   "github",
   "rss",
   "refresh"

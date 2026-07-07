@@ -5,62 +5,66 @@ pubDate: 2026-07-05
 category: "跨端开发"
 tags: ["Mobile", "H5", "Adaptation", "WebView"]
 series: "移动端 H5 与适配"
+seriesOrder: 1
 draft: false
 featured: false
+cover: "/images/covers/mobile-h5-adaptation-architecture.svg"
 ---
 
-移动端 H5 的核心挑战不是「能不能显示」，而是**在不同 DPR、不同 WebView、不同键盘行为下保持一致体验**。这篇作为「移动端 H5 与适配」专题的开篇，给出可落地的架构分层。
+App 内嵌 H5 活动页在 iPhone 14 Pro（灵动岛）底部按钮被挡，Android 某 WebView 键盘顶起后 **fixed 底栏飞到天上去**——同一套 CSS 在 Safari、微信 X5、各家 WebView 表现不一致。我们沉淀了 **适配层 + Bridge + visualViewport** 三层方案，兼容矩阵覆盖 12 款机型。
 
-## 整体架构
+## 架构分层
 
-```mermaid
-flowchart TB
-  subgraph Native["Native 容器"]
-    WV[WebView]
-    Bridge[JSBridge]
-  end
-  subgraph H5["H5 应用层"]
-    Adapter[适配层 rem/vw/safe-area]
-    UI[组件层]
-    Biz[业务层]
-  end
-  subgraph Infra["基础设施"]
-    Monitor[RUM 监控]
-    Cache[离线缓存]
-    Track[埋点 SDK]
-  end
-  WV --> Adapter
-  Bridge --> Biz
-  Adapter --> UI --> Biz
-  Biz --> Monitor
-  Biz --> Cache
-  Biz --> Track
+```
+Native WebView + JSBridge
+    ↓
+适配层 (rem / safe-area / dpr)
+    ↓
+组件 (Button, Modal, List)
+    ↓
+业务
 ```
 
-## 适配方案选型
+## 适配策略：rem + 关键 vw
 
-| 方案                    | 原理       | 适用场景            | 风险           |
-| ----------------------- | ---------- | ------------------- | -------------- |
-| rem + flexible          | 动态根字号 | 传统 H5、设计稿 750 | 大屏字体过大   |
-| vw/vh                   | 视口比例   | 活动页、全屏        | 横屏需额外处理 |
-| clamp + container query | 流体排版   | 现代浏览器          | 兼容性需降级   |
+设计稿 750px 宽：
 
-推荐**基础 rem + 关键区块 vw** 的混合策略：全局用 rem 保证可读性，Banner/Hero 用 vw 铺满。
-
-## 1px 边框与 DPR
+```ts
+// adapter.ts — 限制最大缩放，避免 iPad 字体爆炸
+function setRootFontSize() {
+  const width = Math.min(document.documentElement.clientWidth, 540);
+  document.documentElement.style.fontSize = `${width / 7.5}px`;
+}
+setRootFontSize();
+window.addEventListener('resize', setRootFontSize);
+```
 
 ```css
-.hairline {
-  position: relative;
+.hero {
+  width: 100vw;
+  height: 42vw; /* Banner 铺满 */
 }
+.body-text {
+  font-size: 0.28rem; /* 正文随 rem */
+}
+```
+
+Rejected 纯 vw：正文在小屏上过小，大屏上过大；**混合**更稳。
+
+## safe-area 与 1px
+
+```css
+.footer-bar {
+  padding-bottom: calc(0.24rem + env(safe-area-inset-bottom));
+}
+
 .hairline::after {
-  content: "";
+  content: '';
   position: absolute;
-  inset: 0;
-  border-bottom: 1px solid var(--line);
+  inset: auto 0 0 0;
+  height: 1px;
+  background: var(--line);
   transform: scaleY(0.5);
-  transform-origin: 0 100%;
-  pointer-events: none;
 }
 @media (-webkit-min-device-pixel-ratio: 3) {
   .hairline::after {
@@ -69,48 +73,66 @@ flowchart TB
 }
 ```
 
-## 软键盘与滚动穿透
-
-iOS WebView 中 `position: fixed` 在键盘弹起时容易错位。工程化方案：
-
-1. 输入框聚焦时切换为 `absolute` 布局或滚动容器
-2. 使用 `visualViewport` API 监听键盘高度
-3. 弹层场景用 `touch-action: none` + 独立滚动容器
-
-## JSBridge 协议设计
+## 软键盘：visualViewport
 
 ```ts
-type BridgeMessage = {
-  id: string;
-  module: "user" | "pay" | "share" | "nav";
-  action: string;
-  payload?: Record<string, unknown>;
-};
-
-async function callNative<T>(msg: BridgeMessage): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const callbackName = `__cb_${msg.id}`;
-    (window as any)[callbackName] = (result: T) => {
-      delete (window as any)[callbackName];
-      resolve(result);
-    };
-    window.webkit?.messageHandlers?.bridge?.postMessage?.(msg) ??
-      window.AndroidBridge?.invoke(JSON.stringify(msg));
-    setTimeout(() => reject(new Error("bridge timeout")), 8000);
+if (window.visualViewport) {
+  const vv = window.visualViewport;
+  vv.addEventListener('resize', () => {
+    const offset = window.innerHeight - vv.height - vv.offsetTop;
+    document.documentElement.style.setProperty('--keyboard-offset', `${Math.max(0, offset)}px`);
   });
 }
 ```
 
-## 性能预算
+```css
+.input-dock {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + var(--keyboard-offset, 0px));
+}
+```
 
-| 指标    | 目标          | 说明       |
-| ------- | ------------- | ---------- |
-| FCP     | < 1.8s        | 4G 网络    |
-| 首屏 JS | < 120KB gzip  | 活动页更严 |
-| 图片    | WebP + 懒加载 | 列表必做   |
+iOS 旧 WebView 无 `visualViewport` 时降级：聚焦时 `scrollIntoView` + 去掉 footer `fixed`。
 
-## 系列预告
+## WebView 差异矩阵（摘要）
 
-- WebView 容器差异与调试技巧
-- H5 离线缓存与预加载策略
-- 移动端 RUM 监控接入
+| 容器 | 坑 | 对策 |
+|------|-----|------|
+| iOS WKWebView | 100vh 含地址栏 | `--vh: window.innerHeight * 0.01px` |
+| 微信 X5 | 字体缩放 | `-webkit-text-size-adjust: 100%` |
+| Android 4.x WebView | flex gap 不支持 | margin 降级 |
+| 部分 App 壳 | 无 safe-area | Bridge 读原生 inset |
+
+## JSBridge
+
+```ts
+export async function callNative<T>(module: string, action: string, payload?: unknown): Promise<T> {
+  const id = crypto.randomUUID();
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('bridge timeout')), 8000);
+    (window as any)[`__cb_${id}`] = (res: T) => {
+      clearTimeout(timer);
+      resolve(res);
+    };
+    postToNative({ id, module, action, payload });
+  });
+}
+```
+
+协议版本号放 payload，便于灰度。
+
+## 性能预算与 RUM
+
+| 指标 | 4G 目标 |
+|------|---------|
+| FCP | < 1.8s |
+| 首屏 JS | < 120KB gzip |
+| 图片 | WebP + 懒加载 |
+
+接入 [监控 SDK](/posts/frontend-monitoring-system)，按 **WebView UA + App 版本** 分桶看 LCP。
+
+## 离线缓存（活动页）
+
+Service Worker 仅缓存静态壳 + 上次 JSON 配置；**支付/抽奖接口不缓存**。`workbox` precache 注意体积上限 50MB。
+
+H5 适配不是写一段 flexible.js，而是 **safe-area、键盘、WebView 矩阵、Bridge 协议** 一起设计。先在真机矩阵测，再谈 vw/rem 哲学。

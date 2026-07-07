@@ -7,6 +7,7 @@ tags: ["Vue", "Reactivity", "Proxy", "源码"]
 series: "Vue 3 生态与架构"
 draft: false
 featured: true
+cover: "/images/covers/vue3-reactivity-system-deep-dive.svg"
 ---
 
 Vue 3 用 Proxy 重写了响应式系统，这是高级前端面试中 Vue 方向的「必考底层」。理解它不仅能答面试题，更能指导你在大型 Vue 项目中避免响应式陷阱。

@@ -7,6 +7,7 @@ tags: ["Monorepo", "pnpm", "Turborepo", "Changesets"]
 series: "前端工程化体系"
 draft: false
 featured: false
+cover: "/images/covers/monorepo-governance-strategy.svg"
 ---
 
 Monorepo 是大型前端团队的标配，但「把所有代码放一个仓库」不等于 Monorepo。高级前端需要展示的是**包边界设计**、**依赖治理**和**发布策略**。
@@ -123,3 +124,15 @@ pnpm changeset
 2. **循环依赖**：packages 互相引用 → 用 dependency-cruiser 检测
 3. **构建顺序错误**：turbo.json 的 `dependsOn` 配置遗漏
 4. **幽灵依赖**：直接用未声明的依赖 → pnpm 的 strict 模式可以检测
+
+## CI 耗时对比（我们的 monorepo，18 packages）
+
+| 阶段 | 迁移前（Lerna + 无 cache） | Turbo + remote cache |
+|------|---------------------------|----------------------|
+| 全量 build | 22min | 6min（cache hit 时 90s） |
+| PR 增量 | 18min | 2–4min |
+| 循环依赖检出 | 手动 | dependency-cruiser 在 CI block |
+
+**循环依赖案例**：`ui` 引 `utils`，`utils` 又引 `ui` 的类型——抽 `shared-types` package 打断。
+
+Remote cache 用 S3 兼容存储；**main 分支 cache 优先**，feature 分支 hit 率 ~70%。

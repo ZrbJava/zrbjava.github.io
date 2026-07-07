@@ -1,0 +1,256 @@
+---
+import type { Post } from "@/utils/content";
+import { formatDate, getReadingTime } from "@/utils/content";
+import { aiRoadmapSteps } from "@/data/ai-roadmap";
+import { withBase } from "@/utils/url";
+
+interface Props {
+  posts: Post[];
+  previewCount?: number;
+}
+
+const { posts, previewCount = 4 } = Astro.props;
+const preview = posts.slice(0, previewCount);
+const remaining = aiRoadmapSteps.filter(
+  (step) => !preview.some((post) => post.id === step.slug),
+);
+---
+
+<div class="ai-path">
+  <div class="ai-path-panel card-elevated">
+    <ol class="ai-path-list">
+      {
+        preview.map((post) => {
+          const step = aiRoadmapSteps.find((item) => item.slug === post.id);
+          const order = post.data.aiOrder ?? step?.order ?? 0;
+          const level = post.data.aiLevel ?? step?.stage;
+
+          return (
+            <li>
+              <a class="ai-path-row" href={withBase(`/posts/${post.id}`)}>
+                <span class="ai-path-order" aria-hidden="true">
+                  {String(order).padStart(2, "0")}
+                </span>
+                <span class="ai-path-main">
+                  <span class="ai-path-meta">
+                    {level && <span class="ai-path-level">{level}</span>}
+                    <span>{formatDate(post.data.pubDate)}</span>
+                    <span>{getReadingTime(post.body)}</span>
+                  </span>
+                  <span class="ai-path-title">{post.data.title}</span>
+                  <span class="ai-path-goal">{step?.goal ?? post.data.description}</span>
+                </span>
+                <span class="ai-path-action" aria-hidden="true">阅读</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+
+  {
+    remaining.length > 0 && (
+      <footer class="ai-path-footer">
+        <p class="ai-path-footer-label">后续 {remaining.length} 篇</p>
+        <div class="ai-path-footer-chips">
+          {
+            remaining.map((step) => (
+              <a class="ai-path-chip" href={withBase(`/posts/${step.slug}`)}>
+                <span class="ai-path-chip-order">{String(step.order).padStart(2, "0")}</span>
+                {step.title}
+              </a>
+            ))
+          }
+        </div>
+      </footer>
+    )
+  }
+</div>
+
+<style>
+  .ai-path {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ai-path-panel {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .ai-path-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-path-row {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+
+  .ai-path-list li:last-child .ai-path-row {
+    border-bottom: 0;
+  }
+
+  .ai-path-row:hover {
+    background: color-mix(in srgb, var(--accent-soft) 38%, transparent);
+  }
+
+  .ai-path-row:hover .ai-path-title {
+    color: var(--accent);
+  }
+
+  .ai-path-row:hover .ai-path-action {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  }
+
+  .ai-path-order {
+    color: var(--subtle);
+    font-size: var(--text-sm);
+    font-weight: var(--font-extrabold);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  .ai-path-main {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ai-path-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    color: var(--subtle);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+  }
+
+  .ai-path-level {
+    color: var(--accent);
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    font-weight: var(--font-bold);
+  }
+
+  .ai-path-title {
+    color: var(--ink);
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    line-height: 1.35;
+    transition: color 0.15s ease;
+  }
+
+  .ai-path-goal {
+    color: var(--muted);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  .ai-path-action {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .ai-path-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    padding: 2px 4px 0;
+  }
+
+  .ai-path-footer-label {
+    margin: 0;
+    color: var(--subtle);
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .ai-path-footer-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ai-path-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+
+  .ai-path-chip:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
+    background: color-mix(in srgb, var(--accent-soft) 40%, transparent);
+  }
+
+  .ai-path-chip-order {
+    color: var(--subtle);
+    font-size: var(--text-xs);
+    font-weight: var(--font-extrabold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 640px) {
+    .ai-path-row {
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .ai-path-action {
+      display: none;
+    }
+
+    .ai-path-title {
+      font-size: var(--text-md);
+    }
+
+    .ai-path-goal {
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+  }
+</style>

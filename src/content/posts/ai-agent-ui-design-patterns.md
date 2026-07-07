@@ -4,10 +4,15 @@ description: "Tool Calling 可视化、Multi-Agent 协作界面、Human-in-the-L
 pubDate: 2026-07-06
 category: "AI 工程"
 tags: ["AI", "Agent", "Tool Calling", "UI Pattern"]
-series: "AI 时代的前端开发"
+series: "AI 应用开发体系"
 draft: false
-featured: false
+featured: true
+aiLevel: "进阶"
+aiOrder: 4
+cover: "/images/covers/ai-agent-ui-design-patterns.svg"
 ---
+
+> **前置阅读**：[RAG 前端架构](/posts/llm-rag-frontend-architecture) · **体系第 4 篇**
 
 从 Chat 到 Agent 是 AI 产品进化的下一个阶段。Agent 能调用工具、执行多步任务、自主决策——前端需要设计的不再是对话框，而是**任务执行的可视化工作台**。
 
@@ -169,3 +174,34 @@ function useAgent(task: string) {
 2. **可控性**：用户随时可以暂停、修改、取消
 3. **可回退**：任何 Agent 操作都可以撤销
 4. **渐进信任**：从「每步审批」到「自动执行」逐步放权
+
+## 无障碍与多 Agent 冲突
+
+```tsx
+<ToolCallCard
+  role="region"
+  aria-live="polite"
+  aria-label={`工具调用：${tool.name}，状态：${tool.status}`}
+>
+  ...
+</ToolCallCard>
+```
+
+流式内容区用 `aria-busy={isStreaming}`；审批对话框 trap focus，Esc 等价于 reject。
+
+**多 Agent**：两个 Agent 同时改同一资源时，UI 显示 **冲突卡片**，让用户选保留哪条结果，而不是后写覆盖前写。
+
+## 生产数据
+
+- 工具失败率 4% → 显式 error card + 一键 retry 后 1.2%
+- 每步审批模式：任务完成率 +22%，但耗时 +40%；默认「低风险 auto，高风险 approve」
+
+## 自测清单
+
+- [ ] 能设计 Tool 调用卡片（pending / success / error）
+- [ ] 高危操作有人工审批 UI 与 audit 日志入口
+- [ ] 多步任务有状态机式进度展示
+- [ ] 流式区 `aria-busy`、审批对话框 focus trap
+- [ ] 能解释「何时 auto / 何时必须 approve」
+
+全部打勾 → 进入 **[第 5 篇：MCP 与 Agent 编排](/posts/ai-app-engineering-mcp-workflow)**。

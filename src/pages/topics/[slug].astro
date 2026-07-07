@@ -1,9 +1,14 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import BackLink from "@/components/BackLink.astro";
 import PostCard from "@/components/PostCard.astro";
-import { visiblePosts } from "@/utils/content";
-import { withBase } from "@/utils/url";
+import {
+  getAISystemPosts,
+  getTopicPosts,
+  groupAISystemPostsByStage,
+  visiblePosts,
+} from "@/utils/content";
 
 export async function getStaticPaths() {
   const topics = await getCollection("topics");
@@ -12,71 +17,200 @@ export async function getStaticPaths() {
 
 const { topic } = Astro.props;
 const { Content } = await render(topic);
-const posts = visiblePosts(await getCollection("posts")).filter(
-  (post) => post.data.series === topic.data.title
-);
+const allPosts = visiblePosts(await getCollection("posts"));
+
+const isAiHub = topic.id === "ai-engineering";
+
+let posts = getTopicPosts(allPosts, topic);
+let stageGroups = null;
+
+if (isAiHub) {
+  posts = getAISystemPosts(allPosts);
+  stageGroups = groupAISystemPostsByStage(allPosts);
+}
 ---
 
 <BaseLayout title={topic.data.title} description={topic.data.description}>
-  <section class="section">
-    <div class="container grid two-col topic-layout">
-      <div>
-        <a class="back-link" href={withBase("/topics")}>返回专题</a>
-        <h1 class="section-title">{topic.data.title}</h1>
-        <p class="section-copy">{topic.data.description}</p>
-        <div class="prose topic-content">
-          <Content />
+  <section class="section topic-page">
+    <div class="container">
+      <BackLink fallbackHref="/topics" class="topic-back" />
+
+      <header class="topic-header">
+        <p class="topic-index">专题 · {String(topic.data.order).padStart(2, "0")}</p>
+        <h1 class="topic-title">{topic.data.title}</h1>
+        <p class="topic-desc">{topic.data.description}</p>
+        {
+          topic.body && topic.body.trim().length > 0 && (
+            <div class="prose topic-intro">
+              <Content />
+            </div>
+          )
+        }
+        {
+          topic.data.tags.length > 0 && (
+            <div class="tag-list topic-tags">
+              {topic.data.tags.map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      <section class="topic-articles" aria-label="专题文章">
+        <div class="topic-articles-head">
+          <h2>{isAiHub ? "按阶段阅读" : "专题文章"}</h2>
+          <span class="topic-count">{posts.length} 篇</span>
         </div>
-      </div>
-      <aside class="card path-panel">
-        <h2>专题文章</h2>
-        <div>
-          {posts.map((post) => <PostCard post={post} />)}
-        </div>
-      </aside>
+        {
+          stageGroups ? (
+            stageGroups.map(({ stage, posts: stagePosts }) => (
+              <div class="topic-stage">
+                <h3 class="topic-stage-title">{stage}</h3>
+                <div class="topic-post-list">
+                  {stagePosts.map((post) => (
+                    <PostCard post={post} layout="list" />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : posts.length > 0 ? (
+            <div class="topic-post-list">
+              {posts.map((post) => (
+                <PostCard post={post} layout="list" />
+              ))}
+            </div>
+          ) : (
+            <p class="topic-empty">该专题暂无文章，敬请期待。</p>
+          )
+        }
+      </section>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .back-link {
-    display: inline-flex;
-    margin-bottom: 18px;
+  .topic-back {
+    margin-bottom: 24px;
+  }
+
+  .topic-header {
+    max-width: 48rem;
+    padding-bottom: var(--space-block);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topic-index {
+    margin: 0 0 8px;
     color: var(--accent);
-    font-weight: 800;
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.06em;
   }
 
-  .topic-content {
-    margin-top: 30px;
-  }
-
-  .path-panel {
-    position: sticky;
-    top: calc(var(--header-height) + 28px);
-    padding: 22px;
-  }
-
-  .path-panel h2 {
-    margin: 0 0 12px;
+  .topic-title {
+    margin: 0;
     color: var(--ink);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: var(--font-extrabold);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
   }
 
-  @media (max-width: 860px) {
-    .topic-layout {
-      gap: 32px;
-    }
+  .topic-desc {
+    margin: 14px 0 0;
+    color: var(--muted);
+    font-size: var(--text-lg);
+    line-height: 1.7;
+  }
 
-    .topic-layout aside {
-      order: 2;
-    }
+  .topic-intro {
+    margin-top: 20px;
+    font-size: var(--text-md);
+  }
 
-    .path-panel {
-      position: static;
-      padding: 18px;
-    }
+  .topic-intro :global(p) {
+    margin: 0.8em 0;
+    color: var(--text);
+  }
 
-    .path-panel :global(.post-card:first-child) {
-      padding-top: 16px;
+  .topic-intro :global(ol),
+  .topic-intro :global(ul) {
+    margin: 0.8em 0;
+    padding-left: 1.25em;
+  }
+
+  .topic-intro :global(table) {
+    width: 100%;
+    margin: 1em 0;
+    font-size: var(--text-sm);
+    border-collapse: collapse;
+  }
+
+  .topic-intro :global(th),
+  .topic-intro :global(td) {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+  }
+
+  .topic-tags {
+    margin-top: 18px;
+  }
+
+  .topic-articles {
+    margin-top: var(--space-block);
+    max-width: 48rem;
+  }
+
+  .topic-articles-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .topic-articles-head h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: var(--text-xl);
+    font-weight: var(--font-extrabold);
+  }
+
+  .topic-count {
+    color: var(--subtle);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+  }
+
+  .topic-stage {
+    margin-top: 24px;
+  }
+
+  .topic-stage-title {
+    margin: 0 0 8px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+    color: var(--ink);
+    font-size: var(--text-lg);
+    font-weight: var(--font-extrabold);
+  }
+
+  .topic-post-list :global(.post-card:last-child) {
+    border-bottom: 0;
+  }
+
+  .topic-empty {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: var(--text-md);
+  }
+
+  @media (max-width: 768px) {
+    .topic-header,
+    .topic-articles {
+      max-width: none;
     }
   }
 </style>

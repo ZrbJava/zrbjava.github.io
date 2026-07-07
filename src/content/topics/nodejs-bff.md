@@ -10,11 +10,12 @@ tags: ["Node.js", "BFF", "Backend", "API"]
 
 ## 学习路线
 
-1. 理解 BFF 在微前端/微服务架构中的定位
-2. 掌握 Koa/Fastify 中间件模型与错误边界
-3. 设计 REST vs GraphQL 的 API 契约
-4. 建立 Node 服务的日志、监控与部署流水线
+1. [BFF 层架构设计](/posts/nodejs-bff-layer-design) — 聚合、鉴权、按 UI 裁剪 API
+2. [容错、超时与降级](/posts/nodejs-bff-error-resilience) — partial response、熔断、traceId
 
 ## 系列文章
 
-- [BFF 层架构设计：从前端视角掌控 API](/posts/nodejs-bff-layer-design)
+| 序号 | 文章 | 目标 |
+|------|------|------|
+| 01 | [BFF 层架构设计](/posts/nodejs-bff-layer-design) | 理解 BFF 在微服务中的位置 |
+| 02 | [容错、超时与降级](/posts/nodejs-bff-error-resilience) | 聚合接口的稳定与前端协作 |

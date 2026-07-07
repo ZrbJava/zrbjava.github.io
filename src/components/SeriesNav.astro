@@ -4,16 +4,23 @@ import { withBase } from "@/utils/url";
 
 interface Props {
   series?: string;
+  seriesTopicSlug?: string | null;
   prev: Post | null;
   next: Post | null;
 }
 
-const { series, prev, next } = Astro.props;
+const { series, seriesTopicSlug = null, prev, next } = Astro.props;
 ---
 
 {(prev || next) && series && (
   <nav class="series-nav" aria-label="系列导航">
-    <span class="series-label">系列 · {series}</span>
+    {seriesTopicSlug ? (
+      <a class="series-label" href={withBase(`/topics/${seriesTopicSlug}`)}>
+        系列 · {series}
+      </a>
+    ) : (
+      <span class="series-label">系列 · {series}</span>
+    )}
     <div class="series-links">
       {prev ? (
         <a class="series-link prev" href={withBase(`/posts/${prev.id}`)}>
@@ -48,6 +55,11 @@ const { series, prev, next } = Astro.props;
     color: var(--accent);
     font-size: 13px;
     font-weight: 800;
+    text-decoration: none;
+  }
+
+  a.series-label:hover {
+    text-decoration: underline;
   }
 
   .series-links {

@@ -19,6 +19,7 @@ pnpm dev
 ```bash
 pnpm build
 pnpm preview
+pnpm run covers   # 重新生成全部文章封面 SVG
 ```
 
 构建时会通过 Playwright 渲染 Mermaid 图表。首次安装依赖会自动下载 Chromium。

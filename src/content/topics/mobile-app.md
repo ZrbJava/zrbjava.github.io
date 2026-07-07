@@ -10,11 +10,12 @@ App 开发是大前端向 Native 延伸的关键能力：RN 新架构、JSI、Fa
 
 ## 学习路线
 
-1. 理解 RN 新架构（Fabric + TurboModule + JSI）
-2. 掌握原生模块开发与 Bridge 通信
-3. 对比 RN / Flutter / 原生开发的成本与性能
-4. 建立 App 启动、列表、内存的性能治理体系
+1. [RN 新架构与跨端实践](/posts/react-native-architecture-practice) — Fabric、TurboModule、选型
+2. [调试与性能治理](/posts/react-native-debugging-performance) — 列表、启动、包体积
 
 ## 系列文章
 
-- [React Native 新架构与跨端性能实践](/posts/react-native-architecture-practice)
+| 序号 | 文章 | 目标 |
+|------|------|------|
+| 01 | [React Native 架构实践](/posts/react-native-architecture-practice) | 理解新架构与工程结构 |
+| 02 | [调试与性能治理](/posts/react-native-debugging-performance) | 线上卡顿排查与优化 |

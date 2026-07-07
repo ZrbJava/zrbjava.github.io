@@ -5,8 +5,10 @@ pubDate: 2026-07-02
 category: "React"
 tags: ["React", "RSC", "Next.js", "SSR"]
 series: "React 工程实践"
+seriesOrder: 3
 draft: false
 featured: false
+cover: "/images/covers/react-server-components-practice.svg"
 ---
 
 React Server Components（RSC）是 React 18+ 最重要的架构变革之一。它不是在 SSR 基础上加功能，而是重新定义了**组件在哪里运行、数据在哪里获取、Bundle 里包含什么**。
@@ -115,3 +117,34 @@ export default function DashboardPage() {
 | 数据获取    | 组件内 async           | useAsyncData / useFetch |
 | Bundle 优化 | 服务端组件零 JS        | 全量 hydration          |
 | 生态成熟度  | Next.js 15+ 较成熟     | Nuxt 3 稳定             |
+
+## Streaming 与错误边界
+
+RSC + Suspense 流式输出时，**错误不能等整页失败**：
+
+```tsx
+// app/dashboard/error.tsx
+'use client';
+export default function DashboardError({ error, reset }: { error: Error; reset: () => void }) {
+  return (
+    <div role="alert">
+      <p>模块加载失败：{error.message}</p>
+      <button onClick={reset}>重试</button>
+    </div>
+  );
+}
+```
+
+Server Component throw 会冒泡到最近 `error.tsx`；**部分模块失败**时用 Parallel Routes + 独立 error slot，别拖垮整页。
+
+## Partial Prerender（Next 15+）
+
+静态 shell 先出，动态块 Suspense 边界内流式填充——营销页 LCP 我们 **2.4s → 1.6s**，动态推荐区晚 200ms 到达可接受。
+
+## 生产指标（文档站迁移）
+
+- Client JS bundle：-38%（Server 组件零 JS）
+- 首屏 HTML TTFB + 流式：用户 1s 内看到导航与标题
+- **Rejected**：整页 `'use client'` 包一层——等于放弃 RSC
+
+RSC 落地关键：**划清 Server/Client 边界 + Suspense 粒度 + error 隔离**，不是给每个文件加 async 那么简单。

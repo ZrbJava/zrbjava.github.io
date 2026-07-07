@@ -10,20 +10,25 @@ export interface KnowledgeDomain {
 }
 
 export const skillRadar: SkillPoint[] = [
-  { label: "Vue", value: 95 },
-  { label: "小程序", value: 88 },
+  { label: "AI 应用", value: 78 },
   { label: "React", value: 90 },
+  { label: "Vue", value: 95 },
   { label: "TypeScript", value: 90 },
   { label: "工程化", value: 92 },
+  { label: "小程序", value: 88 },
   { label: "浏览器/性能", value: 88 },
   { label: "Electron", value: 85 },
-  { label: "AI 应用", value: 82 },
   { label: "监控/埋点", value: 80 },
   { label: "移动端/H5", value: 78 },
   { label: "Node/BFF", value: 75 },
 ];
 
 export const knowledgeDomains: KnowledgeDomain[] = [
+  {
+    title: "AI 应用工程",
+    level: "掌握",
+    topics: ["LLM/RAG", "Agent UI", "MCP 编排", "Prompt 评测", "成本治理"],
+  },
   {
     title: "Vue 生态",
     level: "熟练",
@@ -43,11 +48,6 @@ export const knowledgeDomains: KnowledgeDomain[] = [
     title: "工程化",
     level: "熟练",
     topics: ["Vite/Webpack", "Monorepo", "CI/CD", "质量门禁", "包治理"],
-  },
-  {
-    title: "AI 工程",
-    level: "熟练",
-    topics: ["LLM 集成", "RAG", "Agent UI", "MCP", "流式交互"],
   },
   {
     title: "数据/监控",

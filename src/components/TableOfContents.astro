@@ -13,7 +13,7 @@ const headingCount = items.reduce((sum, item) => sum + 1 + item.children.length,
 
 {headingCount >= 2 && (
   <nav class="toc-panel" aria-label="目录" data-toc-panel>
-    <details class="toc-details" open>
+    <details class="toc-details">
       <summary class="toc-summary">
         <span class="toc-summary-label">目录</span>
         <span class="toc-summary-meta">{sectionCount} 章 · {headingCount} 节</span>
@@ -56,6 +56,16 @@ const headingCount = items.reduce((sum, item) => sum + 1 + item.children.length,
   function initTocPanel() {
     const panel = document.querySelector<HTMLElement>("[data-toc-panel]");
     if (!panel) return;
+
+    const details = panel.querySelector(".toc-details");
+    const desktopMq = window.matchMedia("(min-width: 981px)");
+    if (details instanceof HTMLDetailsElement) {
+      const syncOpen = () => {
+        details.open = desktopMq.matches;
+      };
+      syncOpen();
+      desktopMq.addEventListener("change", syncOpen);
+    }
 
     const links = panel.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
     const indicator = panel.querySelector<HTMLElement>("[data-toc-indicator]");
@@ -160,7 +170,7 @@ const headingCount = items.reduce((sum, item) => sum + 1 + item.children.length,
   .toc-summary-label {
     color: var(--ink);
     font-size: 13px;
-    font-weight: 850;
+    font-weight: var(--font-extrabold);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
@@ -248,7 +258,7 @@ const headingCount = items.reduce((sum, item) => sum + 1 + item.children.length,
     width: 22px;
     color: var(--subtle);
     font-size: 11px;
-    font-weight: 850;
+    font-weight: var(--font-extrabold);
     font-variant-numeric: tabular-nums;
   }
 
@@ -257,7 +267,7 @@ const headingCount = items.reduce((sum, item) => sum + 1 + item.children.length,
   }
 
   .toc-h2 .toc-text {
-    font-weight: 650;
+    font-weight: var(--font-semibold);
   }
 
   .toc-children {

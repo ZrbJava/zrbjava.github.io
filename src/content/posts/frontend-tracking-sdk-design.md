@@ -5,111 +5,144 @@ pubDate: 2026-07-05
 category: "数据工程"
 tags: ["Tracking", "Analytics", "SDK", "Growth"]
 series: "数据埋点与增长"
+seriesOrder: 1
 draft: false
 featured: false
+cover: "/images/covers/frontend-tracking-sdk-design.svg"
 ---
 
-埋点不是「加一行代码」，而是一套**从规范 → SDK → 治理 → 分析**的数据工程体系。这篇作为「数据埋点与增长」专题开篇，给出可落地的 SDK 架构。
+Growth 团队要求「活动页加转化漏斗」，工程侧发现 **同一按钮 3 种 event 名、PII 明文进日志**。自研 SDK + Schema 校验 + 可视化圈选上线后，**无效事件从 18% 降到 2%**，新活动埋点从 2 天缩到 2 小时。
 
-## 埋点体系架构
-
-```mermaid
-flowchart TB
-  subgraph Client["客户端"]
-    Auto[自动采集 PV/Click]
-    Manual[手动 track 事件]
-    Visual[可视化圈选]
-    SDK[埋点 SDK Core]
-  end
-  subgraph Pipeline["数据管道"]
-    Queue[本地队列 + 批量上报]
-    Gateway[采集网关]
-    Clean[清洗/去重/校验]
-  end
-  subgraph Analysis["分析层"]
-    Funnel[漏斗分析]
-    Retention[留存分析]
-    AB[A/B 实验]
-  end
-  Auto --> SDK
-  Manual --> SDK
-  Visual --> SDK
-  SDK --> Queue --> Gateway --> Clean
-  Clean --> Funnel
-  Clean --> Retention
-  Clean --> AB
-```
-
-## 事件命名规范
+## 架构
 
 ```
-{业务域}.{页面}.{动作}.{对象}
-
-示例：
-- commerce.product.click_add_cart
-- user.login.success
-- ai.chat.send_message
+自动 PV/Click ──┐
+手动 track ────┼──▶ SDK Core ──▶ IndexedDB 队列 ──▶ 批量上报 ──▶ 网关清洗
+可视化圈选 ────┘
 ```
 
-| 字段       | 类型   | 必填 | 说明       |
-| ---------- | ------ | ---- | ---------- |
-| event      | string | ✅   | 事件名     |
-| timestamp  | number | ✅   | 客户端时间 |
-| user_id    | string | ✅   | 用户标识   |
-| session_id | string | ✅   | 会话标识   |
-| properties | object | ❌   | 业务属性   |
+## 命名规范
 
-## SDK 核心设计
+```
+{域}.{页面}.{动作}.{对象}
+commerce.checkout.click.pay_button
+```
+
+**禁止** `click1`、`test_event`。CI 校验 event 在白名单 registry。
+
+## SDK Core（生产级）
 
 ```ts
 class TrackingSDK {
   private queue: Event[] = [];
-  private timer: ReturnType<typeof setInterval> | null = null;
+  private db: IDBDatabase | null = null;
+  private flushing = false;
+
+  async init(config: SDKConfig) {
+    this.db = await openDB('track_queue');
+    await this.restoreQueueFromIDB();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') this.flush({ useBeacon: true });
+    });
+    setInterval(() => this.flush(), config.flushInterval ?? 5000);
+  }
 
   track(event: string, properties?: Record<string, unknown>) {
-    this.queue.push({
+    const err = validateSchema(event, properties);
+    if (err) {
+      console.warn('[track]', err);
+      return;
+    }
+    const ev = this.buildEvent(event, properties);
+    this.queue.push(ev);
+    if (this.queue.length >= 20) void this.flush();
+  }
+
+  async flush(opts?: { useBeacon?: boolean }) {
+    if (this.flushing || this.queue.length === 0) return;
+    this.flushing = true;
+    const batch = this.queue.splice(0, 50);
+    try {
+      const body = JSON.stringify(batch);
+      if (opts?.useBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon('/api/track/batch', body);
+      } else {
+        await fetch('/api/track/batch', { method: 'POST', body, keepalive: true });
+      }
+      await this.clearIDBBatch(batch);
+    } catch {
+      this.queue.unshift(...batch);
+      await this.persistToIDB(batch);
+    } finally {
+      this.flushing = false;
+    }
+  }
+
+  private buildEvent(event: string, properties?: Record<string, unknown>) {
+    return {
+      event_id: crypto.randomUUID(),
       event,
       timestamp: Date.now(),
       user_id: this.getUserId(),
       session_id: this.getSessionId(),
-      properties: { ...this.getCommonProps(), ...properties },
-    });
-    if (this.queue.length >= 20) this.flush();
-  }
-
-  async flush() {
-    if (this.queue.length === 0) return;
-    const batch = this.queue.splice(0, 50);
-    try {
-      await fetch("/api/track/batch", {
-        method: "POST",
-        body: JSON.stringify(batch),
-        keepalive: true,
-      });
-    } catch {
-      this.queue.unshift(...batch);
-    }
+      properties: { ...this.commonProps(), ...sanitize(properties) },
+    };
   }
 }
 ```
 
+**Offline**：失败写 IndexedDB，下次启动重试。`sendBeacon` 应对 tab 关闭。
+
+## 可视化圈选 DOM 路径
+
+```ts
+function getSelector(el: Element): string {
+  const parts: string[] = [];
+  let node: Element | null = el;
+  while (node && node !== document.body) {
+    let part = node.tagName.toLowerCase();
+    if (node.id) {
+      part += `#${CSS.escape(node.id)}`;
+      parts.unshift(part);
+      break;
+    }
+    const parent = node.parentElement;
+    if (parent) {
+      const siblings = [...parent.children].filter((c) => c.tagName === node!.tagName);
+      if (siblings.length > 1) {
+        part += `:nth-of-type(${siblings.indexOf(node) + 1})`;
+      }
+    }
+    parts.unshift(part);
+    node = parent;
+  }
+  return parts.join(' > ');
+}
+```
+
+圈选配置存服务端，SDK 按 selector 委托 click。**冲突时** manual track 优先。
+
 ## 三种采集模式
 
-| 模式       | 适用         | 优点     | 缺点     |
-| ---------- | ------------ | -------- | -------- |
-| 自动采集   | PV、点击热区 | 零代码   | 粒度粗   |
-| 手动埋点   | 关键转化     | 精确     | 维护成本 |
-| 可视化圈选 | 快速迭代     | 运营友好 | 易混乱   |
+| 模式 | 适用 | 注意 |
+|------|------|------|
+| 自动 | PV、路由 | SPA 监听 history |
+| 手动 | 转化、金额 | code review 必审 |
+| 圈选 | 运营迭代 | 需版本号 + 审计 |
 
-## 数据治理
+## 治理
 
-1. **Schema 校验**：上报前校验必填字段和类型
-2. **去重**：event_id + timestamp 去重
-3. **采样**：高频事件 10% 采样
-4. **隐私**：PII 字段哈希或不上报
+1. **Schema**：ajv 校验 properties 类型
+2. **去重**：`event_id` 网关 24h 去重
+3. **采样**：`page_scroll` 类 10%
+4. **隐私**：手机号 hash；GDPR 区域 opt-out 开关
 
-## 系列预告
+## 漏斗与 A/B（前端侧）
 
-- 漏斗分析与留存模型
-- A/B 实验前端 SDK
-- 隐私合规与 GDPR 实践
+```ts
+track('experiment.exposure', { exp_id: 'checkout_btn', variant: 'B' });
+```
+
+实验 variant 进 commonProps，分析端 join 转化事件。
+
+埋点是数据工程：**规范、SDK 可靠性、治理比多 track 一行重要**。没有 Schema 的埋点债，六个月后会还。

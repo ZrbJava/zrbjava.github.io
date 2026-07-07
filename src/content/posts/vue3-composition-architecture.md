@@ -7,9 +7,10 @@ tags: ["Vue", "Composition API", "Composable", "Architecture"]
 series: "Vue 3 生态与架构"
 draft: false
 featured: false
+cover: "/images/covers/vue3-composition-architecture.svg"
 ---
 
-Composition API 不是语法糖，而是一种**逻辑组织范式**。8 年经验的前端在 Vue 3 项目中最常见的失败模式是：把 Options API 的代码原样搬进 `setup()`，导致 500 行的 setup 函数。
+我们迁移 Vue 3 时，`OrderList.vue` 第一个版本把 Options API 原样塞进 `setup()`，**500 行单文件、三个 watch 互相触发**。拆成 `useOrderFilters` + `useOrderList` + `useOrderExport` 后，单测覆盖率从 0 到 62%，bug 率明显下降。Composition API 是**逻辑组织范式**，不是大 setup 函数。
 
 ## Composable 设计原则
 
@@ -115,3 +116,41 @@ async function handleSubmit() {
 2. **Composable 中直接操作 DOM** → 封装为 `useElementSize` 等专用 Composable
 3. **Composable 之间循环依赖** → 提取共享逻辑到第三个 Composable
 4. **忽略 cleanup** → `onUnmounted` 中清理定时器、事件监听、WebSocket
+
+## 真实重构对比
+
+**Before**：一个 setup 里 `fetchOrders`、`handleFilter`、`exportCsv`、四个 `watch`。
+
+**After**：
+
+```ts
+// features/order/composables/useOrderListPage.ts
+export function useOrderListPage() {
+  const filters = useOrderFilters(); // URL sync
+  const { data, loading, refresh } = useOrderQuery(filters);
+  const { exportCsv, exporting } = useOrderExport(filters);
+  return { filters, data, loading, refresh, exportCsv, exporting };
+}
+```
+
+页面组件只剩布局与事件绑定 **< 80 行**。
+
+## 测试策略
+
+Composable 用 `@vue/test-utils` + `vi.fn()` mock API：
+
+```ts
+it('usePagination loads on mount', async () => {
+  const fetchFn = vi.fn().mockResolvedValue({ items: [1], total: 1 });
+  const { data, loading } = usePagination({ fetchFn });
+  await flushPromises();
+  expect(loading.value).toBe(false);
+  expect(data.value).toEqual([1]);
+});
+```
+
+业务 Composable 单测；纯展示组件用 Storybook。
+
+## 为什么不全量迁移 Options API
+
+Phase 3 稳定模块（如设置页）保持 Options API，**ROI 不够**。新功能强制 `<script setup>`，Code Review 拦截巨型 setup。

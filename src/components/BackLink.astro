@@ -1,0 +1,107 @@
+---
+import Icon from "@/components/Icon.astro";
+import { withBase } from "@/utils/url";
+
+interface Props {
+  /** 无站内上一页时的兜底地址 */
+  fallbackHref: string;
+  label?: string;
+  showIcon?: boolean;
+  class?: string;
+}
+
+const {
+  fallbackHref,
+  label = "返回",
+  showIcon = true,
+  class: className,
+} = Astro.props;
+const fallback = withBase(fallbackHref);
+---
+
+<a
+  class:list={["back-link", className]}
+  href={fallback}
+  data-smart-back
+  data-fallback={fallback}
+>
+  {showIcon && <Icon name="arrow-left" size={15} />}
+  <span>{label}</span>
+</a>
+
+<script>
+  const NAV_PREV = "blog:nav:prev";
+
+  function normalizePath(path: string) {
+    return path.replace(/\/+$/, "") || "/";
+  }
+
+  function resolveBackHref(fallback: string) {
+    try {
+      const current = normalizePath(location.pathname + location.search);
+      const storedCurrent = sessionStorage.getItem("blog:nav:current");
+      const prev = sessionStorage.getItem(NAV_PREV);
+
+      // 刚进入本页时，current 键仍是上一页地址
+      if (storedCurrent) {
+        const fromPath = normalizePath(storedCurrent);
+        if (fromPath !== current) {
+          const fromUrl = new URL(storedCurrent, location.origin);
+          if (fromUrl.origin === location.origin) {
+            return fromUrl.pathname + fromUrl.search;
+          }
+        }
+      }
+
+      if (!prev) return fallback;
+
+      const prevPath = normalizePath(prev);
+      if (prevPath === current) return fallback;
+
+      const prevUrl = new URL(prev, location.origin);
+      if (prevUrl.origin !== location.origin) return fallback;
+
+      return prevUrl.pathname + prevUrl.search;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function initSmartBackLinks() {
+    document.querySelectorAll<HTMLAnchorElement>("[data-smart-back]").forEach((link) => {
+      const fallback = link.dataset.fallback || "/";
+      link.href = resolveBackHref(fallback);
+
+      if (link.dataset.smartBackBound) return;
+      link.dataset.smartBackBound = "1";
+
+      link.addEventListener("click", (event) => {
+        const target = resolveBackHref(fallback);
+        if (target !== fallback) {
+          event.preventDefault();
+          window.location.assign(target);
+        }
+      });
+    });
+  }
+
+  initSmartBackLinks();
+  document.addEventListener("astro:page-load", initSmartBackLinks);
+</script>
+
+<style>
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+</style>

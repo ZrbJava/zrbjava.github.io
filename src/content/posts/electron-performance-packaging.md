@@ -7,6 +7,7 @@ tags: ["Electron", "Performance", "Vite", "Packaging"]
 series: "跨端与 Electron 桌面开发"
 draft: false
 featured: false
+cover: "/images/covers/electron-performance-packaging.svg"
 ---
 
 Electron 应用的性能问题往往被忽视——「能跑就行」。但高级前端需要关注：**启动速度、内存占用、CPU 使用率和打包体积**，这些直接影响用户体验和分发成本。
@@ -159,3 +160,17 @@ jobs:
 | 内存（重负载） | < 500MB | 长时间使用后       |
 | 安装包体积     | < 100MB | 打包产物大小       |
 | 自动更新       | < 30s   | 差分包下载+安装    |
+
+## 真实 Profiling 案例
+
+某版本冷启动 5.2s，Chrome DevTools Performance + `electron --trace-startup`：
+
+| 阶段 | 耗时 | 动作 |
+|------|------|------|
+| 加载 Chromium | 2.1s | 接受，难以再减 |
+| 同步 require 大 JSON 配置 | 1.4s | 改异步 + 懒加载 |
+| 首屏 React render | 0.9s | memo + 延迟非首屏路由 |
+
+优化后冷启动 **2.8s**。内存：空闲 165MB，开 20 个文档 tab 峰值 480MB，强制关闭 hidden window 回收。
+
+asar 打包 + `electron-builder` 差分更新，**全量 98MB → 增量 12MB** 典型。

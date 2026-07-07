@@ -10,33 +10,22 @@ interface Props {
 const { topic, count = 0 } = Astro.props;
 ---
 
-<a class="topic-card" href={withBase(`/topics/${topic.id}`)}>
+<a class="topic-card card-elevated" href={withBase(`/topics/${topic.id}`)}>
   <span class="topic-index">{String(topic.data.order).padStart(2, "0")}</span>
   <h2>{topic.data.title}</h2>
-  <p>{topic.data.description}</p>
+  <p class="topic-desc">{topic.data.description}</p>
   <span class="meta">{count} 篇文章</span>
 </a>
 
 <style>
   .topic-card {
-    display: block;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 22px;
-    background: var(--surface);
-    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    min-height: 168px;
+    height: 100%;
+    padding: var(--space-card);
     color: inherit;
     text-decoration: none;
-    transition:
-      border-color 0.2s,
-      background 0.2s,
-      transform 0.2s;
-  }
-
-  .topic-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
-    background: color-mix(in srgb, var(--accent-soft) 10%, var(--surface));
-    transform: translateY(-2px);
   }
 
   .topic-card:hover h2 {
@@ -44,25 +33,43 @@ const { topic, count = 0 } = Astro.props;
   }
 
   .topic-index {
+    flex-shrink: 0;
     color: var(--accent);
     font-size: 13px;
     font-weight: 800;
   }
 
   h2 {
+    flex-shrink: 0;
     margin: 10px 0 8px;
     color: var(--ink);
     font-size: 23px;
     line-height: 1.25;
   }
 
-  p {
-    margin: 0 0 16px;
+  .topic-desc {
+    flex: 1;
+    margin: 0;
     color: var(--muted);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .meta {
+    flex-shrink: 0;
+    margin-top: 16px;
+    color: var(--subtle);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
   }
 
   @media (max-width: 480px) {
     .topic-card {
+      min-height: 152px;
       padding: 18px;
     }
 

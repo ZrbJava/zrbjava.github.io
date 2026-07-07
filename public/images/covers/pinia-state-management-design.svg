@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Pinia 状态管理设计与大型 Vue 项目实践">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#42b883"/>
+      <stop offset="100%" stop-color="#2c3e50"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#42b883" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#42b883" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#2c3e50" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1180" cy="560" r="220" fill="rgba(0,0,0,0.1)"/>
+  
+        <rect x="860" y="100" width="120" height="90" rx="14" fill="rgba(255,255,255,0.1)"/>
+        <rect x="1000" y="130" width="120" height="90" rx="14" fill="rgba(255,255,255,0.14)"/>
+        <path d="M980 145 L1000 145" stroke="rgba(255,255,255,0.35)" stroke-width="4"/>
+</svg>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="前端 CI/CD 质量门禁设计">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#64748b"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#64748b" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#64748b" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1e293b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1180" cy="560" r="220" fill="rgba(0,0,0,0.1)"/>
+  
+        <circle cx="870" cy="190" r="24" fill="rgba(255,255,255,0.14)"/>
+        <circle cx="960" cy="190" r="24" fill="rgba(255,255,255,0.18)"/>
+        <circle cx="1050" cy="190" r="24" fill="rgba(255,255,255,0.22)"/>
+        <line x1="894" y1="190" x2="936" y2="190" stroke="rgba(255,255,255,0.35)" stroke-width="4"/>
+        <line x1="984" y1="190" x2="1026" y2="190" stroke="rgba(255,255,255,0.35)" stroke-width="4"/>
+</svg>

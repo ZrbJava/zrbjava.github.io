@@ -13,9 +13,8 @@ import { visiblePosts } from "@/utils/content";
 
 const posts = visiblePosts(await getCollection("posts"));
 const topics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
-const projects = await getCollection("projects");
 
-const preferredTopicIds = ["vue3-ecosystem", "mini-program", "ai-frontend"];
+const preferredTopicIds = ["vue3-ecosystem", "mini-program", "ai-engineering"];
 const entryTopics = preferredTopicIds
   .map((id) => topics.find((topic) => topic.id === id))
   .filter((topic): topic is (typeof topics)[number] => Boolean(topic));
@@ -23,7 +22,6 @@ const entryTopics = preferredTopicIds
 const stats = [
   { href: "/posts", value: String(posts.length), label: "文章" },
   { href: "/topics", value: String(topics.length), label: "专题系列" },
-  { href: "/projects", value: String(projects.length), label: "项目复盘" },
   { href: null, value: site.experience, label: "从业经验" }
 ];
 
@@ -39,12 +37,6 @@ const entries = [
     title: "文章",
     copy: `${posts.length} 篇长文：原理、架构取舍与可迁移的工程方法。`,
     index: "02"
-  },
-  {
-    href: "/projects",
-    title: "项目复盘",
-    copy: "真实项目中的架构决策、问题排查与经验总结。",
-    index: "03"
   }
 ];
 ---

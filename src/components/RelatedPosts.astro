@@ -11,9 +11,9 @@ const { posts } = Astro.props;
 
 {posts.length > 0 && (
   <section class="related-posts" aria-label="相关文章">
-    <h2>相关阅读</h2>
-    <div class="related-list">
-      {posts.map((post) => <PostCard post={post} />)}
+    <h2 class="related-heading">相关阅读</h2>
+    <div class="related-grid">
+      {posts.map((post) => <PostCard post={post} layout="compact" hideTags />)}
     </div>
   </section>
 )}
@@ -25,13 +25,26 @@ const { posts } = Astro.props;
     padding-top: 32px;
   }
 
-  .related-posts h2 {
-    margin: 0 0 8px;
+  .related-heading {
+    margin: 0 0 16px;
     color: var(--ink);
-    font-size: 22px;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-extrabold);
   }
 
-  .related-list :global(.post-card:last-child) {
-    border-bottom: 0;
+  .related-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (min-width: 768px) {
+    .related-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .related-grid :global(.post-card:last-child:nth-child(odd)) {
+      grid-column: 1 / -1;
+      max-width: calc(50% - 7px);
+    }
   }
 </style>

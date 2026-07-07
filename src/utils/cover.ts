@@ -13,11 +13,17 @@ const CATEGORY_GRADIENTS: Record<string, [string, string]> = {
   后端开发: ["#22c55e", "#14532d"],
   数据工程: ["#0ea5e9", "#0c4a6e"],
   性能优化: ["#ef4444", "#7f1d1d"],
+  前端架构: ["#14b8a6", "#134e4a"],
 };
 
 export function getCategoryGradient(category: string): string {
   const [from, to] = CATEGORY_GRADIENTS[category] ?? ["#146c5f", "#0f4f47"];
   return `linear-gradient(135deg, ${from}, ${to})`;
+}
+
+export function getCategoryAccent(category: string): string {
+  const [from] = CATEGORY_GRADIENTS[category] ?? ["#146c5f", "#0f4f47"];
+  return from;
 }
 
 export function resolveCoverPath(cover?: string): string | undefined {

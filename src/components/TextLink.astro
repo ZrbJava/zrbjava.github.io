@@ -1,0 +1,28 @@
+---
+import { withBase } from "@/utils/url";
+
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+---
+
+<a class:list={["text-link", className]} href={withBase(href)}>
+  <slot />
+</a>
+
+<style>
+  .text-link {
+    flex-shrink: 0;
+    color: var(--subtle);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    transition: color 0.15s;
+  }
+
+  .text-link:hover {
+    color: var(--accent);
+  }
+</style>

@@ -10,11 +10,12 @@ tags: ["Mobile", "H5", "WebView", "Adaptation"]
 
 ## 学习路线
 
-1. 掌握 viewport、rem/vw、flexible 等适配方案与选型依据
-2. 理解 iOS/Android WebView 差异、软键盘与滚动穿透
-3. 掌握 JSBridge 通信协议与离线缓存策略
-4. 建立 H5 性能预算与监控指标
+1. [H5 适配架构](/posts/mobile-h5-adaptation-architecture) — viewport、rem/vw、组件级响应式
+2. [视口与安全区实战](/posts/mobile-h5-viewport-safe-area) — safe-area、1px、100vh、WebView
 
 ## 系列文章
 
-- [移动端 H5 适配架构：从 viewport 到组件级响应式](/posts/mobile-h5-adaptation-architecture)
+| 序号 | 文章 | 目标 |
+|------|------|------|
+| 01 | [H5 适配架构](/posts/mobile-h5-adaptation-architecture) | 建立整体适配策略 |
+| 02 | [视口与安全区实战](/posts/mobile-h5-viewport-safe-area) | 解决刘海、1px、键盘 |

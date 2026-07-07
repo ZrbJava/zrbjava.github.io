@@ -15,6 +15,9 @@ const posts = defineCollection({
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
     cover: z.string().optional(),
+    aiLevel: z.enum(["入门", "进阶", "高级", "精通"]).optional(),
+    aiOrder: z.number().int().min(1).max(99).optional(),
+    seriesOrder: z.number().int().min(1).max(99).optional(),
   }),
 });
 
@@ -29,16 +32,4 @@ const topics = defineCollection({
   }),
 });
 
-const projects = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    pubDate: z.coerce.date(),
-    role: z.string(),
-    stack: z.array(z.string()),
-    featured: z.boolean().default(false),
-  }),
-});
-
-export const collections = { posts, topics, projects };
+export const collections = { posts, topics };

@@ -18,7 +18,7 @@ import { withBase } from "@/utils/url";
         {site.socials.map((item) => (
           <a
             class="social-link"
-            href={item.href}
+            href={withBase(item.href)}
             target={item.href.startsWith("http") ? "_blank" : undefined}
             rel={item.href.startsWith("http") ? "noreferrer" : undefined}
           >

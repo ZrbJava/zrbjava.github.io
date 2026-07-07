@@ -16,6 +16,9 @@ const site =
 export default defineConfig({
   site,
   integrations: [mdx(), sitemap()],
+  redirects: {
+    "/projects": "/posts",
+  },
   markdown: {
     processor: unified({
       rehypePlugins: [
@@ -37,7 +40,11 @@ export default defineConfig({
       excludeLangs: ["mermaid"],
     },
     shikiConfig: {
-      theme: "github-dark",
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+      defaultColor: false,
     },
   },
 });

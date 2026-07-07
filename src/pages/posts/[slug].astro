@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
-import { getAdjacentInSeries, getRelatedPosts, visiblePosts } from "@/utils/content";
+import { getAdjacentInSeries, getRelatedPosts, getTopicSlugForSeries, visiblePosts } from "@/utils/content";
 import { buildTocTree, extractHeadings } from "@/utils/headings";
 
 export async function getStaticPaths() {
@@ -12,9 +12,13 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const allPosts = visiblePosts(await getCollection("posts"));
+const topics = await getCollection("topics");
 const { prev, next } = getAdjacentInSeries(allPosts, post);
 const relatedPosts = getRelatedPosts(allPosts, post);
 const toc = buildTocTree(extractHeadings(post.body ?? ""));
+const seriesTopicSlug = post.data.series
+  ? getTopicSlugForSeries(post.data.series, topics)
+  : null;
 ---
 
 <PostLayout
@@ -25,6 +29,7 @@ const toc = buildTocTree(extractHeadings(post.body ?? ""));
   category={post.data.category}
   tags={post.data.tags}
   series={post.data.series}
+  seriesTopicSlug={seriesTopicSlug}
   cover={post.data.cover}
   slug={post.id}
   readingSource={post.body}
@@ -32,6 +37,8 @@ const toc = buildTocTree(extractHeadings(post.body ?? ""));
   nextInSeries={next}
   relatedPosts={relatedPosts}
   toc={toc}
+  aiOrder={post.data.aiOrder}
+  aiLevel={post.data.aiLevel}
 >
   <Content />
 </PostLayout>

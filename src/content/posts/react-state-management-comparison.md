@@ -5,8 +5,10 @@ pubDate: 2026-07-03
 category: "React"
 tags: ["React", "State Management", "Redux", "Zustand"]
 series: "React 工程实践"
+seriesOrder: 2
 draft: false
 featured: false
+cover: "/images/covers/react-state-management-comparison.svg"
 ---
 
 「你们项目用什么状态管理？」是高级前端面试的必答题。答案不是推荐某个库，而是展示**状态分类能力**和**选型决策过程**。
@@ -105,7 +107,21 @@ const totalAtom = atom((get) => get(priceAtom) * get(quantityAtom));
 └── 细粒度派生 + 表单联动 → Jotai
 ```
 
-## 8 年经验的选型建议
+## 真实项目：中后台状态迁移 war story
+
+订单中心原 **Redux + saga**，全局 store 800+ 行，改一个筛选条件要动 4 个文件。迁移策略：
+
+| 阶段 | 动作 | 结果 |
+|------|------|------|
+| M1 | 新接口全走 TanStack Query | 删除 60% `useEffect` fetch |
+| M2 | UI 态（sidebar、主题）迁 Zustand | Redux 体积 -40% |
+| M3 | 遗留订单编辑保留 RTK slice | 避免大爆炸 |
+
+**Rejected Jotai 全局化**：团队 12 人，原子分散难 grep；Zustand 单 store 更可审计。
+
+迁移后：**首屏少 dispatch 23 次**，DevTools 噪音下降，新人 onboard 从 2 周缩到 3 天。
+
+## 选型建议
 
 1. **默认组合**：TanStack Query（服务端）+ Zustand（客户端全局）+ useState（本地）
 2. **团队 > 15 人且状态逻辑复杂**：考虑 Redux Toolkit + RTK Query

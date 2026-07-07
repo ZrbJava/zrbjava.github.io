@@ -1,0 +1,102 @@
+---
+import Icon from "@/components/Icon.astro";
+---
+
+<button
+  type="button"
+  class="back-to-top"
+  data-back-to-top
+  aria-label="返回顶部"
+  title="返回顶部"
+  hidden
+>
+  <Icon name="arrow-up" size={18} />
+</button>
+
+<script>
+  function initBackToTop() {
+    const btn = document.querySelector<HTMLButtonElement>("[data-back-to-top]");
+    const article = document.querySelector<HTMLElement>(".article-shell");
+    if (!btn || !article) return;
+
+    const showAfter = 480;
+
+    const update = () => {
+      const visible = window.scrollY > showAfter;
+      btn.hidden = !visible;
+      btn.toggleAttribute("data-visible", visible);
+    };
+
+    btn.addEventListener("click", () => {
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
+    });
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+
+  initBackToTop();
+  document.addEventListener("astro:page-load", initBackToTop);
+</script>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(24px, env(safe-area-inset-bottom));
+    z-index: 25;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    color: var(--ink);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .back-to-top[data-visible] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .back-to-top:hover {
+    background: var(--surface);
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  }
+
+  .back-to-top:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .back-to-top {
+      right: 16px;
+      bottom: 20px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition: none;
+    }
+  }
+</style>

@@ -2,22 +2,33 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import TopicCard from "@/components/TopicCard.astro";
-import { visiblePosts } from "@/utils/content";
+import {
+  getTopicPostCount,
+  getTopicsWithPosts,
+  visiblePosts,
+  type Topic,
+} from "@/utils/content";
 
-const topics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
+const allTopics = (await getCollection("topics")).sort((a, b) => a.data.order - b.data.order);
 const posts = visiblePosts(await getCollection("posts"));
+const topics = getTopicsWithPosts(allTopics, posts);
 
 const domains = [
+  { label: "AI 工程知识", slugs: ["ai-engineering"] },
   { label: "Web 框架", slugs: ["react-engineering", "vue3-ecosystem", "typescript-advanced"] },
   { label: "跨端 & 移动端", slugs: ["cross-platform-electron", "mobile-h5", "mini-program", "mobile-app"] },
   { label: "工程 & 质量", slugs: ["complex-frontend-systems", "frontend-tooling", "frontend-quality"] },
-  { label: "数据 & AI", slugs: ["performance-observability", "data-tracking", "ai-frontend", "ai-engineering"] },
+  { label: "数据 & 可观测", slugs: ["performance-observability", "data-tracking"] },
   { label: "底层 & 可视化", slugs: ["browser-network", "visualization-graphics"] },
   { label: "后端 & 进阶", slugs: ["nodejs-bff", "senior-interview"] }
 ];
 
 function findTopic(id: string) {
   return topics.find((t) => t.id === id);
+}
+
+function getDomainTopics(slugs: string[]) {
+  return slugs.map(findTopic).filter((topic): topic is Topic => topic != null);
 }
 ---
 
@@ -30,16 +41,16 @@ function findTopic(id: string) {
         后端 BFF、监控埋点、AI 应用，每个专题都有推荐阅读路径。
       </p>
       {domains.map((domain) => {
-        const domainTopics = domain.slugs.map(findTopic).filter(Boolean);
+        const domainTopics = getDomainTopics(domain.slugs);
         if (domainTopics.length === 0) return null;
         return (
           <div class="domain-section">
             <h2 class="domain-label">{domain.label}</h2>
             <div class="grid topic-grid">
-              {domainTopics.map((topic) => topic && (
+              {domainTopics.map((topic) => (
                 <TopicCard
                   topic={topic}
-                  count={posts.filter((post) => post.data.series === topic.data.title).length}
+                  count={getTopicPostCount(posts, topic)}
                 />
               ))}
             </div>
@@ -65,6 +76,11 @@ function findTopic(id: string) {
 
   .topic-grid {
     grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+  }
+
+  .topic-grid :global(.topic-card) {
+    height: 100%;
   }
 
   @media (max-width: 760px) {

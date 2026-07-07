@@ -2,11 +2,16 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
-import { getAllCategories, getAllTags, tagToSlug, visiblePosts } from "@/utils/content";
+import SectionHeader from "@/components/SectionHeader.astro";
+import { getAllCategories, getAllTags, getAISystemPosts, sortByDate, tagToSlug, visiblePosts } from "@/utils/content";
 import { site } from "@/data/site";
 import { withBase } from "@/utils/url";
 
 const posts = visiblePosts(await getCollection("posts"));
+const aiPosts = getAISystemPosts(posts);
+const otherPosts = sortByDate(
+  posts.filter((post) => !aiPosts.some((ai) => ai.id === post.id)),
+);
 const categories = getAllCategories(posts);
 const tags = getAllTags(posts);
 ---
@@ -15,24 +20,53 @@ const tags = getAllTags(posts);
   <section class="section">
     <div class="container grid two-col posts-layout">
       <div>
-        <h1 class="section-title">文章</h1>
-        <p class="section-copy">
-          {site.author} 的技术笔记——覆盖前端架构、框架原理、工程化、性能优化与 AI 融合。
-          每篇都力求把「为什么」讲清楚，而不只是罗列结论。
-        </p>
+        <SectionHeader
+          as="h1"
+          title="文章"
+          description={`${site.author} 的技术笔记——${aiPosts.length} 篇 AI 体系文章（入门→精通），以及大前端架构与工程化实践。`}
+        />
+
+        {aiPosts.length > 0 && (
+          <section class="ai-spotlight" aria-label="AI 工程笔记">
+            <div class="ai-spotlight-head">
+              <h2 class="ai-spotlight-title">AI 工程笔记</h2>
+              <p class="ai-spotlight-desc">7 篇体系 · 按 01→07 顺序阅读</p>
+              <a class="ai-spotlight-link" href={withBase("/topics/ai-engineering")}>专题路线 →</a>
+            </div>
+            <div class="ai-spotlight-list">
+              {aiPosts.map((post) => (
+                <PostCard post={post} layout="list" />
+              ))}
+            </div>
+          </section>
+        )}
+
+        <SectionHeader as="h2" title="更多文章" description="前端架构、框架原理、工程化与跨端。" />
+
         <div class="post-list">
-          {posts.map((post) => <PostCard post={post} />)}
+          {otherPosts.map((post) => <PostCard post={post} layout="list" />)}
         </div>
       </div>
-      <aside class="filter-panel card">
-        <h2>分类</h2>
-        <div class="filter-list">
-          {categories.map(([category, count]) => <a href={withBase(`/categories/${category}`)}>{category}<span>{count}</span></a>)}
-        </div>
-        <h2>标签</h2>
-        <div class="tag-list">
-          {tags.map(([tag, count]) => <a class="tag" href={withBase(`/tags/${tagToSlug(tag)}`)}>{tag} · {count}</a>)}
-        </div>
+      <aside class="filter-panel card-elevated">
+        <details class="filter-details">
+          <summary class="filter-summary">筛选与分类</summary>
+          <div class="filter-body">
+            <h2 class="filter-heading">分类</h2>
+            <div class="filter-list">
+              {categories.map(([category, count]) => (
+                <a href={withBase(`/categories/${category}`)}>
+                  {category}<span>{count}</span>
+                </a>
+              ))}
+            </div>
+            <h2 class="filter-heading">标签</h2>
+            <div class="tag-list">
+              {tags.map(([tag, count]) => (
+                <a class="tag" href={withBase(`/tags/${tagToSlug(tag)}`)}>{tag} · {count}</a>
+              ))}
+            </div>
+          </div>
+        </details>
       </aside>
     </div>
   </section>
@@ -40,23 +74,75 @@ const tags = getAllTags(posts);
 
 <style>
   .post-list {
-    margin-top: 28px;
+    margin-top: var(--space-block);
+  }
+
+  .ai-spotlight {
+    margin-top: var(--space-block);
+    margin-bottom: calc(var(--space-block) + 8px);
+  }
+
+  .ai-spotlight-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ai-spotlight-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+  }
+
+  .ai-spotlight-title {
+    margin: 0;
+    color: var(--ink);
+    font-size: var(--text-xl);
+    font-weight: var(--font-extrabold);
+  }
+
+  .ai-spotlight-link {
+    color: var(--accent);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+  }
+
+  .ai-spotlight-list :global(.post-card:last-child) {
+    border-bottom: 0;
   }
 
   .filter-panel {
     position: sticky;
     top: calc(var(--header-height) + 28px);
-    padding: 22px;
+    padding: var(--space-card);
   }
 
-  .filter-panel h2 {
+  .filter-summary {
+    display: none;
+    cursor: pointer;
+    color: var(--ink);
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    list-style: none;
+  }
+
+  .filter-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .filter-heading {
     margin: 0 0 14px;
     color: var(--ink);
-    font-size: 18px;
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
   }
 
-  .filter-panel h2:not(:first-child) {
-    margin-top: 28px;
+  .filter-heading:not(:first-child) {
+    margin-top: 24px;
   }
 
   .filter-list {
@@ -70,7 +156,13 @@ const tags = getAllTags(posts);
     border-bottom: 1px solid var(--line);
     padding-bottom: 10px;
     color: var(--muted);
-    font-weight: 700;
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    transition: color 0.15s;
+  }
+
+  .filter-list a:hover {
+    color: var(--accent);
   }
 
   @media (max-width: 860px) {
@@ -84,7 +176,20 @@ const tags = getAllTags(posts);
 
     .filter-panel {
       position: static;
-      padding: 18px;
+    }
+
+    .filter-summary {
+      display: block;
     }
   }
 </style>
+
+<script>
+  const panel = document.querySelector(".filter-details");
+  const mq = window.matchMedia("(min-width: 861px)");
+  const sync = () => {
+    if (panel instanceof HTMLDetailsElement) panel.open = mq.matches;
+  };
+  sync();
+  mq.addEventListener("change", sync);
+</script>
