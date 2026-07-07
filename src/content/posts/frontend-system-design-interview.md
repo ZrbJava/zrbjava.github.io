@@ -6,7 +6,7 @@ category: "面试指南"
 tags: ["Interview", "System Design", "Architecture"]
 series: "高级前端面试体系"
 draft: false
-featured: true
+featured: false
 ---
 
 前端系统设计题是 P7+ 面试的区分度所在。面试官不是要你写代码，而是看**需求分析 → 架构拆分 → 技术选型 → 权衡取舍**的完整思维链。

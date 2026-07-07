@@ -6,7 +6,7 @@ category: "前端架构"
 tags: ["Permission", "Architecture", "React"]
 series: "复杂前端系统设计"
 draft: false
-featured: true
+featured: false
 ---
 
 权限系统的核心不是隐藏按钮，而是把业务授权模型清楚地映射到前端运行时。

@@ -6,7 +6,7 @@ category: "跨端开发"
 tags: ["Mobile", "H5", "Adaptation", "WebView"]
 series: "移动端 H5 与适配"
 draft: false
-featured: true
+featured: false
 ---
 
 移动端 H5 的核心挑战不是「能不能显示」，而是**在不同 DPR、不同 WebView、不同键盘行为下保持一致体验**。这篇作为「移动端 H5 与适配」专题的开篇，给出可落地的架构分层。

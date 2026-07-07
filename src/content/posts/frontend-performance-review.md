@@ -6,7 +6,7 @@ category: "性能优化"
 tags: ["Performance", "Monitoring", "Web Vitals"]
 series: "性能优化与可观测性"
 draft: false
-featured: true
+featured: false
 ---
 
 性能优化最怕只凭体感。一次有效复盘应该从指标开始，而不是从工具开始。

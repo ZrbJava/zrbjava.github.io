@@ -6,7 +6,7 @@ category: "后端开发"
 tags: ["Node.js", "BFF", "Koa", "Architecture"]
 series: "Node.js 与 BFF"
 draft: false
-featured: true
+featured: false
 ---
 
 BFF（Backend For Frontend）不是「前端写后端」，而是**让前端团队掌控 API 形态**，在 UI 需求和后端微服务之间建立适配层。

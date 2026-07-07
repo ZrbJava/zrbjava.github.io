@@ -6,7 +6,7 @@ category: "AI 工程"
 tags: ["AI", "LLM", "Streaming", "AI SDK"]
 series: "AI 时代的前端开发"
 draft: false
-featured: true
+featured: false
 ---
 
 2024–2026 年，前端工程师最重要的新技能是**将 LLM 集成到产品中**。这不是调 API 那么简单，而是涉及流式渲染、错误回退、Token 管理和用户体验设计。

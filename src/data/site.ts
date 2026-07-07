@@ -9,6 +9,7 @@ export const site = {
   role: "大前端 / 全栈偏前端工程师",
   experience: "8 年",
   url: "https://zhaorubo.top",
+  ogImage: "/images/og-default.png",
   nav: [
     { href: "/", label: "首页" },
     { href: "/posts", label: "文章" },

@@ -6,7 +6,7 @@ category: "数据工程"
 tags: ["Tracking", "Analytics", "SDK", "Growth"]
 series: "数据埋点与增长"
 draft: false
-featured: true
+featured: false
 ---
 
 埋点不是「加一行代码」，而是一套**从规范 → SDK → 治理 → 分析**的数据工程体系。这篇作为「数据埋点与增长」专题开篇，给出可落地的 SDK 架构。

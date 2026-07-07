@@ -23,9 +23,21 @@ const railTopics = (topics.filter((t) => t.data.featured).length >= 6
 ).slice(0, 8);
 const recentPosts = posts.slice(0, 5);
 const recentProjects = projects.slice(0, 2);
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  author: {
+    "@type": "Person",
+    name: site.author,
+  },
+};
 ---
 
-<BaseLayout title="首页" description={site.description}>
+<BaseLayout title="首页" description={site.description} jsonLd={websiteJsonLd}>
   <!-- 01 Hero -->
   <section class="hero" data-hero>
     <HeroCanvas />

@@ -6,7 +6,7 @@ category: "React"
 tags: ["React", "RSC", "Next.js", "SSR"]
 series: "React 工程实践"
 draft: false
-featured: true
+featured: false
 ---
 
 React Server Components（RSC）是 React 18+ 最重要的架构变革之一。它不是在 SSR 基础上加功能，而是重新定义了**组件在哪里运行、数据在哪里获取、Bundle 里包含什么**。

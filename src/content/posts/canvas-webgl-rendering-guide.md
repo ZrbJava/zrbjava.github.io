@@ -6,7 +6,7 @@ category: "可视化"
 tags: ["Canvas", "WebGL", "Performance", "Rendering"]
 series: "可视化与图形编程"
 draft: false
-featured: true
+featured: false
 ---
 
 可视化是高级前端的重要方向。Canvas 和 WebGL 的性能优化不同于 DOM 操作，需要理解**像素级渲染**的特殊性。

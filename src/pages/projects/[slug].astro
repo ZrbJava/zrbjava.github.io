@@ -18,6 +18,7 @@ const toc = buildTocTree(extractHeadings(project.body ?? ""));
   description={project.data.description}
   pubDate={project.data.pubDate}
   tags={project.data.stack}
+  canonicalPath={`/projects/${project.id}`}
   readingSource={project.body}
   toc={toc}
 >

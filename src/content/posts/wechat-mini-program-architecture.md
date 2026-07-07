@@ -6,7 +6,7 @@ category: "跨端开发"
 tags: ["Mini Program", "WeChat", "Performance", "Taro"]
 series: "小程序全栈开发"
 draft: false
-featured: true
+featured: false
 ---
 
 微信小程序的双线程架构（逻辑层 + 渲染层）决定了它的性能模型与 Web 完全不同。理解这套模型，是写出高性能小程序的前提。

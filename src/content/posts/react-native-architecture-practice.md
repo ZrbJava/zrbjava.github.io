@@ -6,7 +6,7 @@ category: "跨端开发"
 tags: ["React Native", "Fabric", "JSI", "Mobile App"]
 series: "App 跨端开发"
 draft: false
-featured: true
+featured: false
 ---
 
 React Native 新架构（New Architecture）用 Fabric + TurboModule + JSI 替换了旧的 Bridge 异步通信，是 RN 性能质变的基础。

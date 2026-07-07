@@ -7,7 +7,7 @@ category: "前端架构"
 tags: ["React", "Form", "Architecture"]
 series: "复杂前端系统设计"
 draft: false
-featured: true
+featured: false
 ---
 
 复杂表单的问题通常不在“怎么把输入框渲染出来”，而在于字段之间的依赖、权限、校验、异步数据和性能边界。
