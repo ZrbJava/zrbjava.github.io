@@ -31,7 +31,7 @@ SITE_URL=https://zhaorubo.top pnpm build
 
 ## 部署
 
-推送到 `main` 或 `dev` 分支后，GitHub Actions 会自动构建并部署到 GitHub Pages。
+推送到 `main` 分支后，GitHub Actions 会自动构建并部署到 GitHub Pages。
 
 自定义域名 `zhaorubo.top` 需在 GitHub 仓库 Settings → Pages 中配置，并在阿里云 DNS 添加指向 GitHub 的解析记录。
 
